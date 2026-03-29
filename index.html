@@ -1,0 +1,2986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build AU — QLD DA Lodgement Experience v1.6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+<!-- Google Maps via iframe embed (no API key required) -->
+<style>
+:root {
+  --ink: #1d1d1f;
+  --ink-med: #4a4a4c;
+  --ink-light: #86868b;
+  --ink-faint: #aeaeb2;
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --card-hover: #fcfcfd;
+  --border: #e5e5ea;
+  --border-light: #f0f0f2;
+  --positive: #34c759;
+  --positive-bg: #eafaf0;
+  --positive-text: #1a7a32;
+  --negative: #ff3b30;
+  --negative-bg: #fef0ef;
+  --negative-text: #b81d14;
+  --warning: #ff9500;
+  --warning-bg: #fff4e5;
+  --warning-text: #8a5d00;
+  --neutral-bg: #f2f2f7;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --accent: #2563eb;
+  --accent-bg: #eff6ff;
+  --accent-text: #1d4ed8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+/* ==================== GATE ==================== */
+.gate{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;}
+.gate-panel{background:var(--card);border-radius:20px;border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);width:660px;overflow:hidden;display:flex;}
+.gate-left{width:280px;flex-shrink:0;background:var(--ink);padding:40px 32px;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.gate-left::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.04);}
+.gate-left::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.03);}
+.gate-logo{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.12);margin-bottom:24px;flex-shrink:0;}
+.gate-logo svg{width:20px;height:20px;fill:white;}
+.gate-brand{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.gate-proto-name{font-size:18px;font-weight:700;color:white;letter-spacing:-0.3px;line-height:1.35;margin-bottom:24px;flex:1;}
+.gate-meta{display:flex;flex-direction:column;gap:10px;}
+.gate-meta-item{display:flex;flex-direction:column;gap:2px;}
+.gate-meta-label{font-size:9px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.8px;}
+.gate-meta-value{font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);}
+.gate-right{flex:1;padding:40px 36px;display:flex;flex-direction:column;justify-content:center;}
+.gate-heading{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;margin-bottom:6px;}
+.gate-sub{font-size:13px;color:var(--ink-light);line-height:1.5;margin-bottom:6px;}
+.gate-disclaimer{background:var(--neutral-bg);border-radius:var(--radius-sm);border-left:3px solid var(--ink-faint);padding:10px 12px;margin:16px 0 24px;}
+.gate-disclaimer p{font-size:11px;color:var(--ink-light);line-height:1.6;}
+.gate-disclaimer strong{font-weight:600;color:var(--ink-med);}
+.gate-input-label{font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.gate-input{width:100%;padding:11px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--neutral-bg);outline:none;letter-spacing:3px;margin-bottom:10px;transition:border-color 0.15s,background 0.15s;box-sizing:border-box;}
+.gate-input:focus{border-color:var(--ink);background:white;}
+.gate-input.gate-shake{animation:gate-shake 0.35s ease;border-color:var(--negative);}
+.gate-btn{width:100%;padding:12px;border-radius:var(--radius-sm);background:var(--ink);color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;}
+.gate-btn:hover{opacity:0.85;}
+.gate-error{font-size:12px;color:var(--negative-text);margin-top:10px;min-height:18px;}
+.gate-footer{font-size:10px;color:var(--ink-faint);margin-top:20px;}
+@keyframes gate-shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+
+/* ==================== APP TOPBAR ==================== */
+.topbar{background:var(--card);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:50;gap:16px;}
+.topbar-logo{display:flex;align-items:center;gap:8px;}
+.topbar-logo-box{width:28px;height:28px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center;}
+.topbar-logo-box svg{width:14px;height:14px;fill:white;}
+.topbar-brand{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-0.2px;}
+.topbar-sub{font-size:11px;color:var(--ink-light);font-weight:300;}
+.topbar-divider{width:1px;height:20px;background:var(--border);}
+.topbar-title{font-size:13px;font-weight:500;color:var(--ink-med);}
+.topbar-spacer{flex:1;}
+.topbar-save{font-size:12px;color:var(--ink-light);display:flex;align-items:center;gap:6px;}
+.topbar-save-dot{width:6px;height:6px;border-radius:50%;background:var(--positive);}
+.topbar-prelodge{padding:7px 14px;border-radius:var(--radius-sm);background:var(--accent);color:white;border:none;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.topbar-prelodge:hover{opacity:0.85;}
+.topbar-prelodge svg{width:14px;height:14px;fill:white;}
+.topbar-admin{width:32px;height:32px;border-radius:var(--radius-sm);background:none;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
+.topbar-admin:hover{background:var(--neutral-bg);border-color:var(--ink-light);}
+.topbar-admin svg{width:16px;height:16px;fill:var(--ink-light);}
+
+/* ==================== PROGRESS BAR ==================== */
+.progress-bar-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;}
+.progress-stages{display:flex;align-items:center;gap:0;max-width:760px;margin:0 auto;}
+.progress-stage{display:flex;align-items:center;flex:1;}
+.progress-stage:last-child{flex:0;}
+.stage-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--ink-faint);flex-shrink:0;transition:all 0.2s;position:relative;cursor:default;}
+.stage-dot.active{border-color:var(--ink);background:var(--ink);color:white;}
+.stage-dot.done{border-color:var(--positive);background:var(--positive);color:white;}
+.stage-dot.done::after{content:'✓';font-size:11px;}
+.stage-dot.done .dot-num{display:none;}
+.stage-label{font-size:9px;font-weight:500;color:var(--ink-faint);position:absolute;top:28px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+.stage-label.active{color:var(--ink);font-weight:600;}
+.stage-line{flex:1;height:2px;background:var(--border);transition:background 0.2s;}
+.stage-line.done{background:var(--positive);}
+.progress-wrap{padding-bottom:20px;}
+
+/* ==================== MAIN CONTENT ==================== */
+.main{max-width:760px;margin:0 auto;padding:32px 24px 100px;}
+.stage-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:32px;box-shadow:var(--shadow-sm);}
+.stage-eyebrow{font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.stage-heading{font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.5px;margin-bottom:8px;}
+.stage-sub{font-size:14px;color:var(--ink-light);line-height:1.6;margin-bottom:28px;}
+.stage-divider{height:1px;background:var(--border);margin:24px 0;}
+
+/* ==================== SEARCH / AUTOCOMPLETE ==================== */
+.search-wrap{position:relative;margin-bottom:20px;}
+.search-input{width:100%;padding:14px 16px 14px 44px;border-radius:var(--radius);border:2px solid var(--border);font-size:15px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--card);outline:none;transition:border-color 0.15s;box-sizing:border-box;}
+.search-input:focus{border-color:var(--ink);}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-faint);}
+.search-icon svg{width:18px;height:18px;fill:var(--ink-faint);}
+.autocomplete-list{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-md);z-index:100;overflow:hidden;display:none;}
+.autocomplete-list.open{display:block;}
+.autocomplete-item{padding:12px 16px;cursor:pointer;transition:background 0.1s;border-bottom:1px solid var(--border-light);}
+.autocomplete-item:last-child{border-bottom:none;}
+.autocomplete-item:hover{background:var(--neutral-bg);}
+.autocomplete-addr{font-size:14px;font-weight:500;color:var(--ink);}
+.autocomplete-sub{font-size:11px;color:var(--ink-light);margin-top:2px;}
+.lot-input-row{display:flex;gap:12px;align-items:flex-end;}
+.lot-or{text-align:center;font-size:12px;color:var(--ink-faint);padding:8px 0;}
+
+/* ==================== PROPERTY CARD ==================== */
+.prop-card{background:var(--neutral-bg);border-radius:var(--radius);padding:16px 20px;border:1px solid var(--border);margin-bottom:20px;}
+.prop-addr{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.prop-lot{font-size:12px;color:var(--ink-light);margin-bottom:12px;}
+.prop-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.chip-zone{background:#e8f0fe;color:#1a56db;}
+.chip-overlay{background:#fef3c7;color:#92400e;}
+.chip-flood{background:var(--negative-bg);color:var(--negative-text);}
+.chip-np{background:var(--neutral-bg);color:var(--ink-med);border:1px solid var(--border);}
+.chip-positive{background:var(--positive-bg);color:var(--positive-text);}
+
+/* ==================== PROPERTY INTELLIGENCE ==================== */
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.intel-card{background:var(--neutral-bg);border-radius:var(--radius-sm);padding:12px 14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.intel-card-left{flex:1;min-width:0;}
+.intel-label{font-size:10px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
+.intel-value{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.intel-desc{font-size:12px;color:var(--ink-light);line-height:1.5;}
+.flood-banner{background:var(--warning-bg);border:1px solid #fbbf24;border-radius:var(--radius-sm);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
+.flood-banner svg{width:18px;height:18px;fill:var(--warning);flex-shrink:0;margin-top:1px;}
+.flood-banner-text{font-size:13px;color:var(--warning-text);line-height:1.5;}
+.flood-banner-text strong{font-weight:600;display:block;margin-bottom:4px;}
+.sara-check{background:var(--positive-bg);border:1px solid #bbf7d0;border-radius:var(--radius-sm);padding:14px 16px;display:flex;gap:12px;align-items:center;margin-bottom:16px;}
+.sara-check svg{width:18px;height:18px;fill:var(--positive);flex-shrink:0;}
+.sara-check-text{font-size:13px;color:var(--positive-text);}
+.sara-check-text strong{font-weight:600;}
+
+/* ==================== DEV TYPE SELECTOR ==================== */
+.devtype-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
+.devtype-card{border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;cursor:pointer;transition:all 0.15s;background:var(--card);display:flex;align-items:center;gap:10px;}
+.devtype-card:hover{border-color:var(--ink-light);background:var(--neutral-bg);}
+.devtype-card.selected{border-color:var(--ink);background:#f8f9ff;}
+.devtype-icon{font-size:20px;flex-shrink:0;}
+.devtype-content{flex:1;min-width:0;}
+.devtype-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:1px;}
+.devtype-desc{font-size:11px;color:var(--ink-light);line-height:1.4;}
+.devtype-badge{display:inline-block;margin-top:3px;font-size:9px;font-weight:600;padding:1px 7px;border-radius:8px;background:var(--neutral-bg);color:var(--ink-light);}
+
+/* ==================== PATHWAY REVEAL ==================== */
+.pathway-hero{text-align:center;padding:32px 24px;border-radius:var(--radius);margin-bottom:24px;}
+.pathway-hero.accepted{background:var(--positive-bg);border:1px solid #bbf7d0;}
+.pathway-hero.risksmart{background:#eff6ff;border:1px solid #bfdbfe;}
+.pathway-hero.code{background:#fef3c7;border:1px solid #fde68a;}
+.pathway-hero.impact{background:var(--warning-bg);border:1px solid #fbbf24;}
+.pathway-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;}
+.pathway-badge.accepted{background:var(--positive);color:white;}
+.pathway-badge.risksmart{background:#2563eb;color:white;}
+.pathway-badge.code{background:#d97706;color:white;}
+.pathway-badge.impact{background:#dc2626;color:white;}
+.pathway-hero-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;margin-bottom:8px;}
+.pathway-hero-sub{font-size:14px;color:var(--ink-med);line-height:1.6;max-width:500px;margin:0 auto 20px;}
+.pathway-timeline{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-med);}
+.pathway-timeline svg{width:16px;height:16px;fill:var(--ink-light);}
+.pathway-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.pathway-step{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;background:var(--neutral-bg);border-radius:var(--radius-sm);border:1px solid var(--border);}
+.pathway-step-num{width:24px;height:24px;border-radius:50%;background:var(--ink);color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pathway-step-content{}
+.pathway-step-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.pathway-step-desc{font-size:12px;color:var(--ink-light);line-height:1.5;}
+.exit-box{background:var(--positive-bg);border-radius:var(--radius);border:1px solid #bbf7d0;padding:24px;text-align:center;margin-bottom:20px;}
+.exit-icon{font-size:36px;margin-bottom:12px;}
+.exit-title{font-size:18px;font-weight:700;color:var(--positive-text);margin-bottom:8px;}
+.exit-body{font-size:13px;color:var(--ink-med);line-height:1.6;margin-bottom:16px;}
+
+/* ==================== FORM FIELDS ==================== */
+.form-section{margin-bottom:28px;}
+.form-section-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.field-row.full{grid-template-columns:1fr;}
+.field-row.trio{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.4px;}
+.field input,.field select,.field textarea{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--card);outline:none;transition:border-color 0.15s;width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);}
+.field textarea{resize:vertical;min-height:90px;line-height:1.5;}
+.field-hint{font-size:11px;color:var(--ink-faint);line-height:1.5;}
+.field-value{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:14px;color:var(--ink-med);background:var(--neutral-bg);}
+.ir-options{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.ir-option{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.15s;}
+.ir-option:hover{border-color:var(--ink-light);}
+.ir-option.selected{border-color:var(--ink);background:#f8f9ff;}
+.ir-option input[type=radio]{margin-top:2px;flex-shrink:0;accent-color:var(--ink);}
+.ir-option-content{}
+.ir-option-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.ir-option-desc{font-size:12px;color:var(--ink-light);line-height:1.5;}
+
+/* ==================== DOCUMENTS CHECKLIST ==================== */
+.doc-section{margin-bottom:20px;}
+.doc-section-title{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.3px;}
+.doc-item{display:flex;gap:12px;align-items:center;padding:12px 14px;background:var(--neutral-bg);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:8px;transition:all 0.3s ease;}
+.doc-item.required{border-left:3px solid var(--ink);}
+.doc-item.conditional{border-left:3px solid var(--warning);}
+.doc-item.optional{border-left:3px solid var(--border);}
+.doc-item.doc-confirmed{background:var(--positive-bg);border-color:var(--positive);border-left-color:var(--positive);}
+.doc-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s ease;}
+.doc-check.checked{background:var(--positive);border-color:var(--positive);}
+.doc-check.checked::after{content:'✓';color:white;font-size:12px;font-weight:700;}
+.doc-check.checking{border-color:var(--accent);animation:docPulse 1s ease-in-out infinite;}
+@keyframes docPulse{0%,100%{border-color:var(--accent);transform:scale(1);}50%{border-color:var(--accent);transform:scale(1.1);}}
+.doc-item-content{flex:1;min-width:0;}
+.doc-item-title{font-size:13px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px;}
+.doc-item-desc{font-size:12px;color:var(--ink-light);line-height:1.5;}
+.doc-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:0.4px;margin-top:4px;}
+.doc-tag.req{background:var(--ink);color:white;}
+.doc-tag.cond{background:var(--warning-bg);color:var(--warning-text);}
+.doc-tag.opt{background:var(--neutral-bg);color:var(--ink-light);border:1px solid var(--border);}
+.doc-upload-btn{background:none;border:1px solid var(--border);color:var(--ink-light);font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
+.doc-upload-btn:hover{border-color:var(--ink-light);color:var(--ink-med);background:var(--card);}
+.doc-upload-btn.uploaded{border-color:var(--positive);color:var(--positive-text);background:var(--positive-bg);}
+.doc-status{font-size:11px;font-weight:600;color:var(--positive-text);white-space:nowrap;flex-shrink:0;}
+
+/* ==================== FEE SUMMARY ==================== */
+.fee-card{background:var(--neutral-bg);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:20px;}
+.fee-header{padding:14px 20px;background:var(--ink);color:white;font-size:13px;font-weight:600;}
+.fee-rows{padding:0 20px;}
+.fee-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+.fee-row:last-child{border-bottom:none;}
+.fee-row-label{font-size:13px;color:var(--ink-med);}
+.fee-row-label small{display:block;font-size:11px;color:var(--ink-light);margin-top:2px;}
+.fee-row-value{font-size:14px;font-weight:600;color:var(--ink);}
+.fee-total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--ink);border-top:1px solid rgba(255,255,255,0.1);}
+.fee-total-label{font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);}
+.fee-total-value{font-size:20px;font-weight:700;color:white;}
+.infra-note{background:var(--accent-bg);border:1px solid #bfdbfe;border-radius:var(--radius-sm);padding:12px 16px;font-size:12px;color:var(--accent-text);line-height:1.6;margin-bottom:20px;}
+.infra-note strong{font-weight:600;}
+
+/* ==================== REVIEW SUMMARY ==================== */
+.review-section{margin-bottom:20px;}
+.review-section-title{font-size:11px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.review-rows{background:var(--neutral-bg);border-radius:var(--radius-sm);border:1px solid var(--border);overflow:hidden;}
+.review-row{display:flex;padding:10px 14px;border-bottom:1px solid var(--border-light);}
+.review-row:last-child{border-bottom:none;}
+.review-row-label{font-size:12px;color:var(--ink-light);width:160px;flex-shrink:0;padding-top:1px;}
+.review-row-value{font-size:12px;font-weight:500;color:var(--ink);flex:1;}
+.declaration-box{border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;}
+.declaration-text{font-size:12px;color:var(--ink-med);line-height:1.7;margin-bottom:14px;}
+.declaration-check{display:flex;gap:10px;align-items:flex-start;cursor:pointer;}
+.declaration-check input[type=checkbox]{margin-top:2px;accent-color:var(--ink);width:16px;height:16px;flex-shrink:0;}
+.declaration-check-label{font-size:13px;font-weight:500;color:var(--ink);}
+
+/* ==================== NAVIGATION ==================== */
+.nav-bar{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;}
+.btn-back{padding:11px 20px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--card);color:var(--ink-med);font-size:14px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.15s;}
+.btn-back:hover{background:var(--neutral-bg);border-color:var(--ink-light);}
+.btn-next{padding:11px 28px;border-radius:var(--radius-sm);background:var(--ink);color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;}
+.btn-next:hover{opacity:0.85;}
+.btn-next:disabled{opacity:0.4;cursor:default;}
+.btn-submit{padding:12px 32px;border-radius:var(--radius-sm);background:#2563eb;color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;}
+.btn-submit:hover{opacity:0.9;}
+.btn-start{padding:12px 32px;border-radius:var(--radius-sm);background:#2563eb;color:white;border:none;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;display:inline-block;}
+.btn-start:hover{opacity:0.9;}
+
+/* ==================== SUCCESS STATE ==================== */
+.success-state{text-align:center;padding:48px 32px;}
+.success-icon{font-size:56px;margin-bottom:20px;}
+.success-title{font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-0.5px;margin-bottom:10px;}
+.success-sub{font-size:15px;color:var(--ink-med);line-height:1.6;margin-bottom:28px;}
+.success-ref{display:inline-block;background:var(--neutral-bg);border-radius:var(--radius-sm);padding:12px 24px;font-size:13px;font-weight:700;color:var(--ink);border:1px solid var(--border);letter-spacing:0.5px;margin-bottom:24px;}
+.success-steps{text-align:left;background:var(--neutral-bg);border-radius:var(--radius);padding:20px 24px;border:1px solid var(--border);}
+.success-steps h4{font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:12px;}
+.success-step{display:flex;gap:10px;margin-bottom:10px;font-size:13px;color:var(--ink-med);line-height:1.5;}
+.success-step-num{width:18px;height:18px;border-radius:50%;background:var(--ink);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+/* ==================== BG PANEL ==================== */
+.bg-panel{margin-bottom:20px;border-radius:var(--radius);overflow:hidden;border:1px solid #e0e8ff;}
+.bg-panel-header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:#f0f4ff;cursor:pointer;user-select:none;}
+.bg-panel-header:hover{background:#e8effe;}
+.bg-tag{font-size:10px;font-weight:700;color:#4f46e5;text-transform:uppercase;letter-spacing:0.5px;background:#e0e8ff;padding:2px 8px;border-radius:10px;}
+.bg-title{font-size:12px;font-weight:600;color:#3730a3;flex:1;}
+.bg-chev{font-size:12px;color:#6366f1;transition:transform 0.2s;}
+.bg-chev.open{transform:rotate(180deg);}
+.bg-body{display:none;background:white;border-top:1px solid #e0e8ff;padding:16px;}
+.bg-body.open{display:block;}
+.bg-row{display:flex;gap:12px;margin-bottom:12px;}
+.bg-row:last-child{margin-bottom:0;}
+.bg-lbl{font-size:11px;font-weight:600;color:#6366f1;width:160px;flex-shrink:0;padding-top:1px;}
+.bg-txt{font-size:12px;color:var(--ink-med);line-height:1.6;flex:1;}
+
+/* ==================== MAP ==================== */
+.map-container { height: 360px; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; z-index: 1; background: var(--neutral-bg); }
+.map-container iframe { width: 100%; height: 100%; border: 0; }
+
+/* ==================== SEARCH TABS ==================== */
+.search-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.search-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; background: var(--neutral-bg); color: var(--ink-light); border: none; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+.search-tab.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+/* ==================== MULTI-ADDRESS ==================== */
+.address-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.address-item { display: flex; align-items: center; gap: 12px; background: var(--neutral-bg); border-radius: var(--radius-sm); padding: 14px 16px; border: 1px solid var(--border); transition: all 0.15s; }
+.address-item.primary { background: #f8f9ff; border-color: var(--accent); border-width: 2px; }
+.address-item-content { flex: 1; }
+.address-item-addr { font-size: 14px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.address-item-meta { font-size: 11px; color: var(--ink-light); margin-top: 3px; }
+.primary-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-text); background: var(--accent-bg); padding: 2px 8px; border-radius: 10px; border: 1px solid #bfdbfe; white-space: nowrap; }
+.make-primary-btn { background: none; border: 1px solid var(--border); color: var(--ink-light); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; white-space: nowrap; }
+.make-primary-btn:hover { border-color: var(--accent); color: var(--accent-text); background: var(--accent-bg); }
+.address-remove { background: none; border: none; color: var(--ink-faint); cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 4px; transition: all 0.15s; }
+.address-remove:hover { background: var(--negative-bg); color: var(--negative-text); }
+.add-address-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--ink-light); background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; margin-top: 12px; }
+.add-address-btn:hover { border-color: var(--ink-light); color: var(--ink-med); background: var(--neutral-bg); }
+
+/* ==================== OUT OF AREA ==================== */
+.ooa-card { background: var(--warning-bg); border: 1px solid var(--warning); border-radius: var(--radius-sm); padding: 20px; text-align: center; }
+.ooa-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.ooa-text { font-size: 13px; color: var(--ink-light); margin-bottom: 14px; }
+.ooa-btn { background: var(--warning); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; font-family: 'Inter', sans-serif; }
+
+/* ==================== PROHIBITED USES ==================== */
+.prohibited-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.prohibited-title { font-size: 12px; font-weight: 600; color: var(--negative-text); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
+.prohibited-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px; background: var(--negative-bg); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 12px; color: var(--negative-text); }
+.prohibited-x { font-weight: 700; flex-shrink: 0; }
+
+/* ==================== UPLOAD ZONE ==================== */
+.upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 20px; }
+.upload-zone:hover { border-color: var(--ink-light); background: var(--neutral-bg); }
+.upload-zone-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-zone-text { font-size: 13px; color: var(--ink-light); }
+.upload-zone-text strong { color: var(--ink-med); }
+.uploaded-files { margin-bottom: 16px; }
+.uploaded-file { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--positive-bg); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 12px; color: var(--positive-text); }
+.uploaded-file-icon { font-size: 14px; }
+
+/* ==================== AI REVIEW ==================== */
+.ai-review { background: var(--accent-bg); border: 1px solid #bfdbfe; border-radius: var(--radius-sm); padding: 16px; margin-bottom: 20px; }
+.ai-review-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: aiPulse 2s ease-in-out infinite; }
+@keyframes aiPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+.ai-review-title { font-size: 12px; font-weight: 600; color: var(--accent-text); }
+.ai-review-item { font-size: 12px; color: var(--ink-med); padding: 4px 0; display: flex; align-items: center; gap: 6px; }
+
+/* ==================== INFO TOOLTIP ==================== */
+.info-tip { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--neutral-bg); color: var(--ink-faint); font-size: 10px; font-weight: 700; cursor: pointer; margin-left: 6px; border: 1px solid var(--border); position: relative; }
+.info-tip:hover .info-tip-content { display: block; }
+.info-tip-content { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 260px; background: var(--ink); color: white; font-size: 11px; font-weight: 400; line-height: 1.5; padding: 10px 12px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); z-index: 200; text-transform: none; letter-spacing: 0; }
+
+/* ==================== SIGN-IN SECTION ==================== */
+.signin-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.signin-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.signin-btn { padding: 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+.signin-btn.primary { background: var(--ink); color: white; border: none; }
+.signin-btn.primary:hover { opacity: 0.85; }
+.signin-btn.secondary { background: var(--card); color: var(--ink-med); border: 1px solid var(--border); }
+.signin-btn.secondary:hover { background: var(--neutral-bg); }
+
+/* ==================== QLEAVE TOGGLE ==================== */
+.qleave-toggle { display: flex; gap: 10px; margin-top: 10px; }
+.qleave-option { flex: 1; padding: 12px; border: 2px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; text-align: center; }
+.qleave-option.selected { border-color: var(--ink); background: #f8f9ff; }
+.qleave-option-title { font-size: 12px; font-weight: 600; color: var(--ink); }
+.qleave-option-desc { font-size: 11px; color: var(--ink-light); margin-top: 4px; }
+
+/* ==================== PRE-LODGEMENT CARD ==================== */
+.prelodge-card { background: var(--accent-bg); border: 1px solid #bfdbfe; border-radius: var(--radius); padding: 20px; margin-top: 20px; text-align: center; }
+.prelodge-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.prelodge-text { font-size: 12px; color: var(--ink-light); margin-bottom: 14px; line-height: 1.5; }
+.prelodge-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; font-family: 'Inter', sans-serif; }
+
+/* ==================== DOWNLOAD GRID ==================== */
+.download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.download-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: var(--ink); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: opacity 0.15s; font-family: 'Inter', sans-serif; }
+.download-btn:hover { opacity: 0.85; }
+.download-btn.full { grid-column: 1 / -1; }
+
+/* ==================== TOAST ==================== */
+.toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: white; padding: 12px 24px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg); z-index: 9999; opacity: 0; transition: all 0.3s ease; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ==================== CONSENT CARD ==================== */
+.consent-card { background: var(--neutral-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-top: 16px; }
+.consent-card-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.consent-card-desc { font-size: 12px; color: var(--ink-light); margin-bottom: 12px; }
+.consent-actions{display:flex;gap:8px;margin-bottom:12px;}
+.consent-actions .download-btn,.consent-actions .upload-consent-btn{flex:1;padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.15s;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;}
+.consent-actions .download-btn{background:var(--ink);color:white;border:none;}
+.consent-actions .download-btn:hover{opacity:0.85;}
+.consent-actions .upload-consent-btn{background:white;color:var(--ink);border:1px solid var(--border);}
+.consent-actions .upload-consent-btn:hover{border-color:var(--ink-light);background:var(--card-hover);}
+.consent-actions .upload-consent-btn.uploaded{border-color:var(--positive);color:var(--positive-text);background:var(--positive-bg);}
+.ai-verify-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-top:12px;display:none;}
+.ai-verify-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.ai-verify-icon{width:24px;height:24px;border-radius:6px;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-size:12px;}
+.ai-verify-title{font-size:12px;font-weight:600;color:var(--ink);}
+.ai-verify-status{font-size:11px;color:var(--ink-light);margin-left:auto;}
+.ai-verify-checks{display:flex;flex-direction:column;gap:6px;}
+.ai-verify-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-med);}
+.ai-verify-row .v-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
+.ai-verify-row .v-icon.pass{background:var(--positive-bg);color:var(--positive-text);}
+.ai-verify-row .v-icon.fail{background:var(--negative-bg);color:var(--negative-text);}
+.ai-verify-row .v-icon.warn{background:var(--warning-bg);color:var(--warning-text);}
+.ai-verify-row .v-icon.checking{background:var(--accent-bg);color:var(--accent-text);animation:docPulse 1s ease-in-out infinite;}
+.ai-verify-row .v-label{flex:1;}
+.ai-verify-row .v-result{font-size:11px;font-weight:500;}
+.ai-verify-row .v-result.pass{color:var(--positive-text);}
+.ai-verify-row .v-result.fail{color:var(--negative-text);}
+.ai-verify-row .v-result.warn{color:var(--warning-text);}
+.ai-verify-summary{margin-top:10px;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.5;}
+.ai-verify-summary.pass{background:var(--positive-bg);color:var(--positive-text);border:1px solid var(--positive);}
+.ai-verify-summary.warn{background:var(--warning-bg);color:var(--warning-text);border:1px solid var(--warning);}
+.ai-verify-summary.fail{background:var(--negative-bg);color:var(--negative-text);border:1px solid var(--negative);}
+
+/* ==================== PROTOTYPE TAG ==================== */
+.proto-tag{position:fixed;bottom:16px;right:16px;background:rgba(29,29,31,0.85);color:rgba(255,255,255,0.75);font-size:10px;padding:6px 12px;border-radius:20px;backdrop-filter:blur(8px);z-index:80;cursor:pointer;line-height:1.5;text-align:right;}
+.proto-tag strong{color:white;display:block;font-weight:600;}
+
+/* ==================== ADMIN PAGE ==================== */
+.admin-topbar{background:var(--ink);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.admin-topbar-title{font-size:14px;font-weight:600;color:white;display:flex;align-items:center;gap:8px;}
+.admin-topbar-title svg{width:16px;height:16px;fill:rgba(255,255,255,0.6);}
+.admin-close-btn{background:none;border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-sm);padding:6px 14px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+.admin-close-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3);color:white;}
+.admin-page-body{max-width:1000px;margin:0 auto;padding:32px 24px;}
+.admin-page-heading{font-size:18px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.admin-page-heading svg{width:18px;height:18px;fill:var(--ink-light);}
+.admin-page-sub{font-size:13px;color:var(--ink-light);margin-bottom:20px;}
+.admin-info-banner{background:var(--accent-bg);border:1px solid #dbeafe;border-radius:var(--radius);padding:14px 18px;font-size:13px;color:var(--accent-text);line-height:1.6;margin-bottom:28px;}
+.admin-info-banner strong{font-weight:700;}
+/* Landing cards */
+.admin-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px;}
+.admin-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;transition:box-shadow 0.15s;}
+.admin-card:hover{box-shadow:var(--shadow-md);}
+.admin-card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;}
+.admin-card-icon.fees{background:#fef3c7;border:1px solid #fde68a;}
+.admin-card-icon.levy{background:var(--positive-bg);border:1px solid #bbf7d0;}
+.admin-card-icon.docs{background:var(--accent-bg);border:1px solid #dbeafe;}
+.admin-card-icon.zones{background:#f3e8ff;border:1px solid #e9d5ff;}
+.admin-card-icon.rules{background:var(--neutral-bg);border:1px solid var(--border);}
+.admin-card-icon.log{background:var(--negative-bg);border:1px solid #fecaca;}
+.admin-card-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.admin-card-desc{font-size:12px;color:var(--ink-light);line-height:1.5;flex:1;margin-bottom:16px;}
+.admin-card-stat{background:var(--neutral-bg);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;}
+.admin-card-stat-label{font-size:9px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+.admin-card-stat-value{font-size:22px;font-weight:700;color:var(--ink);line-height:1.2;}
+.admin-card-stat-sub{font-size:11px;color:var(--ink-light);margin-top:2px;}
+.admin-card-btn{background:var(--ink);color:white;border:none;border-radius:var(--radius-sm);padding:10px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;text-align:center;width:100%;}
+.admin-card-btn:hover{opacity:0.85;}
+/* Detail views */
+.admin-detail{display:none;}
+.admin-detail-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.admin-detail-back{background:none;border:none;font-size:12px;font-weight:600;color:var(--ink-light);cursor:pointer;font-family:'Inter',sans-serif;padding:0;}
+.admin-detail-back:hover{color:var(--ink);}
+.admin-detail-title{font-size:16px;font-weight:700;color:var(--ink);}
+.admin-section{margin-bottom:28px;}
+.admin-section h3{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.admin-section-desc{font-size:12px;color:var(--ink-light);line-height:1.5;margin-bottom:0;}
+.admin-section-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px;}
+.admin-action-btn{background:var(--ink);color:white;border:none;border-radius:var(--radius-sm);padding:8px 16px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;white-space:nowrap;flex-shrink:0;}
+.admin-action-btn:hover{opacity:0.85;}
+.admin-config-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.admin-config-row{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border-light);}
+.admin-config-row.last{border-bottom:none;}
+.admin-config-label{font-size:12px;font-weight:500;color:var(--ink-light);}
+.admin-config-value{font-size:13px;font-weight:600;color:var(--ink);}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.admin-table th{text-align:left;padding:8px 12px;background:var(--neutral-bg);color:var(--ink-light);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid var(--border);}
+.admin-table td{padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--ink-med);vertical-align:middle;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;}
+.admin-badge.accepted{background:var(--positive-bg);color:var(--positive-text);}
+.admin-badge.risksmart{background:#eff6ff;color:#1d4ed8;}
+.admin-badge.code{background:#fef3c7;color:#92400e;}
+.admin-badge.impact{background:var(--negative-bg);color:var(--negative-text);}
+/* Document matrix */
+.doc-matrix-info{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;}
+.doc-matrix-info h4{font-size:11px;font-weight:700;letter-spacing:0.06em;color:var(--ink-light);text-transform:uppercase;margin-bottom:8px;}
+.doc-matrix-info p{font-size:13px;color:var(--ink-med);line-height:1.5;}
+.doc-matrix-legend{display:flex;align-items:center;gap:20px;margin-top:14px;padding:10px 14px;background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border-light);}
+.doc-matrix-legend span.legend-label{font-size:11px;font-weight:700;letter-spacing:0.04em;color:var(--ink-light);text-transform:uppercase;}
+.doc-matrix-legend .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-med);}
+.doc-matrix-legend .legend-swatch{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.doc-matrix-legend .legend-swatch.empty{background:var(--surface);border:1px solid var(--border);}
+.doc-matrix-legend .legend-swatch.required{background:var(--positive-bg);color:var(--positive-text);}
+.doc-matrix-legend .legend-swatch.mandatory{background:var(--positive-bg);color:var(--positive-text);}
+.doc-carousel-nav{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-bottom:4px;}
+.doc-carousel-info{font-size:12px;color:var(--ink-light);padding:4px 10px;border:1px solid var(--border-light);border-radius:var(--radius-sm);background:var(--card);}
+.doc-carousel-dots{display:flex;gap:5px;align-items:center;}
+.doc-carousel-dot{width:20px;height:6px;border-radius:3px;background:var(--border);cursor:pointer;transition:background 0.2s;}
+.doc-carousel-dot.active{background:var(--ink);width:28px;}
+.doc-carousel-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink-med);font-size:14px;transition:all 0.15s;}
+.doc-carousel-btn:hover{background:var(--surface);border-color:var(--ink-light);}
+.doc-matrix-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.doc-matrix{width:100%;border-collapse:collapse;table-layout:fixed;}
+.doc-matrix th,.doc-matrix td{border:1px solid var(--border-light);padding:0;text-align:center;vertical-align:middle;}
+.doc-matrix .dm-header-pathway{background:var(--positive-bg);color:var(--positive-text);font-size:12px;font-weight:700;letter-spacing:0.04em;padding:6px 8px;text-transform:uppercase;}
+.doc-matrix .dm-header-type{background:var(--card);padding:10px 6px;font-size:12px;font-weight:600;color:var(--ink);line-height:1.35;}
+.doc-matrix .dm-header-type .dm-code{font-size:10px;color:var(--ink-faint);font-weight:400;display:block;margin-top:2px;}
+.doc-matrix .dm-header-type .dm-pathway{font-size:10px;color:var(--positive-text);font-weight:600;display:block;margin-top:1px;}
+.doc-matrix .dm-doc-label{background:var(--card);text-align:left;padding:8px 14px;font-size:13px;color:var(--ink);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-matrix .dm-category{background:var(--ink);text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:#fff;letter-spacing:0.05em;text-transform:uppercase;border-bottom:none;}
+.doc-matrix .dm-doc-label-head{background:var(--surface);text-align:left;padding:10px 14px;font-size:11px;font-weight:700;letter-spacing:0.04em;color:var(--ink-light);text-transform:uppercase;}
+.doc-matrix .dm-cell{cursor:pointer;width:140px;min-width:100px;padding:6px;transition:background 0.15s;}
+.doc-matrix .dm-cell:hover{background:var(--surface);}
+.dm-cell-icon{width:30px;height:30px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;transition:all 0.15s;}
+.dm-cell-icon.empty{background:var(--surface);border:1px solid var(--border);}
+.dm-cell-icon.required{background:var(--positive-bg);color:var(--positive-text);}
+.dm-cell-icon.mandatory{background:var(--positive-bg);color:var(--positive-text);}
+/* Edit modal */
+.admin-edit-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;padding:24px;}
+.admin-edit-panel{background:var(--card);border-radius:var(--radius);max-width:480px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden;}
+.admin-edit-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.admin-edit-header h3{font-size:14px;font-weight:700;color:var(--ink);}
+.admin-edit-body{padding:20px;}
+.admin-edit-field{margin-bottom:16px;}
+.admin-edit-field label{display:block;font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px;}
+.admin-edit-field input,.admin-edit-field select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:'Inter',sans-serif;color:var(--ink);box-sizing:border-box;}
+.admin-edit-field input:focus,.admin-edit-field select:focus{outline:none;border-color:var(--ink);}
+.admin-edit-actions{display:flex;gap:8px;justify-content:flex-end;padding:16px 20px;border-top:1px solid var(--border);}
+.admin-edit-actions button{padding:8px 20px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.15s;}
+.admin-edit-actions .cancel-btn{background:none;border:1px solid var(--border);color:var(--ink-med);}
+.admin-edit-actions .save-btn{background:var(--ink);border:none;color:white;}
+
+/* ==================== RESPONSIVE ==================== */
+@media(max-width:640px){
+  .gate-panel{flex-direction:column;width:calc(100vw - 32px);max-width:420px;}
+  .gate-left{width:100%;padding:24px;}
+  .intel-grid{grid-template-columns:1fr;}
+  .devtype-grid{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== GATE ==================== -->
+<div class="gate" id="gate">
+  <div class="gate-panel">
+    <div class="gate-left">
+      <div class="gate-logo">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg>
+      </div>
+      <div class="gate-brand">Build AU</div>
+      <div class="gate-proto-name">QLD DA Lodgement Experience</div>
+      <div class="gate-meta">
+        <div class="gate-meta-item">
+          <div class="gate-meta-label">Version</div>
+          <div class="gate-meta-value">v1.6 — March 2026</div>
+        </div>
+        <div class="gate-meta-item">
+          <div class="gate-meta-label">Jurisdiction</div>
+          <div class="gate-meta-value">Queensland — City Council</div>
+        </div>
+        <div class="gate-meta-item">
+          <div class="gate-meta-label">Sample area</div>
+          <div class="gate-meta-value">Milton QLD 4064</div>
+        </div>
+        <div class="gate-meta-item">
+          <div class="gate-meta-label">Legislation</div>
+          <div class="gate-meta-value">Planning Act 2016, DA Rules v3</div>
+        </div>
+      </div>
+    </div>
+    <div class="gate-right">
+      <div class="gate-heading">Restricted access</div>
+      <div class="gate-sub">Enter the password to view this demonstrator.</div>
+      <div class="gate-disclaimer">
+        <p><strong>Concept demonstrator only.</strong> This prototype uses real spatial data from Milton QLD 4064 and verified Council DA fees (2025–26) for demonstration purposes. It does not constitute a real lodgement system or legal advice. Commercial in confidence — Objective Corporation.</p>
+      </div>
+      <div class="gate-input-label">Password</div>
+      <input class="gate-input" id="gate-input" type="password" placeholder="••••••••••••"
+        onkeydown="if(event.key==='Enter')checkPassword()">
+      <button class="gate-btn" onclick="checkPassword()">Continue</button>
+      <div class="gate-error" id="gate-error"></div>
+      <div class="gate-footer">Objective Corporation · Build AU AI Applicant Experience</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN PAGE ==================== -->
+<div id="adminPage" style="display:none;">
+  <!-- Dark topbar -->
+  <div class="admin-topbar">
+    <div class="admin-topbar-title">
+      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.61 3.61 0 0112 15.6z"/></svg>
+      Council Configuration
+    </div>
+    <button class="admin-close-btn" onclick="closeAdmin()">✕ Close</button>
+  </div>
+
+  <div class="admin-page-body">
+    <!-- Landing view -->
+    <div id="adminLanding">
+      <div class="admin-page-heading">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.61 3.61 0 0112 15.6z"/></svg>
+        Council Configuration
+      </div>
+      <div class="admin-page-sub">Select a section to configure</div>
+
+      <div class="admin-info-banner">
+        <strong>Prototype note:</strong> This panel shows how council administrators configure document requirements and statutory fee thresholds. Changes made here flow through to the applicant-facing screens in real time.
+      </div>
+
+      <div class="admin-card-grid">
+        <!-- Fees & Levies (combined) -->
+        <div class="admin-card">
+          <div class="admin-card-icon fees">💰</div>
+          <div class="admin-card-title">Fees & Levies</div>
+          <div class="admin-card-desc">Configure DA application fees (point value and multipliers) and QLeave portable long service leave levy rate and threshold.</div>
+          <div class="admin-card-stat" style="display:flex;gap:12px;">
+            <div style="flex:1;">
+              <div class="admin-card-stat-label">Fee point value</div>
+              <div class="admin-card-stat-value" id="cardPointValue" style="font-size:22px;">$143.00</div>
+              <div class="admin-card-stat-sub">2025–26</div>
+            </div>
+            <div style="flex:1;border-left:1px solid var(--border-light);padding-left:12px;">
+              <div class="admin-card-stat-label">QLeave rate</div>
+              <div class="admin-card-stat-value" id="cardQLeaveRate" style="font-size:22px;">0.575%</div>
+              <div class="admin-card-stat-sub">Threshold: $150,000</div>
+            </div>
+          </div>
+          <button class="admin-card-btn" onclick="showAdminDetail('fees')">Configure →</button>
+        </div>
+
+        <!-- Document Requirements -->
+        <div class="admin-card">
+          <div class="admin-card-icon docs">📋</div>
+          <div class="admin-card-title">Document Requirements</div>
+          <div class="admin-card-desc">Configure which supporting documents are required or mandatory for each DA type. Click cells in the matrix to cycle through states.</div>
+          <div class="admin-card-stat">
+            <div class="admin-card-stat-label">Document categories</div>
+            <div class="admin-card-stat-value" id="cardDocCount">6</div>
+            <div class="admin-card-stat-sub" id="cardDocSub">24 document types across 12 DA types</div>
+          </div>
+          <button class="admin-card-btn" onclick="showAdminDetail('docs')">Configure →</button>
+        </div>
+
+        <!-- Zone Mapping -->
+        <div class="admin-card">
+          <div class="admin-card-icon zones">🗺</div>
+          <div class="admin-card-title">Zone Mapping</div>
+          <div class="admin-card-desc">View zone-to-assessment level mappings under City Plan 2014. Controls which pathway applies per zone and development type.</div>
+          <div class="admin-card-stat">
+            <div class="admin-card-stat-label">Zones configured</div>
+            <div class="admin-card-stat-value">5</div>
+            <div class="admin-card-stat-sub">City Plan 2014</div>
+          </div>
+          <button class="admin-card-btn" onclick="showAdminDetail('zones')">Configure →</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== DETAIL: Fees & Levies (combined) ===== -->
+    <div class="admin-detail" id="adminDetail-fees">
+      <div class="admin-detail-header">
+        <button class="admin-detail-back" onclick="showAdminLanding()">← Back to Configuration</button>
+        <div class="admin-detail-title">Fees & Levies</div>
+        <p style="font-size:13px;color:var(--ink-light);margin-top:2px;">Application fee schedule and QLeave levy configuration</p>
+      </div>
+
+      <!-- DA Fee Schedule section -->
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <div>
+            <h3>DA Application Fee Schedule</h3>
+            <p class="admin-section-desc">Configure the point value and fee categories applied to development applications. Prescribed under the Planning and Environment (Fees) Regulations.</p>
+          </div>
+          <button class="admin-action-btn" onclick="showFeeEditModal()">Edit fee schedule</button>
+        </div>
+        <div class="admin-config-card">
+          <div class="admin-config-row">
+            <div class="admin-config-label">Point value</div>
+            <div class="admin-config-value" id="adminPointValue">$143.00</div>
+          </div>
+          <div class="admin-config-row">
+            <div class="admin-config-label">Financial year</div>
+            <div class="admin-config-value">2025–26</div>
+          </div>
+          <div class="admin-config-row">
+            <div class="admin-config-label">Effective from</div>
+            <div class="admin-config-value" id="adminFeeEffective">1 July 2025</div>
+          </div>
+          <div class="admin-config-row last">
+            <div class="admin-config-label">Last modified</div>
+            <div class="admin-config-value" id="adminFeeModified">15 Mar 2026 by <strong>Sean Richards</strong></div>
+          </div>
+        </div>
+        <table class="admin-table" style="margin-top:16px;">
+          <thead><tr><th>Category</th><th>DA Type</th><th>Points</th><th>Fee</th><th>Notes</th></tr></thead>
+          <tbody id="adminFeeTable"></tbody>
+        </table>
+      </div>
+
+      <!-- QLeave Levy section -->
+      <div class="admin-section" style="margin-top:32px;">
+        <div class="admin-section-header">
+          <div>
+            <h3>QLeave Portable Long Service Leave Levy</h3>
+            <p class="admin-section-desc">Configure the QLeave levy rate and threshold. This levy applies to building and construction work in Queensland.</p>
+          </div>
+          <button class="admin-action-btn" onclick="showQLeaveEditModal()">Edit QLeave rates</button>
+        </div>
+        <div class="admin-config-card">
+          <div class="admin-config-row">
+            <div class="admin-config-label">Levy rate</div>
+            <div class="admin-config-value" id="adminQLeaveRate">0.575%</div>
+          </div>
+          <div class="admin-config-row">
+            <div class="admin-config-label">Threshold</div>
+            <div class="admin-config-value" id="adminQLeaveThreshold">$150,000 (construction value excl. GST)</div>
+          </div>
+          <div class="admin-config-row">
+            <div class="admin-config-label">Effective from</div>
+            <div class="admin-config-value" id="adminQLeaveEffective">1 July 2025</div>
+          </div>
+          <div class="admin-config-row last">
+            <div class="admin-config-label">Last modified</div>
+            <div class="admin-config-value" id="adminQLeaveModified">15 Mar 2026 by <strong>Sean Richards</strong></div>
+          </div>
+        </div>
+        <div class="admin-info-banner" style="margin-top:16px;">
+          <div style="font-weight:600;margin-bottom:4px;">How the levy is calculated</div>
+          <div>The levy is charged as a percentage of the total construction value (excluding GST) when the value equals or exceeds the threshold. Example: $500,000 construction value × 0.575% = $2,875.00 levy.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DETAIL: Required Documents ===== -->
+    <div class="admin-detail" id="adminDetail-docs">
+      <div class="admin-detail-header">
+        <button class="admin-detail-back" onclick="showAdminLanding()">← Back to Configuration</button>
+        <div class="admin-detail-title">Document Requirements</div>
+        <p style="font-size:13px;color:var(--ink-light);margin-top:2px;">Document configuration by application type</p>
+      </div>
+
+      <div class="doc-matrix-info">
+        <h4>Document requirements by application type</h4>
+        <p>Click any cell to cycle through document requirement states. The carousel shows 4 application types at a time — use the arrows to navigate through all <span id="docMatrixTypeCount">13</span> types.</p>
+        <div class="doc-matrix-legend">
+          <span class="legend-label">Legend:</span>
+          <div class="legend-item"><span class="legend-swatch empty"></span> Not required</div>
+          <div class="legend-item"><span class="legend-swatch required">✓</span> Required</div>
+          <div class="legend-item"><span class="legend-swatch mandatory">M</span> Mandatory</div>
+        </div>
+      </div>
+
+      <div class="doc-carousel-nav">
+        <div class="doc-carousel-info" id="docCarouselInfo">Showing 1–4 of 13</div>
+        <div class="doc-carousel-dots" id="docCarouselDots"></div>
+        <button class="doc-carousel-btn" onclick="docCarouselPrev()">‹</button>
+        <button class="doc-carousel-btn" onclick="docCarouselNext()">›</button>
+      </div>
+
+      <div class="doc-matrix-wrap">
+        <table class="doc-matrix" id="docMatrixTable">
+          <thead id="docMatrixHead"></thead>
+          <tbody id="docMatrixBody"></tbody>
+        </table>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:12px;">
+        <button class="admin-action-btn" onclick="addDocRow()">+ Add document</button>
+      </div>
+    </div>
+
+    <!-- ===== DETAIL: Zone Mapping ===== -->
+    <div class="admin-detail" id="adminDetail-zones">
+      <div class="admin-detail-header">
+        <button class="admin-detail-back" onclick="showAdminLanding()">← Back</button>
+        <div class="admin-detail-title">Zone Mapping</div>
+      </div>
+      <div class="admin-section">
+        <h3>Zone → Assessment Level Mapping (City Plan 2014)</h3>
+        <table class="admin-table">
+          <thead><tr><th>Zone Code</th><th>Zone Name</th><th>Minor Works</th><th>New Dwelling</th><th>Secondary Dwelling</th><th>Multiple Dwelling</th></tr></thead>
+          <tbody>
+            <tr><td>CR2</td><td>Character Residential – Infill Housing</td><td><span class="admin-badge accepted">Accepted</span></td><td><span class="admin-badge risksmart">RiskSmart</span></td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge impact">Impact</span></td></tr>
+            <tr><td>MDR</td><td>Medium Density Residential</td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge impact">Impact</span></td></tr>
+            <tr><td>HDR2</td><td>High Density Residential (up to 15 storeys)</td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge impact">Impact</span></td><td><span class="admin-badge impact">Impact</span></td><td><span class="admin-badge impact">Impact</span></td></tr>
+            <tr><td>LII</td><td>Low Impact Industry</td><td><span class="admin-badge code">Code</span></td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
+            <tr><td>MU</td><td>Mixed Use</td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge code">Code</span></td><td><span class="admin-badge code">Code</span></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:11px;color:var(--ink-faint);margin-top:8px;">Overlay modifiers: Demolition Control and TBC overlays require character assessment for new dwellings. Flood overlay (Overland Flow) may disqualify RiskSmart — standard code assessment applies.</p>
+      </div>
+    </div>
+
+    <!-- ===== DETAIL: Assessment Rules ===== -->
+    <div class="admin-detail" id="adminDetail-rules">
+      <div class="admin-detail-header">
+        <button class="admin-detail-back" onclick="showAdminLanding()">← Back</button>
+        <div class="admin-detail-title">Assessment Rules</div>
+      </div>
+      <div class="admin-section">
+        <h3>RiskSmart Eligibility Rules (BCC-only fast-track)</h3>
+        <table class="admin-table">
+          <thead><tr><th>Rule</th><th>Threshold / Condition</th><th>Effect if failed</th></tr></thead>
+          <tbody>
+            <tr><td>Assessment level</td><td>Code assessable only (not impact)</td><td>Ineligible — standard code pathway</td></tr>
+            <tr><td>Flood overlay</td><td>No Overland Flow overlay on site</td><td>Ineligible — flood assessment required</td></tr>
+            <tr><td>Development type</td><td>New dwelling house, dual occupancy, small commercial</td><td>RiskSmart not available for impact assessable uses</td></tr>
+            <tr><td>Site area</td><td>No minimum — prototype uses &lt;700m² lots</td><td>N/A for prototype</td></tr>
+            <tr><td>Timeframe</td><td>5–10 business days (vs 25 days standard code)</td><td>—</td></tr>
+            <tr><td>Additional referrals</td><td>Must not require SARA or utility referrals</td><td>Ineligible — standard code pathway</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="admin-section">
+        <h3>Information Request (IR) Trigger Thresholds</h3>
+        <table class="admin-table">
+          <thead><tr><th>Trigger</th><th>Condition</th><th>Default IR period</th></tr></thead>
+          <tbody>
+            <tr><td>Incomplete Form 1</td><td>Missing mandatory fields (Parts 1–4, 8)</td><td>Action Notice within 10 days — application not PMA</td></tr>
+            <tr><td>Missing documents</td><td>Required supporting docs absent at lodgement</td><td>IR within 10 days of Part 1 period end; 3-month response window</td></tr>
+            <tr><td>Demolition Control / TBC character assessment</td><td>New dwelling in Demolition Control or TBC overlay without character assessment</td><td>IR triggered at Part 1 — assessment cannot proceed</td></tr>
+            <tr><td>Flood assessment missing</td><td>Site in Flood overlay (Overland Flow), no flood study lodged</td><td>IR triggered at Part 1</td></tr>
+            <tr><td>SARA referral</td><td>Development triggering State interests (SDAP schedule)</td><td>Concurrent referral — 20 business days (standard); 10 days (code)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== DETAIL: Change Log ===== -->
+    <div class="admin-detail" id="adminDetail-changelog">
+      <div class="admin-detail-header">
+        <button class="admin-detail-back" onclick="showAdminLanding()">← Back</button>
+        <div class="admin-detail-title">Configuration Change Log</div>
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <div>
+            <h3>Audit Trail</h3>
+            <p class="admin-section-desc">All configuration changes are recorded with who made the change, when, and the effective date.</p>
+          </div>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Date</th><th>User</th><th>Section</th><th>Change</th><th>Effective from</th></tr></thead>
+          <tbody id="adminChangeLog"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==================== MAIN APP ==================== -->
+<div id="app" style="display:none">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="topbar-logo-box">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg>
+      </div>
+      <div>
+        <div class="topbar-brand">Build AU</div>
+        <div class="topbar-sub">Prototype</div>
+      </div>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">DA Lodgement — Queensland</div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-save"><div class="topbar-save-dot"></div> Auto-saved</div>
+    <button class="topbar-prelodge" onclick="showPreLodgementModal()">
+      <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+      Book pre-lodgement meeting
+    </button>
+    <button class="topbar-admin" onclick="openAdmin()" title="Admin panel">
+      <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.61 3.61 0 0112 15.6z"/></svg>
+    </button>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar-wrap" id="progressBarWrap">
+    <div class="progress-stages" id="progressStages">
+      <!-- Dynamically rendered by JS -->
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- Stage 1: Find Your Property -->
+    <div id="stage1" class="stage-view">
+      <div id="bgp1"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 1 of 9</div>
+        <div class="stage-heading">Find your property</div>
+        <div class="stage-sub">Start by entering your property address or lot/plan reference. We'll look up your zone and planning overlays automatically.</div>
+
+        <!-- Search tabs -->
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="setSearchMode('address')">Address</button>
+          <button class="search-tab" onclick="setSearchMode('lotplan')">Lot / Plan</button>
+        </div>
+
+        <!-- Address search -->
+        <div id="addressSearchWrap" class="search-wrap">
+          <div class="search-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
+          <input class="search-input" id="addressSearch" type="text" placeholder="Start typing an address in Milton QLD…" autocomplete="off"
+            oninput="filterAddresses(this.value)" onkeydown="handleSearchKey(event)">
+          <div class="autocomplete-list" id="autocompleteList"></div>
+        </div>
+
+        <!-- Lot/Plan search -->
+        <div id="lotplanSearchWrap" class="search-wrap" style="display:none">
+          <div class="search-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div>
+          <input class="search-input" id="lotplanSearch" type="text" placeholder="e.g. Lot 2 RP212550" autocomplete="off"
+            oninput="filterByLotPlan(this.value)" onkeydown="handleSearchKey(event)">
+          <div class="autocomplete-list" id="lotplanAutocompleteList"></div>
+        </div>
+
+        <!-- Primary address (shown after selection) -->
+        <div id="primaryAddressWrap" style="display:none">
+          <div id="primaryAddressCard"></div>
+        </div>
+
+        <!-- Out of area card -->
+        <div id="outOfAreaCard" style="display:none">
+          <div class="ooa-card">
+            <div class="ooa-title">Outside City Council area</div>
+            <div class="ooa-text">This property isn't in our council area. Try a different address.</div>
+            <button class="ooa-btn" onclick="clearSelection()">Search again</button>
+          </div>
+        </div>
+
+        <!-- Empty state hint -->
+        <div id="noSelectionHint" style="font-size:13px;color:var(--ink-faint);text-align:center;padding:20px 0;">
+          Enter your address above to get started. This prototype uses 15 sample properties in Milton QLD 4064.
+        </div>
+
+        <!-- Google Maps embed (shown after address selection, above add-more) -->
+        <div class="map-container" id="mapContainer" style="display:none">
+          <iframe id="googleMap" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+
+        <!-- Additional addresses + add more (below map) -->
+        <div id="addMoreWrap" style="display:none">
+          <div id="additionalAddressList" class="address-list" style="margin-bottom:8px;"></div>
+          <button class="add-address-btn" id="addMoreBtn" onclick="addAnotherAddress()">+ Add another property</button>
+          <div id="multiNote" style="display:none;font-size:11px;color:var(--ink-faint);margin-top:8px;">The assessment pathway is determined by your primary property (marked above).</div>
+        </div>
+
+        <div class="nav-bar">
+          <div></div>
+          <button class="btn-next" id="s1Next" onclick="nextStage()" disabled>Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Property Intelligence -->
+    <div id="stage2" class="stage-view" style="display:none">
+      <div id="bgp2"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 2 of 9</div>
+        <div class="stage-heading">Your property snapshot</div>
+        <div class="stage-sub">Here's what we found for your property based on the Brisbane City Plan 2014.</div>
+
+        <div id="propBanner" class="prop-card" style="margin-bottom:20px;"></div>
+        <div id="floodBanner" style="display:none"></div>
+        <div class="intel-grid" id="intelGrid"></div>
+        <div id="saraBanner"></div>
+
+        <div class="nav-bar">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-next" onclick="nextStage()">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 3: What Do You Want To Do? -->
+    <div id="stage3" class="stage-view" style="display:none">
+      <div id="bgp3"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 3 of 9</div>
+        <div class="stage-heading">What are you planning?</div>
+        <div class="stage-sub">Select the type of development you're proposing. This determines your assessment pathway.</div>
+
+        <div class="devtype-grid" id="devTypeGrid"></div>
+
+        <div class="prohibited-section" id="prohibitedSection"></div>
+
+        <div class="nav-bar">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-next" id="s3Next" onclick="nextStage()" disabled>Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 4: Assessment Pathway Reveal -->
+    <div id="stage4" class="stage-view" style="display:none">
+      <div id="bgp4"></div>
+      <div class="stage-card" id="s4Card">
+        <div class="stage-eyebrow">Step 4 of 9</div>
+        <div class="stage-heading" id="s4Heading">Your assessment pathway</div>
+        <div id="s4Content"></div>
+        <div class="nav-bar" id="s4Nav">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-next" id="s4Next" onclick="nextStage()">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 5: Development Details -->
+    <div id="stage5" class="stage-view" style="display:none">
+      <div id="bgp5"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 5 of 9</div>
+        <div class="stage-heading">Development details</div>
+        <div class="stage-sub">Tell us more about your proposed works. This information will appear on your Form 1.</div>
+        <div id="s5FormContent"></div>
+        <div class="nav-bar">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-next" onclick="nextStage()">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 6: Documents -->
+    <div id="stage6" class="stage-view" style="display:none">
+      <div id="bgp6"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 6 of 9</div>
+        <div class="stage-heading">Documents required</div>
+        <div class="stage-sub">Upload your documents and we'll check them against the requirements for your application.</div>
+
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-zone-icon">📁</div>
+          <div class="upload-zone-text"><strong>Drag files here</strong> or click to upload</div>
+        </div>
+        <input type="file" id="fileInput" multiple style="display:none" onchange="handleFileUpload(event)">
+        <div class="uploaded-files" id="uploadedFiles"></div>
+        <div id="aiReviewSection" style="display:none"></div>
+
+        <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.3px;">Required documents</div>
+        <div id="s6DocList"></div>
+        <div class="nav-bar">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-next" onclick="nextStage()">Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 7: Applicant Details (Form 1, Part 1) -->
+    <div id="stage7" class="stage-view" style="display:none">
+      <div id="bgp7"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 7 of 9</div>
+        <div class="stage-heading">Applicant details</div>
+        <div class="stage-sub">Provide details of the person or company making this development application (Form 1, Part 1).</div>
+
+        <div class="signin-section">
+          <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px;">Sign in or continue as guest</div>
+          <div class="signin-options">
+            <button class="signin-btn primary" onclick="showToast('Sign-in coming soon — continue as guest for now')">Sign in with Build AU</button>
+            <button class="signin-btn secondary" onclick="dismissSignin()">Continue as guest</button>
+          </div>
+        </div>
+
+        <div id="guestFormSection" style="display:none">
+          <!-- Applicant details — primary section matching Form 1 Part 1 Q1 -->
+          <div class="form-section">
+            <div class="form-section-title">Applicant</div>
+            <div class="field-row">
+              <div class="field"><label>Applicant name (individual or company)</label><input type="text" placeholder="e.g. Thomas Robertson" id="applicantName"></div>
+              <div class="field"><label>Contact name (if company)</label><input type="text" placeholder="Only if applicant is a company" id="applicantContact"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Postal address</label><input type="text" placeholder="e.g. 4723 Newberry Court" id="applicantPostal"></div>
+              <div class="field"><label>Suburb</label><input type="text" placeholder="e.g. Milton" id="applicantSuburb"></div>
+            </div>
+            <div class="field-row">
+              <div class="field" style="flex:0.5"><label>State</label><input type="text" placeholder="QLD" id="applicantState" value="QLD"></div>
+              <div class="field" style="flex:0.5"><label>Postcode</label><input type="text" placeholder="e.g. 4064" id="applicantPostcode"></div>
+              <div class="field"><label>Country</label><input type="text" placeholder="Australia" id="applicantCountry" value="Australia"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Contact number</label><input type="tel" placeholder="e.g. 0412 345 678" id="applicantPhone"></div>
+              <div class="field"><label>Email (non-mandatory)</label><input type="email" placeholder="e.g. t.robertson@email.com" id="applicantEmail"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>Mobile (non-mandatory)</label><input type="tel" placeholder="e.g. 0412 345 678" id="applicantMobile"></div>
+              <div class="field"><label>Applicant reference (if applicable)</label><input type="text" placeholder="e.g. DA-2026-001" id="applicantRef"></div>
+            </div>
+          </div>
+
+          <!-- Owner's consent — Form 1 Part 1 Q2 -->
+          <div class="form-section">
+            <div class="form-section-title">Owner's consent (Form 1, Part 1 — Section 2)</div>
+            <div class="ir-options">
+              <label class="ir-option selected" id="appSelf">
+                <input type="radio" name="applicantType" value="self" checked onchange="toggleApplicant('self')">
+                <div class="ir-option-content">
+                  <div class="ir-option-title">I am the property owner</div>
+                  <div class="ir-option-desc">Owner's consent is not required — you are the registered owner of the premises.</div>
+                </div>
+              </label>
+              <label class="ir-option" id="appAgent">
+                <input type="radio" name="applicantType" value="agent" onchange="toggleApplicant('agent')">
+                <div class="ir-option-content">
+                  <div class="ir-option-title">I am not the owner — written consent is required</div>
+                  <div class="ir-option-desc">The written consent of the owner must be attached for the application to be properly made.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div id="agentSection" style="display:none">
+            <div class="consent-card" id="consentDownloadCard">
+              <div class="consent-card-title">Owner's consent</div>
+              <div class="consent-card-desc">Download a blank consent template, have the registered owner sign it, then upload the signed version. The consent must be current, specific to this application, and include the owner's signature.</div>
+              <div class="consent-actions">
+                <button class="download-btn" onclick="generateOwnersConsentPDF()">Download template</button>
+                <button class="upload-consent-btn" id="consentUploadBtn" onclick="simulateConsentUpload()">Upload signed consent</button>
+              </div>
+              <div class="ai-verify-card" id="consentVerifyCard">
+                <div class="ai-verify-header">
+                  <div class="ai-verify-icon">AI</div>
+                  <div class="ai-verify-title">Document verification</div>
+                  <div class="ai-verify-status" id="consentVerifyStatus">Checking...</div>
+                </div>
+                <div class="ai-verify-checks" id="consentVerifyChecks"></div>
+                <div class="ai-verify-summary" id="consentVerifySummary" style="display:none;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- IR agreement — Form 1 Part 6 -->
+          <div class="form-section">
+            <div class="form-section-title">Information request (Form 1, Part 6)</div>
+            <div class="declaration-check" onclick="toggleIR()" style="cursor:pointer;">
+              <input type="checkbox" id="irCheckbox" checked onchange="toggleIR()">
+              <div>
+                <div class="declaration-check-label">I agree to receive an information request if determined necessary for this development application</div>
+                <div style="font-size:11px;color:var(--ink-light);margin-top:4px;">If unchecked, the assessment manager will assess based on information provided only.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-bar">
+            <button class="btn-back" onclick="prevStage()">← Back</button>
+            <button class="btn-next" onclick="nextStage()">Continue →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 8: Fee & Review -->
+    <div id="stage8" class="stage-view" style="display:none">
+      <div id="bgp8"></div>
+      <div class="stage-card" id="s8Card">
+        <div class="stage-eyebrow">Step 8 of 9</div>
+        <div class="stage-heading">Review &amp; submit</div>
+        <div class="stage-sub">Review your application summary and estimated fees before lodging.</div>
+
+        <div id="s8ReviewContent"></div>
+
+        <div class="declaration-box">
+          <div class="declaration-text">
+            I declare that the information provided in this application is true and correct to the best of my knowledge. I understand that providing false or misleading information is an offence under the Planning Act 2016. I acknowledge that this application fee is non-refundable once the application has been accepted as a Properly Made Application.
+          </div>
+          <label class="declaration-check">
+            <input type="checkbox" id="declarationCheck" onchange="toggleSubmit()">
+            <span class="declaration-check-label">I confirm the above declaration and consent to this application being lodged with Council.</span>
+          </label>
+        </div>
+
+        <div class="nav-bar">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-submit" id="submitBtn" disabled onclick="submitApp()">Lodge Application</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 9: Success -->
+    <div id="stage9" class="stage-view" style="display:none">
+      <div id="bgp9"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 9 of 9</div>
+        <div class="stage-heading">Application confirmed</div>
+        <div class="success-state" style="padding:24px 0;">
+          <div class="success-icon">🎉</div>
+          <div class="success-title">Application lodged successfully</div>
+          <div class="success-sub">Your Development Application has been received by Council. You'll receive an email confirmation within 24 hours.</div>
+          <div class="success-ref" id="successRef">DA-2026/4091</div>
+
+          <div style="text-align:left;margin-top:24px;">
+            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;">Download your application</div>
+            <div class="download-grid">
+              <button class="download-btn" onclick="generateForm1PDF()">📄 Form 1 (PDF)</button>
+              <button class="download-btn" onclick="generateForm2PDF()">📄 Form 2 (PDF)</button>
+              <button class="download-btn full" id="consentDlBtn" onclick="generateOwnersConsentPDF()" style="display:none">📝 Owner's Consent (PDF)</button>
+            </div>
+          </div>
+
+          <div class="success-steps" style="margin-top:24px;">
+            <h4>What happens next</h4>
+            <div class="success-step"><div class="success-step-num">1</div><div>Council will review your application within <strong>10 business days</strong> to confirm it's a Properly Made Application (PMA). If anything is missing, you'll receive an Action Notice.</div></div>
+            <div class="success-step" id="successStep2"><div class="success-step-num">2</div><div id="successStep2Text">Your application enters the assessment period. The assessing officer will contact you if an Information Request is required.</div></div>
+            <div class="success-step"><div class="success-step-num">3</div><div>You can track your application status at <strong>ePlanning</strong> using your DA reference number above.</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <div class="toast" id="toast"></div>
+
+</div><!-- /app -->
+
+<!-- Prototype tag -->
+<div class="proto-tag" onclick="openAdmin()" title="Click to open admin panel · Shift+A">
+  <strong>Build AU — QLD DA Experience v1.6</strong>
+  <span style="margin-left:6px;opacity:0.6;">⚙ Admin</span>
+  <br>Concept demonstration only. Commercial in confidence.
+</div>
+
+<!-- Google Maps via iframe embed -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ==================== DATA ====================
+const ADDRESSES = [
+  // Accepted Development — CR2, DHC+TBC, no flood
+  { id:'a1', addr:'11 Baroona Road, Milton QLD 4064', street:'11 BAROONA ROAD', lot:'Lot 2 RP212550', area:571, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.4686, lng:153.0034 },
+  { id:'a2', addr:'2 Blaxland Street, Milton QLD 4064', street:'2 BLAXLAND STREET', lot:'Lot 86 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.4692, lng:153.0041 },
+  { id:'a3', addr:'11 Castlemaine Street, Milton QLD 4064', street:'11 CASTLEMAINE STREET', lot:'Lot 74 RP19536', area:589, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'accepted', lat:-27.4698, lng:153.0028 },
+  { id:'a4', addr:'2 Copeland Street, Milton QLD 4064', street:'2 COPELAND STREET', lot:'Lot 1 RP47527', area:400, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.4701, lng:153.0037 },
+  // RiskSmart / New Dwelling — CR2, DHC+TBC
+  { id:'r1', addr:'15 Baroona Road, Milton QLD 4064', street:'15 BAROONA ROAD', lot:'Lot 3 RP212549', area:595, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.4688, lng:153.0033 },
+  { id:'r2', addr:'3 Blaxland Street, Milton QLD 4064', street:'3 BLAXLAND STREET', lot:'Lot 71 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.4693, lng:153.0042 },
+  { id:'r3', addr:'17 Castlemaine Street, Milton QLD 4064', street:'17 CASTLEMAINE STREET', lot:'Lot 73 RP19536', area:683, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.4700, lng:153.0027 },
+  { id:'r4', addr:'12 Blaxland Street, Milton QLD 4064', street:'12 BLAXLAND STREET', lot:'Lot 81 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:true, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'risksmart', lat:-27.4693, lng:153.0040 },
+  // Code Assessable / Secondary Dwelling — MDR, Milton NP
+  { id:'c1', addr:'12 Bergin Street, Milton QLD 4064', street:'12 BERGIN STREET', lot:'Lot 37 RP18476', area:435, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4710, lng:153.0050 },
+  { id:'c2', addr:'14 Gordon Street, Milton QLD 4064', street:'14 GORDON STREET', lot:'Lot 68 RP18476', area:405, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4715, lng:153.0055 },
+  { id:'c3', addr:'11 Sheehan Street, Milton QLD 4064', street:'11 SHEEHAN STREET', lot:'Lot 16 RP18476', area:405, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4718, lng:153.0048 },
+  { id:'c4', addr:'9 Dorsey Street, Milton QLD 4064', street:'9 DORSEY STREET', lot:'Lot 25 SP116098', area:174, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4720, lng:153.0052 },
+  // Impact Assessable / Multi-Unit — HDR2, Milton Station NP
+  { id:'i1', addr:'10 Crombie Street, Milton QLD 4064', street:'10 CROMBIE STREET', lot:'Lot 171 RP18374', area:410, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', dhc:true, tbc:false, flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.4725, lng:153.0045 },
+  { id:'i2', addr:'9 Manning Street, Milton QLD 4064', street:'9 MANNING STREET', lot:'Lot 100 RP18374', area:405, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', dhc:true, tbc:false, flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.4728, lng:153.0043 },
+  { id:'i3', addr:'20 Walsh Street, Milton QLD 4064', street:'20 WALSH STREET', lot:'Lot 1 RP153912', area:2833, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', dhc:true, tbc:false, flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.4730, lng:153.0040 },
+  { id:'oo1', addr:'177 Pacific Highway, North Sydney NSW 2060', street:'177 PACIFIC HIGHWAY', lot:'Lot 1 DP891235', area:4200, zone:'OOA', zoneDesc:'Outside City Council area', dhc:false, tbc:false, flood:false, np:'N/A', npPrec:'N/A', scenario:'outofarea', outOfArea:true, lat:-33.8399, lng:151.2093 },
+];
+
+const DEV_TYPES = {
+  CR2: [
+    { id:'minor', label:'Minor works', desc:'Deck, carport, shed, pool, fence', icon:'🔨', pathway:'accepted', badge:'No DA required' },
+    { id:'alts', label:'Alterations & additions', desc:'Extension to existing dwelling', icon:'🏠', pathway:'accepted', badge:'No DA required' },
+    { id:'newdwelling', label:'New dwelling house', desc:'Replace existing house with new build', icon:'🏗️', pathway:'risksmart', badge:'RiskSmart eligible' },
+    { id:'secondary', label:'Secondary dwelling', desc:'Granny flat (≤80m² GFA, meets acceptable outcomes)', icon:'🏡', pathway:'accepted', badge:'No DA required' },
+  ],
+  MDR: [
+    { id:'minor', label:'Minor works', desc:'Deck, carport, landscaping', icon:'🔨', pathway:'code', badge:'Code assessable' },
+    { id:'secondary', label:'Secondary dwelling', desc:'Dual occupancy or secondary unit', icon:'🏡', pathway:'code', badge:'Code assessable' },
+    { id:'newdwelling', label:'New dwelling / dual occ', desc:'New residential development', icon:'🏗️', pathway:'code', badge:'Code assessable' },
+    { id:'multiple', label:'Multiple dwellings', desc:'Units, townhouses, apartments (4+)', icon:'🏢', pathway:'impact', badge:'Impact assessable' },
+  ],
+  HDR2: [
+    { id:'multiple', label:'Multiple dwellings / apartments', desc:'Multi-storey residential (up to 15 storeys)', icon:'🏢', pathway:'impact', badge:'Impact assessable' },
+    { id:'mixeduse', label:'Mixed use (residential + commercial)', desc:'Ground-floor commercial with residential above', icon:'🏙️', pathway:'impact', badge:'Impact assessable' },
+  ],
+};
+
+const PROHIBITED_USES = {
+  CR2: [
+    { label: 'Multiple dwellings (3+ units)', reason: 'Prohibited in the Character Residential zone under BCC City Plan 2014' },
+    { label: 'Commercial development', reason: 'Not permitted in Character Residential zone' },
+    { label: 'Industrial uses', reason: 'Not permitted in residential zones' },
+    { label: 'High-rise apartments (above 2 storeys)', reason: 'Exceeds zone height limit' },
+  ],
+  MDR: [
+    { label: 'Industrial uses', reason: 'Not permitted in residential zones' },
+    { label: 'Large-scale commercial', reason: 'Not permitted in Medium Density Residential' },
+    { label: 'High-rise above neighbourhood plan limit', reason: 'Exceeds 3-4 storey height limit' },
+  ],
+  HDR2: [
+    { label: 'Industrial uses', reason: 'Not permitted in residential zones' },
+    { label: 'Low-density detached housing', reason: 'Single dwelling house not consistent with HDR2 zone intent' },
+  ],
+};
+
+const PATHWAY_CONFIG = {
+  accepted: {
+    label:'Accepted Development',
+    color:'accepted',
+    icon:'✅',
+    title:'Great news — no DA required!',
+    sub:'This type of development at your property is Accepted Development under the Brisbane City Plan 2014. It complies with the zone and overlay codes without needing a formal development application.',
+    timeline:'No DA process — works can proceed subject to building approval',
+    isExit: true,
+  },
+  risksmart: {
+    label:'RiskSmart — Code Assessable',
+    color:'risksmart',
+    icon:'⚡',
+    title:'RiskSmart fast-track available',
+    sub:'Your development is Code Assessable and eligible for Council\'s RiskSmart program — Brisbane\'s fast-track DA pathway for eligible code-assessable applications. Target decision: 5–10 business days.',
+    timeline:'5–10 business days (RiskSmart) · 35 business days (standard code)',
+    steps:[
+      { title:'Lodge your DA', desc:'Submit Form 1, site plan, building plans, and character assessment for Demolition Control / TBC overlay.' },
+      { title:'Code assessment', desc:'Council assesses against the Neighbourhood Plan, dwelling house code, and overlay codes.' },
+      { title:'Decision notice', desc:'Approval, approval with conditions, or refusal. Conditions may include materials, setbacks, character requirements.' },
+    ],
+    isExit: false,
+  },
+  risksmart_flood: {
+    label:'Code Assessable (Flood overlay)',
+    color:'code',
+    icon:'🌊',
+    title:'Code Assessable — flood overlay applies',
+    sub:'Your property is in a flood overlay area (Overland Flow Path), which means a flood impact assessment is required and RiskSmart is not available. Your application follows the standard code assessment pathway.',
+    timeline:'35 business days (standard code assessment)',
+    steps:[
+      { title:'Lodge your DA', desc:'Submit Form 1 with a hydraulic engineer\'s flood impact assessment report, site plan, and character assessment.' },
+      { title:'Code assessment', desc:'Assessed against dwelling house code, neighbourhood plan, flood overlay code, and Traditional Building Character overlay codes.' },
+      { title:'Decision notice', desc:'Approval may include flood-resilience conditions (floor levels, materials, drainage).' },
+    ],
+    isExit: false,
+  },
+  code: {
+    label:'Code Assessable',
+    color:'code',
+    icon:'📋',
+    title:'Code Assessable development',
+    sub:'Your development is Code Assessable under the Brisbane City Plan 2014. There is no public notification — Council assesses the application against the relevant codes. No RiskSmart fast-track available for this development type.',
+    timeline:'35 business days (standard code assessment)',
+    steps:[
+      { title:'Lodge your DA', desc:'Submit Form 1, site plan, architectural plans, character assessment (Demolition Control overlay), and any other required documents.' },
+      { title:'Code assessment', desc:'Assessed against the zone code, overlay codes, and neighbourhood plan provisions. No public submission period.' },
+      { title:'Decision notice', desc:'Approval, approval with conditions, or refusal. Right of appeal to the Planning and Environment Court.' },
+    ],
+    isExit: false,
+  },
+  impact: {
+    label:'Impact Assessable',
+    color:'impact',
+    icon:'📣',
+    title:'Impact Assessable — public notification required',
+    sub:'Your development is Impact Assessable. This triggers a formal public notification period during which neighbours and the community can make submissions. Applications take longer and involve more documentation.',
+    timeline:'~55+ business days (including 15-day public notification period)',
+    steps:[
+      { title:'Lodge your DA', desc:'Submit Form 1, comprehensive development plans, traffic report, character assessment, and impact assessment documentation.' },
+      { title:'Public notification', desc:'Mandatory 15-business-day public notification period. Adjoining owners notified, site notice posted, public advertisement placed.' },
+      { title:'Assessment & decision', desc:'Council considers all submissions and assesses against the Strategic Framework, zone code, and overlay codes. Decision notice issued.' },
+    ],
+    isExit: false,
+  },
+};
+
+const STAGE_LABELS = ['Find Property','Prop. Review','Dev. Type','Pathway','Details','Documents','Applicant','Fee & Review','Confirmation'];
+
+let state = {
+  currentStage: 1,
+  selectedAddresses: [],
+  selectedDevType: null,
+  pathway: null,
+  constructionValue: 0,
+  numUnits: 2,
+  devDescription: '',
+  irPref: 'yes',
+  floorArea: 0,
+  searchMode: 'address',
+  qleavePayNow: true,
+  uploadedFiles: [],
+};
+
+function checkPassword() {
+  const input = document.getElementById('gate-input');
+  const err = document.getElementById('gate-error');
+  if (input.value === 'objective2026') {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    err.textContent = 'Incorrect password. Try again.';
+    input.classList.remove('gate-shake');
+    void input.offsetWidth;
+    input.classList.add('gate-shake');
+    setTimeout(()=>input.classList.remove('gate-shake'), 400);
+  }
+}
+
+function initMap() {
+  // Google Maps iframe embed — no API key required
+}
+function updateMap(addresses) {
+  const iframe = document.getElementById('googleMap');
+  if (!iframe || !addresses.length) return;
+  const primary = addresses[0];
+  // Use Google Maps embed URL with coordinates for the primary address
+  const q = encodeURIComponent(primary.addr);
+  iframe.src = `https://www.google.com/maps?q=${primary.lat},${primary.lng}&z=17&output=embed`;
+}
+
+function initApp() {
+  renderProgress();
+  renderBgPanels();
+  // Admin tables rendered on demand via openAdmin()
+  initMap();
+  showStage(1);
+}
+
+function setSearchMode(mode) {
+  state.searchMode = mode;
+  document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('addressSearchWrap').style.display = mode === 'address' ? 'block' : 'none';
+  document.getElementById('lotplanSearchWrap').style.display = mode === 'lotplan' ? 'block' : 'none';
+}
+
+function renderProgress() {
+  const wrap = document.getElementById('progressStages');
+  wrap.innerHTML = '';
+  STAGE_LABELS.forEach((label, i) => {
+    const n = i + 1;
+    const isDone = n < state.currentStage;
+    const isActive = n === state.currentStage;
+    const dotClass = isDone ? 'done' : (isActive ? 'active' : '');
+    const lineClass = isDone ? 'done' : '';
+    wrap.innerHTML += `<div class="progress-stage">
+      <div class="stage-dot ${dotClass}" title="${label}">
+        <span class="dot-num">${n}</span>
+        <span class="stage-label ${isActive?'active':''}">${label}</span>
+      </div>
+      ${i < STAGE_LABELS.length - 1 ? `<div class="stage-line ${lineClass}"></div>` : ''}
+    </div>`;
+  });
+}
+
+function showStage(n) {
+  document.querySelectorAll('.stage-view').forEach(el => el.style.display='none');
+  const el = document.getElementById('stage' + n);
+  if (el) el.style.display = 'block';
+  state.currentStage = n;
+  renderProgress();
+  window.scrollTo(0, 0);
+  if (n === 2) renderStage2();
+  if (n === 3) renderStage3();
+  if (n === 4) renderStage4();
+  if (n === 5) renderStage5();
+  if (n === 6) renderStage6();
+  if (n === 8) renderStage8();
+}
+
+function nextStage() {
+  if (state.currentStage === 7) {
+    state.applicantName = document.getElementById('applicantName')?.value || '';
+    state.applicantContact = document.getElementById('applicantContact')?.value || '';
+    state.applicantPostal = document.getElementById('applicantPostal')?.value || '';
+    state.applicantSuburb = document.getElementById('applicantSuburb')?.value || '';
+    state.applicantState = document.getElementById('applicantState')?.value || 'QLD';
+    state.applicantPostcode = document.getElementById('applicantPostcode')?.value || '';
+    state.applicantCountry = document.getElementById('applicantCountry')?.value || 'Australia';
+    state.applicantPhone = document.getElementById('applicantPhone')?.value || '';
+    state.applicantEmail = document.getElementById('applicantEmail')?.value || '';
+    state.applicantMobile = document.getElementById('applicantMobile')?.value || '';
+    state.applicantRef = document.getElementById('applicantRef')?.value || '';
+    state.isAgent = document.querySelector('input[name="applicantType"]:checked')?.value === 'agent';
+  }
+  showStage(state.currentStage + 1);
+}
+
+function prevStage() {
+  showStage(state.currentStage - 1);
+}
+
+function filterAddresses(val) {
+  const list = document.getElementById('autocompleteList');
+  const q = val.trim().toLowerCase();
+  if (q.length < 2) { list.classList.remove('open'); return; }
+  const matches = ADDRESSES.filter(a => a.addr.toLowerCase().includes(q));
+  if (!matches.length) { list.innerHTML = '<div class="autocomplete-item"><div class="autocomplete-addr" style="color:var(--ink-light)">No matches — try another address</div></div>'; list.classList.add('open'); return; }
+  list.innerHTML = matches.map(a => `
+    <div class="autocomplete-item" onclick="selectAddress('${a.id}')">
+      <div class="autocomplete-addr">${a.addr}</div>
+      <div class="autocomplete-sub">${a.lot} · ${a.area}m² · ${a.zone} zone</div>
+    </div>`).join('');
+  list.classList.add('open');
+}
+
+function filterByLotPlan(val) {
+  const list = document.getElementById('lotplanAutocompleteList');
+  const q = val.trim().toLowerCase();
+  if (q.length < 2) { list.classList.remove('open'); return; }
+  const matches = ADDRESSES.filter(a => a.lot.toLowerCase().includes(q));
+  if (!matches.length) { list.innerHTML = '<div class="autocomplete-item"><div class="autocomplete-addr" style="color:var(--ink-light)">No matches found</div></div>'; list.classList.add('open'); return; }
+  list.innerHTML = matches.map(a => `
+    <div class="autocomplete-item" onclick="selectAddress('${a.id}')">
+      <div class="autocomplete-addr">${a.lot}</div>
+      <div class="autocomplete-sub">${a.addr} · ${a.zone} zone</div>
+    </div>`).join('');
+  list.classList.add('open');
+}
+
+function handleSearchKey(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('autocompleteList').classList.remove('open');
+    document.getElementById('lotplanAutocompleteList')?.classList.remove('open');
+  }
+}
+
+function selectAddress(id) {
+  const a = ADDRESSES.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('autocompleteList').classList.remove('open');
+  document.getElementById('lotplanAutocompleteList')?.classList.remove('open');
+
+  if (a.outOfArea) {
+    document.getElementById('outOfAreaCard').style.display = 'block';
+    document.getElementById('primaryAddressWrap').style.display = 'none';
+    document.getElementById('noSelectionHint').style.display = 'none';
+    document.getElementById('mapContainer').style.display = 'none';
+    document.getElementById('s1Next').disabled = true;
+    document.getElementById('addressSearch').value = '';
+    if (document.getElementById('lotplanSearch')) document.getElementById('lotplanSearch').value = '';
+    return;
+  }
+
+  if (state.selectedAddresses.find(x => x.id === a.id)) return;
+
+  state.selectedAddresses.push(a);
+  document.getElementById('outOfAreaCard').style.display = 'none';
+  document.getElementById('addressSearch').value = '';
+  if (document.getElementById('lotplanSearch')) document.getElementById('lotplanSearch').value = '';
+  renderAddressList();
+  document.getElementById('primaryAddressWrap').style.display = 'block';
+  document.getElementById('noSelectionHint').style.display = 'none';
+  document.getElementById('mapContainer').style.display = 'block';
+  document.getElementById('addMoreWrap').style.display = 'block';
+  document.getElementById('s1Next').disabled = false;
+  updateMap(state.selectedAddresses);
+  if (state.selectedAddresses.length > 1) {
+    document.getElementById('multiNote').style.display = 'block';
+  }
+}
+
+function renderAddressList() {
+  const primary = state.selectedAddresses[0];
+  const additional = state.selectedAddresses.slice(1);
+
+  // Primary address card (above map)
+  document.getElementById('primaryAddressCard').innerHTML = `
+    <div class="address-item primary">
+      <div class="address-item-content">
+        <div class="address-item-addr">
+          ${primary.addr}
+          <span class="primary-badge">Primary</span>
+        </div>
+        <div class="address-item-meta">${primary.lot} · ${primary.area}m² · ${primary.zone} — ${primary.zoneDesc}</div>
+      </div>
+      <button class="address-remove" onclick="removeAddress('${primary.id}')" title="Remove">✕</button>
+    </div>`;
+
+  // Additional addresses (below map)
+  const addList = document.getElementById('additionalAddressList');
+  if (additional.length) {
+    addList.innerHTML = additional.map(a => `
+      <div class="address-item">
+        <div class="address-item-content">
+          <div class="address-item-addr">${a.addr}</div>
+          <div class="address-item-meta">${a.lot} · ${a.area}m² · ${a.zone} — ${a.zoneDesc}</div>
+        </div>
+        <button class="make-primary-btn" onclick="makePrimary('${a.id}')">Make primary</button>
+        <button class="address-remove" onclick="removeAddress('${a.id}')" title="Remove">✕</button>
+      </div>`).join('');
+  } else {
+    addList.innerHTML = '';
+  }
+}
+
+function makePrimary(id) {
+  const idx = state.selectedAddresses.findIndex(a => a.id === id);
+  if (idx <= 0) return;
+  const addr = state.selectedAddresses.splice(idx, 1)[0];
+  state.selectedAddresses.unshift(addr);
+  renderAddressList();
+  updateMap(state.selectedAddresses);
+}
+
+function removeAddress(id) {
+  state.selectedAddresses = state.selectedAddresses.filter(a => a.id !== id);
+  if (state.selectedAddresses.length === 0) {
+    document.getElementById('primaryAddressWrap').style.display = 'none';
+    document.getElementById('noSelectionHint').style.display = 'block';
+    document.getElementById('mapContainer').style.display = 'none';
+    document.getElementById('addMoreWrap').style.display = 'none';
+    document.getElementById('s1Next').disabled = true;
+    document.getElementById('multiNote').style.display = 'none';
+  } else {
+    renderAddressList();
+    updateMap(state.selectedAddresses);
+    if (state.selectedAddresses.length <= 1) document.getElementById('multiNote').style.display = 'none';
+  }
+}
+
+function addAnotherAddress() {
+  document.getElementById('addressSearch').value = '';
+  document.getElementById('addressSearch').focus();
+}
+
+function clearSelection() {
+  state.selectedAddresses = [];
+  document.getElementById('addressSearch').value = '';
+  if (document.getElementById('lotplanSearch')) document.getElementById('lotplanSearch').value = '';
+  document.getElementById('primaryAddressWrap').style.display = 'none';
+  document.getElementById('noSelectionHint').style.display = 'block';
+  document.getElementById('mapContainer').style.display = 'none';
+  document.getElementById('addMoreWrap').style.display = 'none';
+  document.getElementById('outOfAreaCard').style.display = 'none';
+  document.getElementById('s1Next').disabled = true;
+  document.getElementById('multiNote').style.display = 'none';
+  document.getElementById('autocompleteList').classList.remove('open');
+  document.getElementById('googleMap').src = '';
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) {
+    document.getElementById('autocompleteList')?.classList.remove('open');
+    document.getElementById('lotplanAutocompleteList')?.classList.remove('open');
+  }
+});
+
+function renderStage2() {
+  const a = state.selectedAddresses[0];
+  if (!a) return;
+  document.getElementById('propBanner').innerHTML = `
+    <div class="prop-addr">${a.addr}</div>
+    <div class="prop-lot">${a.lot} · ${a.area}m² lot · Lat ${a.lat.toFixed(4)}, Lng ${a.lng.toFixed(4)}</div>
+    <div class="prop-chips" style="margin-top:10px">
+      <span class="chip chip-zone">${a.zone}</span>
+      ${a.dhc ? '<span class="chip chip-overlay">Demolition Control</span>' : ''}
+      ${a.tbc ? '<span class="chip chip-overlay">TBC Overlay</span>' : ''}
+      ${a.flood ? '<span class="chip chip-flood">⚠ Flood Overlay</span>' : ''}
+    </div>`;
+  const floodBanner = document.getElementById('floodBanner');
+  if (a.flood) {
+    floodBanner.style.display = 'block';
+    floodBanner.innerHTML = `<div class="flood-banner">
+      <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+      <div class="flood-banner-text">
+        <strong>Flood Overlay — Overland Flow</strong>
+        This property is in a mapped flood area. A hydraulic engineer's flood impact assessment report will be required with your DA. RiskSmart fast-track is not available — this application must follow the standard code assessment pathway.
+      </div>
+    </div>`;
+  } else {
+    floodBanner.style.display = 'none';
+  }
+  const zoneDescs = {
+    CR2: 'Allows dwelling houses, dual occupancy, home-based businesses. Traditional Building Character overlays (Demolition Control / TBC) apply in most of Milton CR2 land.',
+    MDR: 'Allows multi-unit dwellings, dual occupancy, secondary dwellings. Height up to 3–4 storeys (8.5–13m) in Milton NP.',
+    HDR2: 'Allows high-density residential development up to 15 storeys (45m). Milton Station NP sets maximum heights and setbacks.'
+  };
+  document.getElementById('intelGrid').innerHTML = `
+    <div class="intel-card">
+      <div class="intel-card-left">
+        <div class="intel-label">Planning zone</div>
+        <div class="intel-value">${a.zone} — ${a.zoneDesc}</div>
+      </div>
+      <span class="info-tip">i<span class="info-tip-content">${zoneDescs[a.zone] || ''}</span></span>
+    </div>
+    <div class="intel-card">
+      <div class="intel-card-left">
+        <div class="intel-label">Neighbourhood plan</div>
+        <div class="intel-value">${a.np}</div>
+      </div>
+      <span class="info-tip">i<span class="info-tip-content">${a.npPrec}. Sets site-specific height, setback, and character requirements.</span></span>
+    </div>
+    ${a.dhc ? `<div class="intel-card">
+      <div class="intel-card-left">
+        <div class="intel-label">Demolition control overlay</div>
+        <div class="intel-value">Traditional Building Character (Demolition) — applies to this site</div>
+      </div>
+      <span class="info-tip">i<span class="info-tip-content">Demolition of pre-1947 dwellings requires assessment under the Traditional Building Character (Demolition) overlay code. A character assessment is required with any new dwelling DA.</span></span>
+    </div>` : ''}
+    ${a.tbc ? `<div class="intel-card">
+      <div class="intel-card-left">
+        <div class="intel-label">TBC overlay</div>
+        <div class="intel-value">Applies to this site</div>
+      </div>
+      <span class="info-tip">i<span class="info-tip-content">Recognises traditional Queenslander and pre-1947 housing. New works should respect materials, form and proportions.</span></span>
+    </div>` : ''}
+    <div class="intel-card">
+      <div class="intel-card-left">
+        <div class="intel-label">Lot area</div>
+        <div class="intel-value">${a.area}m²</div>
+      </div>
+      <span class="info-tip">i<span class="info-tip-content">${a.area >= 400 ? 'Meets minimum lot size for most development types in this zone.' : 'Smaller lot — minimum lot size provisions may affect options.'}</span></span>
+    </div>
+    <div class="intel-card">
+      <div class="intel-card-left">
+        <div class="intel-label">Assessment manager</div>
+        <div class="intel-value">Council</div>
+      </div>
+      <span class="info-tip">i<span class="info-tip-content">Council is the assessment manager for this property. DA fees (2025–26) apply.</span></span>
+    </div>`;
+  document.getElementById('saraBanner').innerHTML = `
+    <div class="sara-check">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      <div class="sara-check-text"><strong>No SARA referral required</strong> — This residential development in Milton QLD does not trigger a referral to the State Assessment and Referral Agency (SARA) under the SDAP.</div>
+    </div>`;
+}
+
+function renderStage3() {
+  const a = state.selectedAddresses[0];
+  const types = DEV_TYPES[a.zone] || DEV_TYPES.CR2;
+  document.getElementById('devTypeGrid').innerHTML = types.map(t => `
+    <div class="devtype-card ${state.selectedDevType?.id === t.id ? 'selected' : ''}" onclick="selectDevType('${t.id}')">
+      <div class="devtype-icon">${t.icon}</div>
+      <div class="devtype-content">
+        <div class="devtype-title">${t.label}</div>
+        <div class="devtype-desc">${t.desc}</div>
+        <span class="devtype-badge">${t.badge}</span>
+      </div>
+    </div>`).join('');
+  const prohibited = PROHIBITED_USES[a.zone] || [];
+  const prohibSec = document.getElementById('prohibitedSection');
+  if (prohibited.length) {
+    prohibSec.innerHTML = `<div class="prohibited-title">Not permitted at this property</div>` +
+      prohibited.map(p => `<div class="prohibited-item"><span class="prohibited-x">✕</span><div><strong>${p.label}</strong> — ${p.reason}</div></div>`).join('');
+  } else {
+    prohibSec.innerHTML = '';
+  }
+}
+
+function selectDevType(id) {
+  const a = state.selectedAddresses[0];
+  const types = DEV_TYPES[a.zone] || DEV_TYPES.CR2;
+  state.selectedDevType = types.find(t => t.id === id);
+  let pathway = state.selectedDevType.pathway;
+  if (pathway === 'risksmart' && a.flood) pathway = 'risksmart_flood';
+  state.pathway = pathway;
+  renderStage3();
+  document.getElementById('s3Next').disabled = false;
+}
+
+function renderStage4() {
+  const cfg = PATHWAY_CONFIG[state.pathway];
+  if (!cfg) return;
+  const card = document.getElementById('s4Content');
+  const nav = document.getElementById('s4Nav');
+
+  if (cfg.isExit) {
+    document.getElementById('s4Heading').textContent = 'Your assessment pathway';
+    card.innerHTML = `
+      <div class="pathway-hero ${cfg.color}">
+        <div class="pathway-badge ${cfg.color}">${cfg.icon} ${cfg.label}</div>
+        <div class="pathway-hero-title">${cfg.title}</div>
+        <div class="pathway-hero-sub">${cfg.sub}</div>
+      </div>
+      <div class="exit-box">
+        <div class="exit-icon">🎊</div>
+        <div class="exit-title">No Development Application needed</div>
+        <div class="exit-body">This type of minor works or alteration at your property meets all the requirements of the ${state.selectedAddresses[0].zone} zone code and overlay codes without a formal DA. You can proceed directly to a building approval if your works require one.<br><br>Make sure your works still comply with the relevant building codes and any Body Corporate requirements.</div>
+        <button class="btn-start" onclick="showStage(1);state.selectedAddresses=[];state.selectedDevType=null;state.pathway=null;">Start a new application</button>
+      </div>`;
+    nav.innerHTML = '<button class="btn-back" onclick="prevStage()">← Back</button><div></div>';
+  } else {
+    card.innerHTML = `
+      <div class="pathway-hero ${cfg.color}">
+        <div class="pathway-badge ${cfg.color}">${cfg.icon} ${cfg.label}</div>
+        <div class="pathway-hero-title">${cfg.title}</div>
+        <div class="pathway-hero-sub">${cfg.sub}</div>
+        <div class="pathway-timeline">
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+          ${cfg.timeline}
+        </div>
+      </div>
+      <div class="pathway-steps">
+        ${(cfg.steps||[]).map((s,i)=>`<div class="pathway-step">
+          <div class="pathway-step-num">${i+1}</div>
+          <div class="pathway-step-content">
+            <div class="pathway-step-title">${s.title}</div>
+            <div class="pathway-step-desc">${s.desc}</div>
+          </div>
+        </div>`).join('')}
+      </div>`;
+    nav.innerHTML = `<button class="btn-back" onclick="prevStage()">← Back</button>
+      <button class="btn-next" onclick="nextStage()">Continue to details →</button>`;
+  }
+}
+
+function renderStage5() {
+  const dt = state.selectedDevType;
+  const a = state.selectedAddresses[0];
+  const needsValue = true;
+  const needsUnits = dt?.id === 'multiple' || dt?.id === 'mixeduse';
+  const needsFloorArea = ['newdwelling','secondary','multiple','mixeduse','alts'].includes(dt?.id);
+
+  document.getElementById('s5FormContent').innerHTML = `
+    <div class="form-section">
+      <div class="form-section-title">Development description (Form 1, Part 3)</div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Description of proposed works</label>
+          <textarea id="devDesc" placeholder="e.g. Demolition of existing dwelling and construction of a new 2-bedroom dwelling house with carport and deck, designed in accordance with the Traditional Building Character overlay code." rows="4">${state.devDescription}</textarea>
+          <span class="field-hint">This description will appear verbatim on your Form 1 lodgement. Be specific — include materials, height, and key design features.</span>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Type of development (Form 1 Part 3)</label>
+          <div class="field-value" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            Material change of use (MCU) / Building work
+            <span class="chip" style="background:${getPathwayChipBg()};color:${getPathwayChipColor()};font-size:11px;padding:3px 10px;">${getPathwayLabel()}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${needsFloorArea ? `
+    <div class="form-section">
+      <div class="form-section-title">Building details</div>
+      <div class="field-row ${needsUnits ? '' : ''}">
+        <div class="field"><label>Gross floor area (m²)</label><input type="number" id="floorArea" placeholder="e.g. 180" min="1" value="${state.floorArea||''}" oninput="state.floorArea=+this.value"></div>
+        ${needsUnits ? `<div class="field"><label>Number of dwellings / units</label><input type="number" id="numUnits" placeholder="e.g. 4" min="2" value="${state.numUnits||2}" oninput="state.numUnits=+this.value"></div>` : ''}
+        <div class="field"><label>Number of storeys</label><input type="number" id="numStoreys" placeholder="e.g. 2" min="1" max="15"></div>
+      </div>
+    </div>` : ''}
+    <div class="form-section">
+      <div class="form-section-title">Construction value &amp; QLeave</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Estimated construction value (excl. GST)</label>
+          <input type="number" id="constValue" placeholder="e.g. 450000" min="0" value="${state.constructionValue||''}" oninput="state.constructionValue=+this.value">
+          <span class="field-hint">Used to calculate your QLeave levy. Required for all works.</span>
+        </div>
+        <div class="field">
+          <label>QLeave levy (auto-calculated)</label>
+          <div class="field-value" id="qleaveCalc">Enter construction value above</div>
+          <span class="field-hint">0.575% of construction value for works ≥ $150,000 (excl. GST)</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Building approval</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Building approval type</label>
+          <select id="buildApproval">
+            <option value="concurrent">Concurrent — building approval with DA (combined assessment)</option>
+            <option value="separate">Separate — building approval after DA decision</option>
+          </select>
+          <span class="field-hint">Concurrent approval is common for straightforward new dwellings and speeds up the process.</span>
+        </div>
+        <div class="field">
+          <label>QBCC licence number (if builder known)</label>
+          <input type="text" id="qbccLic" placeholder="e.g. 1234567 (optional at lodgement)">
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('constValue')?.addEventListener('input', function() {
+    state.constructionValue = +this.value;
+    updateQLeave();
+  });
+  updateQLeave();
+}
+
+function getPathwayLabel() {
+  const labels = { accepted:'Accepted Development', risksmart:'Code Assessable (RiskSmart)', risksmart_flood:'Code Assessable (Standard)', code:'Code Assessable', impact:'Impact Assessable' };
+  return labels[state.pathway] || '';
+}
+
+function getPathwayChipBg() {
+  const bgs = { accepted:'var(--positive-bg)', risksmart:'#eff6ff', risksmart_flood:'#fef3c7', code:'#fef3c7', impact:'var(--negative-bg)' };
+  return bgs[state.pathway] || 'var(--neutral-bg)';
+}
+
+function getPathwayChipColor() {
+  const colors = { accepted:'var(--positive-text)', risksmart:'#1d4ed8', risksmart_flood:'#92400e', code:'#92400e', impact:'var(--negative-text)' };
+  return colors[state.pathway] || 'var(--ink-med)';
+}
+
+function updateQLeave() {
+  const el = document.getElementById('qleaveCalc');
+  if (!el) return;
+  const v = state.constructionValue;
+  if (!v || v < 150000) {
+    el.textContent = v && v > 0 ? 'No QLeave required (under $150,000)' : 'Enter construction value above';
+  } else {
+    const levy = v * 0.00575;
+    el.textContent = '$' + levy.toLocaleString('en-AU', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+}
+
+function renderStage6() {
+  const a = state.selectedAddresses[0];
+  const dt = state.selectedDevType;
+  const p = state.pathway;
+  const isImpact = p === 'impact';
+  const isCode = p === 'code' || p === 'risksmart' || p === 'risksmart_flood';
+  const isFlood = a?.flood;
+  const isDHC = a?.dhc;
+  const isTBC = a?.tbc;
+  const isMultiple = dt?.id === 'multiple' || dt?.id === 'mixeduse';
+  const needsQLeave = state.constructionValue >= 150000;
+
+  const docs = [];
+  docs.push({ id:'form1', title:'Form 1 — Development Application form', desc:'The standard QLD Form 1. Parts 1–4 and Part 8 declaration are mandatory.', type:'req' });
+  docs.push({ id:'form2', title:'Form 2 — Building work details', desc:'Required where the DA includes a building work component.', type:'req' });
+  docs.push({ id:'consent', title:'Owner\'s consent', desc:'Written consent from all registered owners if you are not the owner.', type:'opt' });
+  docs.push({ id:'siteplan', title:'Site plan (1:200 or 1:500)', desc:'Lot boundaries, north point, existing and proposed structures, setbacks.', type:'req' });
+  docs.push({ id:'floorplan', title:'Floor plans (all levels)', desc:'Dimensioned floor plans for all levels.', type: isCode || isImpact ? 'req' : 'opt' });
+  docs.push({ id:'elevations', title:'Elevations (all sides)', desc:'Height, roof form, materials, boundary relationship.', type: isCode || isImpact ? 'req' : 'opt' });
+  if (isMultiple) docs.push({ id:'landscape', title:'Landscape plan', desc:'Prepared by a qualified landscape architect.', type:'req' });
+  if (isDHC) docs.push({ id:'dhc', title:'Demolition control assessment', desc:'Assessment under the Traditional Building Character (Demolition) overlay code — how the design responds to streetscape character.', type:'req' });
+  if (isTBC) docs.push({ id:'tbc', title:'TBC character assessment', desc:'How development respects Traditional Building Character.', type:'req' });
+  if (isDHC || isTBC) docs.push({ id:'materials', title:'Materials and finishes schedule', desc:'External materials, colours and finishes.', type:'req' });
+  if (isFlood) {
+    docs.push({ id:'flood', title:'Flood impact assessment', desc:'Hydraulic engineer report for Flood overlay (Overland Flow).', type:'cond' });
+    docs.push({ id:'stormwater', title:'Stormwater management plan', desc:'No increase in peak flow rates to adjoining properties.', type:'cond' });
+  }
+  if (isImpact) {
+    docs.push({ id:'tpreport', title:'Town planning report', desc:'Comprehensive assessment against all relevant benchmarks.', type:'req' });
+    docs.push({ id:'traffic', title:'Traffic impact assessment', desc:'Required for 10+ vehicle movements per peak hour.', type:'cond' });
+    docs.push({ id:'notification', title:'Notification material', desc:'Letters to adjoining owners and public notice sign.', type:'req' });
+  }
+  if (needsQLeave) docs.push({ id:'qleave', title:'QLeave levy receipt', desc:'0.575% of construction cost for works ≥ $150,000.', type:'opt' });
+
+  // Store docs in state for animation
+  state.stageDocs = docs;
+
+  const html = docs.map(d => `
+    <div class="doc-item ${d.type === 'req' ? 'required' : d.type === 'cond' ? 'conditional' : 'optional'}" id="doc-${d.id}">
+      <div class="doc-check" id="doc-check-${d.id}"></div>
+      <div class="doc-item-content">
+        <div class="doc-item-title">${d.title}<span class="info-tip">ⓘ<span class="info-tip-content">${d.desc}</span></span></div>
+        <span class="doc-tag ${d.type}">${d.type === 'req' ? 'Required' : d.type === 'cond' ? 'Conditional' : 'Optional'}</span>
+      </div>
+      <button class="doc-upload-btn" id="doc-btn-${d.id}" onclick="uploadSingleDoc('${d.id}')">Upload</button>
+    </div>`).join('');
+
+  document.getElementById('s6DocList').innerHTML = html;
+
+  // Animate auto-checking of documents after a brief delay
+  setTimeout(() => animateDocChecks(), 600);
+}
+
+function animateDocChecks() {
+  // Simulate AI checking uploaded documents against requirements
+  // Auto-confirm: form1, form2, siteplan, floorplan (as if detected from upload)
+  const autoConfirm = ['form1', 'form2', 'siteplan', 'floorplan'];
+  let delay = 0;
+
+  state.stageDocs.forEach((d, i) => {
+    const check = document.getElementById('doc-check-' + d.id);
+    const item = document.getElementById('doc-' + d.id);
+    const btn = document.getElementById('doc-btn-' + d.id);
+    if (!check || !item) return;
+
+    if (autoConfirm.includes(d.id)) {
+      // First show checking animation
+      setTimeout(() => {
+        check.classList.add('checking');
+      }, delay);
+      // Then confirm after a staggered delay
+      setTimeout(() => {
+        check.classList.remove('checking');
+        check.classList.add('checked');
+        item.classList.add('doc-confirmed');
+        if (btn) { btn.classList.add('uploaded'); btn.textContent = 'Uploaded'; }
+      }, delay + 800);
+      delay += 400;
+    }
+  });
+}
+
+function uploadSingleDoc(docId) {
+  const check = document.getElementById('doc-check-' + docId);
+  const item = document.getElementById('doc-' + docId);
+  const btn = document.getElementById('doc-btn-' + docId);
+  if (!check || !item || !btn) return;
+
+  // Simulate upload with checking animation
+  check.classList.add('checking');
+  btn.textContent = 'Uploading…';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    check.classList.remove('checking');
+    check.classList.add('checked');
+    item.classList.add('doc-confirmed');
+    btn.classList.add('uploaded');
+    btn.textContent = 'Uploaded';
+    btn.disabled = false;
+  }, 1200);
+}
+
+function docItem(title, desc, type) {
+  // Legacy fallback — not used in new renderStage6
+  const tagLabel = type === 'req' ? 'Required' : type === 'cond' ? 'Conditional' : 'Optional';
+  const itemClass = type === 'req' ? 'required' : type === 'cond' ? 'conditional' : 'optional';
+  return `<div class="doc-item ${itemClass}">
+    <div class="doc-check" onclick="this.classList.toggle('checked')"></div>
+    <div class="doc-item-content">
+      <div class="doc-item-title">${title}<span class="info-tip">ⓘ<span class="info-tip-content">${desc}</span></span></div>
+      <span class="doc-tag ${type}">${tagLabel}</span>
+    </div>
+  </div>`;
+}
+
+function dismissSignin() {
+  document.querySelector('.signin-section').style.display = 'none';
+  document.getElementById('guestFormSection').style.display = 'block';
+}
+
+function toggleApplicant(val) {
+  const agentSec = document.getElementById('agentSection');
+  document.getElementById('appSelf').classList.toggle('selected', val === 'self');
+  document.getElementById('appAgent').classList.toggle('selected', val === 'agent');
+  agentSec.style.display = val === 'agent' ? 'block' : 'none';
+}
+
+function selectIR(val) { state.irPref = val; }
+function toggleIR() {
+  const cb = document.getElementById('irCheckbox');
+  state.irPref = cb.checked ? 'yes' : 'no';
+}
+
+/* === Owner's Consent Upload + AI Verification === */
+function simulateConsentUpload() {
+  const btn = document.getElementById('consentUploadBtn');
+  if (btn.classList.contains('uploaded')) return;
+
+  // Simulate file picker
+  btn.textContent = 'Uploading...';
+  btn.style.pointerEvents = 'none';
+
+  setTimeout(() => {
+    btn.textContent = '✓ Owners-Consent-Signed.pdf';
+    btn.classList.add('uploaded');
+    btn.style.pointerEvents = 'auto';
+    state.consentUploaded = true;
+
+    // Show AI verification card and begin checks
+    const card = document.getElementById('consentVerifyCard');
+    card.style.display = 'block';
+    runConsentAIVerification();
+  }, 1200);
+}
+
+function runConsentAIVerification() {
+  const a = state.selectedAddresses[0];
+  const lotPlan = a?.lot || 'Lot 5 RP12345';
+  const addr = a?.addr || '42 Park Road, Milton QLD 4064';
+
+  const checks = [
+    { id: 'cv-signature', label: 'Owner signature present', delay: 800 },
+    { id: 'cv-lotplan', label: 'Lot/Plan matches application (' + lotPlan + ')', delay: 1600 },
+    { id: 'cv-address', label: 'Property address matches (' + addr.split(',')[0] + ')', delay: 2400 },
+    { id: 'cv-date', label: 'Document date within acceptable period', delay: 3200 },
+    { id: 'cv-specific', label: 'Consent is specific to this development application', delay: 4000 }
+  ];
+
+  const container = document.getElementById('consentVerifyChecks');
+  container.innerHTML = '';
+  const statusEl = document.getElementById('consentVerifyStatus');
+  statusEl.textContent = 'Checking...';
+  statusEl.style.color = 'var(--accent-text)';
+
+  // Create all rows in checking state
+  checks.forEach(c => {
+    container.innerHTML += `
+      <div class="ai-verify-row" id="${c.id}">
+        <div class="v-icon checking">⋯</div>
+        <div class="v-label">${c.label}</div>
+        <div class="v-result" id="${c.id}-result"></div>
+      </div>`;
+  });
+
+  // Simulate staggered AI verification results
+  const results = [
+    { id: 'cv-signature', pass: true, text: 'Detected' },
+    { id: 'cv-lotplan', pass: true, text: 'Matched' },
+    { id: 'cv-address', pass: true, text: 'Matched' },
+    { id: 'cv-date', pass: 'warn', text: '14 Jan 2026 — 2 months ago' },
+    { id: 'cv-specific', pass: true, text: 'Confirmed' }
+  ];
+
+  results.forEach((r, i) => {
+    setTimeout(() => {
+      const row = document.getElementById(r.id);
+      const icon = row.querySelector('.v-icon');
+      const result = document.getElementById(r.id + '-result');
+
+      icon.classList.remove('checking');
+      if (r.pass === true) {
+        icon.classList.add('pass');
+        icon.textContent = '✓';
+        result.textContent = r.text;
+        result.classList.add('pass');
+      } else if (r.pass === 'warn') {
+        icon.classList.add('warn');
+        icon.textContent = '!';
+        result.textContent = r.text;
+        result.classList.add('warn');
+      } else {
+        icon.classList.add('fail');
+        icon.textContent = '✕';
+        result.textContent = r.text;
+        result.classList.add('fail');
+      }
+
+      // After last check, show summary
+      if (i === results.length - 1) {
+        setTimeout(() => {
+          const summary = document.getElementById('consentVerifySummary');
+          const hasWarn = results.some(r => r.pass === 'warn');
+          const hasFail = results.some(r => r.pass === false);
+
+          if (hasFail) {
+            summary.className = 'ai-verify-summary fail';
+            summary.innerHTML = '<strong>Verification failed</strong> — The owner\'s consent document has issues that need to be resolved before the application can be properly made.';
+            statusEl.textContent = 'Issues found';
+            statusEl.style.color = 'var(--negative-text)';
+          } else if (hasWarn) {
+            summary.className = 'ai-verify-summary warn';
+            summary.innerHTML = '<strong>Verified with note</strong> — The consent document is valid. The document date is within the acceptable period, though there is no fixed statutory expiry. Assessment managers generally expect consent to be current (within 6–12 months of lodgement).';
+            statusEl.textContent = 'Verified';
+            statusEl.style.color = 'var(--warning-text)';
+          } else {
+            summary.className = 'ai-verify-summary pass';
+            summary.innerHTML = '<strong>Verified</strong> — The owner\'s consent document matches the application details and appears to be in order.';
+            statusEl.textContent = 'Verified';
+            statusEl.style.color = 'var(--positive-text)';
+          }
+          summary.style.display = 'block';
+        }, 500);
+      }
+    }, checks[i].delay);
+  });
+}
+
+function renderStage8() {
+  const a = state.selectedAddresses[0];
+  const dt = state.selectedDevType;
+  const p = state.pathway;
+  const cv = state.constructionValue;
+
+  let daFee = 0, feeBreakdown = '';
+  const POINT = 143;
+  if (dt?.id === 'minor') { daFee = 5 * POINT; feeBreakdown = '5 points × $143 (minor development)'; }
+  else if (dt?.id === 'alts') { daFee = 5 * POINT; feeBreakdown = '5 points × $143 (alterations)'; }
+  else if (dt?.id === 'newdwelling') {
+    daFee = 16 * POINT;
+    feeBreakdown = '16 points × $143 (new dwelling house — Domestic Type A)';
+    if (p === 'impact') { daFee += 5 * POINT; feeBreakdown += ' + 5 pts impact surcharge'; }
+  }
+  else if (dt?.id === 'secondary') { daFee = 10 * POINT; feeBreakdown = '10 points × $143 (secondary dwelling — Domestic Type B)'; }
+  else if (dt?.id === 'multiple' || dt?.id === 'mixeduse') {
+    const units = Math.max(2, state.numUnits || 2);
+    const base = 61 * POINT;
+    const extra = units > 2 ? Math.min(units - 2, 68) * 5 * POINT : 0;
+    const impact = 114 * POINT;
+    daFee = base + extra + impact;
+    feeBreakdown = `61 pts base ($${(base).toLocaleString()}) + ${units > 2 ? `${units-2} extra units ($${extra.toLocaleString()})` : '0 extra units'} + 114 pts impact surcharge ($${impact.toLocaleString()})`;
+  }
+
+  const qleave = cv >= 150000 ? cv * 0.00575 : 0;
+  const total = daFee + qleave;
+  const displayTotal = state.qleavePayNow ? total : daFee;
+
+  const applicantName = state.applicantName || document.getElementById('applicantName')?.value || '—';
+  const applicantEmail = state.applicantEmail || document.getElementById('applicantEmail')?.value || '—';
+
+  let html = `
+    <div class="review-section">
+      <div class="review-section-title">Property</div>
+      <div class="review-rows">
+        <div class="review-row"><div class="review-row-label">Address</div><div class="review-row-value">${a?.addr}</div></div>
+        <div class="review-row"><div class="review-row-label">Lot / plan</div><div class="review-row-value">${a?.lot}</div></div>
+        <div class="review-row"><div class="review-row-label">Zone</div><div class="review-row-value">${a?.zone} — ${a?.zoneDesc}</div></div>
+        <div class="review-row"><div class="review-row-label">Neighbourhood plan</div><div class="review-row-value">${a?.np}</div></div>
+      </div>
+    </div>
+    <div class="review-section">
+      <div class="review-section-title">Development</div>
+      <div class="review-rows">
+        <div class="review-row"><div class="review-row-label">Type</div><div class="review-row-value">${dt?.label}</div></div>
+        <div class="review-row"><div class="review-row-label">Pathway</div><div class="review-row-value">${getPathwayLabel()}</div></div>
+        <div class="review-row"><div class="review-row-label">Construction value</div><div class="review-row-value">${cv ? '$'+cv.toLocaleString() : 'Not provided'}</div></div>
+      </div>
+    </div>
+    <div class="review-section">
+      <div class="review-section-title">Applicant</div>
+      <div class="review-rows">
+        <div class="review-row"><div class="review-row-label">Applicant</div><div class="review-row-value">${applicantName}</div></div>
+        <div class="review-row"><div class="review-row-label">Email</div><div class="review-row-value">${applicantEmail}</div></div>
+        <div class="review-row"><div class="review-row-label">Owner's consent</div><div class="review-row-value">${state.isAgent ? (state.consentUploaded ? 'Uploaded — verified' : 'Required — not yet uploaded') : 'Not required (applicant is owner)'}</div></div>
+        <div class="review-row"><div class="review-row-label">Information request</div><div class="review-row-value">${state.irPref === 'yes' ? 'Agreed to receive if necessary' : 'Not agreed'}</div></div>
+      </div>
+    </div>
+
+    <div class="fee-card">
+      <div class="fee-header">City Council DA Fee Estimate — 2025–26</div>
+      <div class="fee-rows">
+        <div class="fee-row">
+          <div class="fee-row-label">DA application fee<small>${feeBreakdown}</small></div>
+          <div class="fee-row-value">$${daFee.toLocaleString()}</div>
+        </div>
+        ${qleave > 0 ? `<div class="fee-row">
+          <div class="fee-row-label">QLeave portable long service levy<small>0.575% × $${cv.toLocaleString()} construction value (excl. GST)</small></div>
+          <div class="fee-row-value">$${qleave.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+        </div>` : `<div class="fee-row">
+          <div class="fee-row-label">QLeave levy<small>Not applicable (construction value below $150,000 threshold)</small></div>
+          <div class="fee-row-value">$0</div>
+        </div>`}
+      </div>
+      <div class="fee-total-row">
+        <div class="fee-total-label">Estimated total payable at lodgement</div>
+        <div class="fee-total-value">$${displayTotal.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+      </div>
+    </div>`;
+
+  if (qleave > 0) {
+    html += `<div style="margin-bottom:20px;">
+    <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:8px;">QLeave payment preference</div>
+    <div class="qleave-toggle">
+      <div class="qleave-option ${state.qleavePayNow ? 'selected' : ''}" onclick="setQLeaveOption(true)">
+        <div class="qleave-option-title">Pay now</div>
+        <div class="qleave-option-desc">Include with DA fee</div>
+      </div>
+      <div class="qleave-option ${!state.qleavePayNow ? 'selected' : ''}" onclick="setQLeaveOption(false)">
+        <div class="qleave-option-title">Pay later</div>
+        <div class="qleave-option-desc">Before construction</div>
+      </div>
+    </div>
+    <div id="qleavePayLaterNote" style="display:${state.qleavePayNow ? 'none' : 'block'};font-size:11px;color:var(--ink-light);margin-top:8px;">QLeave levy of $${qleave.toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2})} must be paid before construction commences at qleave.qld.gov.au</div>
+  </div>`;
+  }
+
+  html += `<div class="infra-note">
+      <strong>Infrastructure charges:</strong> Separate infrastructure charges (water, sewerage, transport) may be payable at the time of approval under the Council Infrastructure Charges Resolution. These are not included in the DA fee estimate above and will be calculated by Council based on the approved development.
+    </div>`;
+
+  document.getElementById('s8ReviewContent').innerHTML = html;
+}
+
+function setQLeaveOption(payNow) {
+  state.qleavePayNow = payNow;
+  renderStage8();
+}
+
+function toggleSubmit() {
+  document.getElementById('submitBtn').disabled = !document.getElementById('declarationCheck').checked;
+}
+
+function submitApp() {
+  showStage(9);
+  document.getElementById('progressBarWrap').style.display = 'none';
+  const refNum = Math.floor(Math.random() * 9000) + 1000;
+  document.getElementById('successRef').textContent = 'DA-2026/' + refNum;
+  const pathwayStepTexts = {
+    risksmart: 'Your application enters the RiskSmart fast-track assessment (5–10 business days).',
+    risksmart_flood: 'Your application enters standard code assessment (35 business days). Flood overlay assessment included.',
+    code: 'Your application enters code assessment (35 business days).',
+    impact: 'Your application enters the Impact Assessment process with a 15-business-day public notification period.',
+  };
+  document.getElementById('successStep2Text').textContent = pathwayStepTexts[state.pathway] || pathwayStepTexts.code;
+  const consentBtn = document.getElementById('consentDlBtn');
+  if (consentBtn && state.isAgent) consentBtn.style.display = 'flex';
+  window.scrollTo(0, 0);
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function showPreLodgementModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'admin-edit-overlay';
+  overlay.id = 'prelodgeOverlay';
+  overlay.onclick = function(e) { if (e.target === this) this.remove(); };
+  overlay.innerHTML = `
+    <div class="admin-edit-panel" style="max-width:480px;">
+      <div class="admin-edit-header">
+        <h3>Book a pre-lodgement meeting</h3>
+        <button onclick="document.getElementById('prelodgeOverlay').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-light);">✕</button>
+      </div>
+      <div style="text-align:center;padding:32px 28px;">
+        <div style="font-size:36px;margin-bottom:16px;">📅</div>
+        <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;">Pre-lodgement meeting with Council</div>
+        <div style="font-size:13px;color:var(--ink-light);line-height:1.6;margin-bottom:24px;">
+          Discuss your proposal with a planning officer before lodging. This helps identify issues early and speeds up the assessment process.
+        </div>
+        <div style="background:var(--neutral-bg);border-radius:var(--radius-sm);padding:14px;margin-bottom:20px;text-align:left;">
+          <div style="font-size:11px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;">Available times</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;" onclick="this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)';showToast('Pre-lodgement meeting booked — Tue 1 Apr, 10:00 AM');setTimeout(()=>document.getElementById('prelodgeOverlay')?.remove(),1500)">
+              <span style="font-size:13px;font-weight:500;color:var(--ink);">Tue 1 Apr — 10:00 AM</span>
+              <span style="font-size:11px;color:var(--ink-light);">30 min</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;" onclick="this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)';showToast('Pre-lodgement meeting booked — Thu 3 Apr, 2:00 PM');setTimeout(()=>document.getElementById('prelodgeOverlay')?.remove(),1500)">
+              <span style="font-size:13px;font-weight:500;color:var(--ink);">Thu 3 Apr — 2:00 PM</span>
+              <span style="font-size:11px;color:var(--ink-light);">30 min</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;" onclick="this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)';showToast('Pre-lodgement meeting booked — Mon 7 Apr, 11:00 AM');setTimeout(()=>document.getElementById('prelodgeOverlay')?.remove(),1500)">
+              <span style="font-size:13px;font-weight:500;color:var(--ink);">Mon 7 Apr — 11:00 AM</span>
+              <span style="font-size:11px;color:var(--ink-light);">30 min</span>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--ink-faint);">Select a time to book your meeting. A confirmation will be emailed to you.</div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function handleFileUpload(event) {
+  const files = Array.from(event.target.files);
+  files.forEach(f => {
+    state.uploadedFiles.push({ name: f.name, size: (f.size / 1024).toFixed(0) + ' KB' });
+  });
+  renderUploadedFiles();
+  simulateAIReview();
+}
+
+function renderUploadedFiles() {
+  const el = document.getElementById('uploadedFiles');
+  el.innerHTML = state.uploadedFiles.map(f => `
+    <div class="uploaded-file"><span class="uploaded-file-icon">✓</span> ${f.name} <span style="color:var(--ink-faint);margin-left:auto;">${f.size}</span></div>`).join('');
+}
+
+function simulateAIReview() {
+  const el = document.getElementById('aiReviewSection');
+  el.style.display = 'block';
+  el.innerHTML = `<div class="ai-review">
+    <div class="ai-review-header"><div class="ai-dot"></div><div class="ai-review-title">AI reviewing uploaded documents…</div></div>
+  </div>`;
+  setTimeout(() => {
+    const a = state.selectedAddresses[0];
+    const items = [
+      '✓ Site plan detected — dimensions and north point present',
+      '✓ Floor plans detected — levels identified',
+    ];
+    if (a?.dhc) items.push('⚠ Character assessment not detected — required for Demolition Control overlay');
+    if (a?.flood) items.push('⚠ Flood impact assessment not detected — required for flood overlay');
+    el.innerHTML = `<div class="ai-review">
+      <div class="ai-review-header"><div class="ai-review-title">AI document review</div></div>
+      ${items.map(i => `<div class="ai-review-item">${i}</div>`).join('')}
+    </div>`;
+  }, 2000);
+}
+
+function generateForm1PDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const a = state.selectedAddresses[0];
+  let y = 20;
+
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text('FORM 1 — Development Application', 105, y, { align: 'center' });
+  y += 8;
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'normal');
+  doc.text('Planning Act 2016, Section 71 · Planning Regulation 2017, Section 15', 105, y, { align: 'center' });
+  y += 15;
+
+  function sectionHeader(title) {
+    doc.setFillColor(240, 240, 242);
+    doc.rect(15, y - 4, 180, 8, 'F');
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'bold');
+    doc.text(title, 18, y + 1);
+    y += 12;
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(10);
+  }
+  function addRow(label, value) {
+    doc.setFont(undefined, 'bold');
+    doc.text(label + ':', 18, y);
+    doc.setFont(undefined, 'normal');
+    doc.text(String(value || '—'), 75, y);
+    y += 7;
+    if (y > 270) { doc.addPage(); y = 20; }
+  }
+
+  sectionHeader('Part 1 — Applicant Details');
+  addRow('Applicant name', state.applicantName || '');
+  addRow('Contact name', state.applicantContact || '');
+  addRow('Postal address', state.applicantPostal || '');
+  addRow('Suburb', state.applicantSuburb || '');
+  addRow('State', state.applicantState || 'QLD');
+  addRow('Postcode', state.applicantPostcode || '');
+  addRow('Contact number', state.applicantPhone || '');
+  addRow('Email', state.applicantEmail || '');
+  addRow('Mobile', state.applicantMobile || '');
+  y += 3;
+  addRow("Owner's consent required", state.isAgent ? 'Yes — written consent attached' : 'No');
+  y += 5;
+
+  sectionHeader('Part 2 — Location Details');
+  addRow('Property address', a?.addr || '');
+  addRow('Lot / Plan', a?.lot || '');
+  addRow('LGA', 'City Council');
+  addRow('Zone', a?.zone + ' — ' + (a?.zoneDesc || ''));
+  y += 5;
+
+  sectionHeader('Part 3 — Development Details');
+  addRow('Development type', state.selectedDevType?.label || '');
+  addRow('Assessment level', getPathwayLabel());
+  addRow('Construction value', state.constructionValue ? '$' + state.constructionValue.toLocaleString() : '');
+  y += 5;
+
+  sectionHeader('Part 4 — Assessment Manager');
+  addRow('Assessment manager', 'City Council');
+  y += 5;
+
+  sectionHeader('Part 6 — Information Request');
+  addRow('Agreement', state.irPref === 'yes' ? 'I agree to receive an information request if determined necessary' : 'Not agreed');
+  y += 5;
+
+  sectionHeader('Part 8 — Declaration');
+  doc.setFontSize(9);
+  const decText = 'I declare that the information provided in this application is true and correct to the best of my knowledge.';
+  const lines = doc.splitTextToSize(decText, 170);
+  doc.text(lines, 18, y);
+  y += lines.length * 5 + 10;
+  addRow('Signature', '____________________________');
+  addRow('Date', new Date().toLocaleDateString());
+
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text('Generated by Build AU Applicants v1.6 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.setTextColor(0);
+
+  doc.save('Form-1-Development-Application.pdf');
+}
+
+function generateForm2PDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y = 20;
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text('FORM 2 — Building Work Details', 105, y, { align: 'center' });
+  y += 8;
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'normal');
+  doc.text('Planning Act 2016 · Planning Regulation 2017', 105, y, { align: 'center' });
+  y += 15;
+  doc.setFont(undefined, 'bold');
+  doc.text('Building type:', 18, y);
+  doc.setFont(undefined, 'normal');
+  doc.text(state.selectedDevType?.label || '—', 75, y);
+  y += 7;
+  doc.setFont(undefined, 'bold');
+  doc.text('Construction value:', 18, y);
+  doc.setFont(undefined, 'normal');
+  doc.text(state.constructionValue ? '$' + state.constructionValue.toLocaleString() : '—', 75, y);
+  y += 7;
+  doc.setFont(undefined, 'bold');
+  doc.text('QBCC licence:', 18, y);
+  doc.setFont(undefined, 'normal');
+  doc.text('To be provided', 75, y);
+  y += 20;
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text('Generated by Build AU Applicants v1.6 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.save('Form-2-Building-Work-Details.pdf');
+}
+
+function generateOwnersConsentPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const a = state.selectedAddresses[0];
+  let y = 20;
+  doc.setFontSize(16);
+  doc.setFont(undefined, 'bold');
+  doc.text("OWNER'S CONSENT TO DEVELOPMENT APPLICATION", 105, y, { align: 'center' });
+  y += 8;
+  doc.setFontSize(10);
+  doc.setFont(undefined, 'normal');
+  doc.text('Planning Act 2016 · Planning Regulation 2017', 105, y, { align: 'center' });
+  y += 15;
+  const applicantName = state.applicantName || document.getElementById('applicantName')?.value || '';
+  const consentText = 'I/We, ______________________, being the registered owner(s) of the land described as ' + (a?.lot || '') + ' situated at ' + (a?.addr || '') + ', hereby give consent for ' + (applicantName || 'the applicant') + ' to make a Development Application to City Council on my/our behalf for ' + (state.selectedDevType?.label || 'the proposed development') + '.';
+  const lines = doc.splitTextToSize(consentText, 170);
+  doc.text(lines, 18, y);
+  y += lines.length * 6 + 20;
+  doc.text('Owner signature: ____________________________', 18, y); y += 12;
+  doc.text('Date: ____________________________', 18, y); y += 12;
+  doc.text('Witness signature: ____________________________', 18, y); y += 12;
+  doc.text('Witness name: ____________________________', 18, y);
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text('Generated by Build AU Applicants v1.6 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.save('Owners-Consent-Form.pdf');
+}
+
+function renderBgPanels() {
+  const panels = [
+    { id:'bgp1', what:'Allows the applicant to find their property using a real address autocomplete from verified Milton QLD 4064 spatial data. Now includes map visualisation, multi-address support, and lot/plan search.', why:'Property confirmation is the logical start of any DA — everything that follows (zone, pathway, fees) depends on knowing the exact lot. The autocomplete uses verified Council spatial data to ensure correct zone and overlay attribution.', who:'Property owners, planning consultants, developers lodging a DA in Milton QLD', dn:'15 real addresses used — 4 per scenario group (Accepted, RiskSmart, Code, Impact) plus 3 Impact addresses. Spatial data sourced from Council CP14 zoning overlay and parcel data via GeoPandas spatial join.' },
+    { id:'bgp2', what:'Displays zone, overlays (Demolition Control, TBC, Flood), neighbourhood plan precinct, SARA check, and lot area for the selected property. All data is real from the Council spatial datasets.', why:'Giving applicants their planning context upfront reduces requests for further information and sets expectations before they choose a development type. The flood banner is critical — it changes the pathway from RiskSmart to standard code.', who:'Property owners and planning consultants who need to understand their planning constraints before choosing a development type', dn:'Flood overlay (Overland Flow) shown only on 12 Blaxland Street — the one address in the dataset with a confirmed flood overlay. Demolition Control applies to all Milton addresses; TBC applies to CR2 addresses only.' },
+    { id:'bgp3', what:'Lets the applicant select their development type from a filtered list relevant to their zone. The selection determines the assessment pathway.', why:'Plain-language development type descriptions reduce applicant confusion about planning jargon. Filtering by zone prevents applicants from selecting types not available in their zone (e.g. multi-storey in CR2).', who:'Property owners and applicants who may not be familiar with planning terminology', dn:'Dev types are zone-filtered: CR2 shows 5 options; MDR shows 4; HDR2 shows 2. RiskSmart badge is shown on the new dwelling option for CR2 (where eligible). Flood overlay overrides RiskSmart eligibility in the routing logic.' },
+    { id:'bgp4', what:'Reveals the assessment pathway (Accepted Development, RiskSmart, Code Assessable, or Impact Assessable) with a clear explanation of what it means, timeline, and next steps.', why:'The pathway reveal is the key moment in the DA process — applicants often don\'t know what pathway they\'re in until they\'ve already spent money on plans. Showing it early reduces wasted effort.', who:'All applicants — this is the pivotal screen that determines their experience', dn:'Accepted Development triggers an exit flow (no DA needed). RiskSmart with flood overlay routes to standard code (risksmart_flood pathway). Impact Assessable includes public notification steps.' },
+    { id:'bgp5', what:'Collects development-specific details for Form 1 and Form 2: description of works, floor area, number of units (for multi-dwelling), construction value, and building approval type.', why:'Collecting these details in a structured way ensures the Form 1 is complete at lodgement, reducing Information Requests. The QLeave auto-calculation educates applicants about a levy many don\'t know about.', who:'Applicants and their planning consultants completing the technical details of the application', dn:'Construction value drives QLeave calculation (0.575% for works ≥ $150K). Number of units drives fee calculation in Stage 8. Fields are conditionally shown based on development type.' },
+    { id:'bgp6', what:'Generates a smart document checklist based on the property\'s overlays and the selected development type and pathway. Required, conditional, and optional documents are distinguished.', why:'Incomplete document packages are the primary cause of Information Requests and Action Notices, adding weeks to DA timescales. A pre-populated, property-aware checklist directly addresses this pain point.', who:'Applicants preparing their lodgement package', dn:'Demolition Control / TBC overlay triggers character assessment and materials schedule as required. Flood overlay triggers hydraulic engineer report as mandatory conditional. Impact assessable triggers town planning report and notification material. QLeave receipt shown only when construction value ≥ $150K.' },
+    { id:'bgp7', what:'Collects owner and applicant contact details (Form 1, Parts 1–2) and the applicant\'s Information Request preference (Form 1, Part 6).', why:'The IR preference is often overlooked by applicants but is a meaningful legal choice under the Planning Act 2016. Explaining it in plain language (Yes vs No) empowers applicants to make an informed decision.', who:'Property owners and planning agents completing the statutory contact details', dn:'Agent section shown conditionally if "agent" radio selected. IR preference explanation references s54 of the Planning Act 2016 for accuracy.' },
+    { id:'bgp8', what:'Shows a full application summary and calculates the DA fee (Council 2025–26 fee schedule) and QLeave levy. Includes declaration and submit action.', why:'Fee transparency at point of lodgement reduces post-submission surprises. The infrastructure charges note sets expectations that additional charges may apply at approval — a common source of applicant frustration.', who:'Applicants reviewing their completed application before lodgement', dn:'Fees use verified Council 2025–26 schedule: point value $143. Multiple dwelling fee includes base (61 pts) + per-unit (5 pts) + impact surcharge (114 pts). QLeave = 0.575% of construction value. Infrastructure charges are separate and noted as TBA.' },
+    { id:'bgp9', what:'Confirmation screen showing the generated DA reference number and next steps in the assessment process.', why:'Provides certainty that the application has been lodged and sets clear expectations about what happens next.', who:'Applicants after submitting their DA', dn:'DA reference number is auto-generated. Pathway-specific text explains the timeline and process.' },
+  ];
+  panels.forEach(p => {
+    const el = document.getElementById(p.id);
+    if (el) el.innerHTML = bgPanel(p.id+'inner', p.what, p.why, p.who, p.dn);
+  });
+}
+
+function bgPanel(id, what, why, who, dn) {
+  return `<div class="bg-panel">
+    <div class="bg-panel-header" onclick="toggleBP('${id}')">
+      <span class="bg-tag">Prototype context</span>
+      <span class="bg-title">Background &amp; Design Rationale</span>
+      <span class="bg-chev" id="chev-${id}">▾</span>
+    </div>
+    <div class="bg-body" id="bp-${id}">
+      <div class="bg-row"><div class="bg-lbl">What this screen does</div><div class="bg-txt">${what}</div></div>
+      <div class="bg-row"><div class="bg-lbl">Why designed this way</div><div class="bg-txt">${why}</div></div>
+      <div class="bg-row"><div class="bg-lbl">Audience</div><div class="bg-txt">${who}</div></div>
+      ${dn ? `<div class="bg-row"><div class="bg-lbl">Design decisions</div><div class="bg-txt">${dn}</div></div>` : ''}
+    </div>
+  </div>`;
+}
+
+function toggleBP(id) {
+  const body = document.getElementById('bp-' + id);
+  const chev = document.getElementById('chev-' + id);
+  body?.classList.toggle('open');
+  chev?.classList.toggle('open');
+}
+
+/* ========== ADMIN PAGE LOGIC ========== */
+const adminConfig = {
+  pointValue: 143,
+  financialYear: '2025–26',
+  feeEffective: '1 July 2025',
+  feeModifiedBy: 'Sean Richards',
+  feeModifiedDate: '15 Mar 2026',
+  qleaveRate: 0.00575,
+  qleaveThreshold: 150000,
+  qleaveEffective: '1 July 2025',
+  qleaveModifiedBy: 'Sean Richards',
+  qleaveModifiedDate: '15 Mar 2026',
+  fees: [
+    { category: 'Minor development (deck/carport/shed/pool)', daType: 'minor', points: 5, notes: 'Domestic Type C' },
+    { category: 'New dwelling house (Type A)', daType: 'newdwelling', points: 16, notes: 'Code assessable' },
+    { category: 'Secondary dwelling/extension (Type B)', daType: 'secondary', points: 10, notes: 'Code assessable' },
+    { category: 'Multiple dwelling — base (2 units)', daType: 'multiple', points: 61, notes: '+5 pts per unit 3–70' },
+    { category: 'Impact assessable surcharge (multiple dwelling)', daType: 'multiple', points: 114, notes: 'Added to base fee' },
+    { category: 'Impact assessable surcharge (domestic)', daType: 'All domestic', points: 5, notes: 'Added to base fee' }
+  ],
+  daTypes: [
+    /* — Code Assessable — */
+    { id:'house_code', name:'Dwelling House (New)', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'house_ext', name:'Extension / Renovation', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'secondary', name:'Secondary Dwelling', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'dual_occ', name:'Dual Occupancy', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'multi_code', name:'Multiple Dwelling', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'mixed_code', name:'Mixed Use', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'mcu_home', name:'MCU – Home Business', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'reconfigure', name:'Reconfiguring a Lot', code:'Code', pathway:'CODE ASSESSABLE' },
+    { id:'operational', name:'Operational Work', code:'Code', pathway:'CODE ASSESSABLE' },
+    /* — Impact Assessable — */
+    { id:'multi_impact', name:'Multiple Dwelling', code:'Impact', pathway:'IMPACT ASSESSABLE' },
+    { id:'mixed_impact', name:'Mixed Use', code:'Impact', pathway:'IMPACT ASSESSABLE' },
+    { id:'commercial', name:'Commercial / Retail', code:'Impact', pathway:'IMPACT ASSESSABLE' }
+  ],
+  docCategories: [
+    { name: 'Site & Context', docs: [
+      { id:'siteplan', title:'Site plan (existing & proposed)' },
+      { id:'contour', title:'Contour & levels survey' },
+      { id:'neighbourhood', title:'Neighbourhood & site description' },
+      { id:'sitelevels', title:'Site levels & surrounding properties' },
+      { id:'openspace', title:'Private open space & habitable windows' }
+    ]},
+    { name: 'Plans & Elevations', docs: [
+      { id:'floorplans', title:'Floor plans (all levels)' },
+      { id:'elevations', title:'Elevations (all sides)' },
+      { id:'sections', title:'Cross sections' },
+      { id:'shadow', title:'Shadow diagrams' }
+    ]},
+    { name: 'Character & Amenity', docs: [
+      { id:'dhc', title:'Demolition control assessment' },
+      { id:'tbc', title:'TBC character assessment' },
+      { id:'materials', title:'Materials & finishes schedule' },
+      { id:'streetscape', title:'Streetscape perspective' }
+    ]},
+    { name: 'Engineering & Environment', docs: [
+      { id:'stormwater', title:'Stormwater management plan' },
+      { id:'flood', title:'Flood impact assessment' },
+      { id:'traffic', title:'Traffic impact assessment' },
+      { id:'acoustic', title:'Acoustic report' },
+      { id:'geotech', title:'Geotechnical report' }
+    ]},
+    { name: 'Landscape & Sustainability', docs: [
+      { id:'landscape', title:'Landscape plan' },
+      { id:'arborist', title:'Arborist report' },
+      { id:'sustainability', title:'Sustainability report' }
+    ]},
+    { name: 'Reporting', docs: [
+      { id:'tpreport', title:'Town planning report' },
+      { id:'notification', title:'Notification material' },
+      { id:'qleave', title:'QLeave levy receipt' }
+    ]}
+  ],
+  docMatrix: {},
+  changeLog: [
+    { date: '15 Mar 2026', user: 'Sean Richards', section: 'Fee Schedule', change: 'Set point value to $143.00 for FY 2025–26', effective: '1 July 2025' },
+    { date: '15 Mar 2026', user: 'Sean Richards', section: 'QLeave Levy', change: 'Set levy rate to 0.575%, threshold $150,000', effective: '1 July 2025' },
+    { date: '15 Mar 2026', user: 'Sean Richards', section: 'Required Documents', change: 'Initial document list configured (13 supporting documents)', effective: '15 Mar 2026' }
+  ]
+};
+
+function openAdmin() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('adminPage').style.display = 'block';
+  showAdminLanding();
+  updateAdminCardStats();
+  window.scrollTo(0, 0);
+}
+
+function closeAdmin() {
+  document.getElementById('adminPage').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+function showAdminLanding() {
+  document.querySelectorAll('.admin-detail').forEach(el => el.style.display = 'none');
+  document.getElementById('adminLanding').style.display = 'block';
+  updateAdminCardStats();
+  window.scrollTo(0, 0);
+}
+
+function showAdminDetail(section) {
+  document.getElementById('adminLanding').style.display = 'none';
+  document.querySelectorAll('.admin-detail').forEach(el => el.style.display = 'none');
+  const detail = document.getElementById('adminDetail-' + section);
+  if (detail) {
+    detail.style.display = 'block';
+    if (section === 'fees') renderAdminFeeTable();
+    if (section === 'docs') renderDocMatrix();
+    if (section === 'changelog') renderAdminChangeLog();
+  }
+  window.scrollTo(0, 0);
+}
+
+function updateAdminCardStats() {
+  const el = (id) => document.getElementById(id);
+  if (el('cardQLeaveRate')) el('cardQLeaveRate').textContent = (adminConfig.qleaveRate * 100).toFixed(3) + '%';
+  if (el('cardPointValue')) el('cardPointValue').textContent = '$' + adminConfig.pointValue.toFixed(2);
+  const totalDocs = adminConfig.docCategories.reduce((sum, c) => sum + c.docs.length, 0);
+  if (el('cardDocCount')) el('cardDocCount').textContent = adminConfig.docCategories.length;
+  if (el('cardDocSub')) el('cardDocSub').textContent = totalDocs + ' document types across ' + adminConfig.daTypes.length + ' DA types';
+  if (el('cardChangeCount')) el('cardChangeCount').textContent = adminConfig.changeLog.length;
+}
+
+function renderAdminFeeTable() {
+  const tbody = document.getElementById('adminFeeTable');
+  if (!tbody) return;
+  tbody.innerHTML = adminConfig.fees.map(f => `<tr>
+    <td style="font-weight:500;color:var(--ink)">${f.category}</td>
+    <td>${f.daType}</td>
+    <td>${f.points} pts</td>
+    <td style="font-weight:600;">$${(f.points * adminConfig.pointValue).toLocaleString()}</td>
+    <td>${f.notes}</td>
+  </tr>`).join('');
+}
+
+/* --- Document matrix carousel --- */
+let docCarouselPage = 0;
+const DOC_COLS_PER_PAGE = 4;
+
+function initDocMatrix() {
+  if (Object.keys(adminConfig.docMatrix).length > 0) return;
+  /* Matrix key: M = Mandatory, R = Required (conditional), '' = Not required.
+     Impact assessable types generally require more comprehensive documentation.
+     Notification material is only required for Impact (public notification mandatory under Planning Act 2016 s53).
+     Character assessments (Demolition Control / TBC) only apply where overlay is present — conditional on overlays, not DA type.
+     QLeave receipt conditional on construction value ≥ threshold. */
+  const defaults = {
+    'siteplan':      { house_code:'M', house_ext:'M', secondary:'M', dual_occ:'M', multi_code:'M', mixed_code:'M', mcu_home:'R', reconfigure:'R', operational:'R', multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'contour':       { house_code:'R', house_ext:'',  secondary:'R', dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'R', operational:'R', multi_impact:'M', mixed_impact:'M', commercial:'R' },
+    'neighbourhood': { house_code:'R', house_ext:'R', secondary:'R', dual_occ:'M', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'sitelevels':    { house_code:'R', house_ext:'',  secondary:'',  dual_occ:'R', multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'R' },
+    'openspace':     { house_code:'M', house_ext:'R', secondary:'R', dual_occ:'M', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:''  },
+    'floorplans':    { house_code:'M', house_ext:'M', secondary:'M', dual_occ:'M', multi_code:'M', mixed_code:'M', mcu_home:'R', reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'elevations':    { house_code:'M', house_ext:'M', secondary:'M', dual_occ:'M', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'sections':      { house_code:'R', house_ext:'R', secondary:'R', dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'shadow':        { house_code:'',  house_ext:'',  secondary:'',  dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'dhc':           { house_code:'R', house_ext:'R', secondary:'',  dual_occ:'R', multi_code:'',  mixed_code:'',  mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'R', mixed_impact:'',  commercial:''  },
+    'tbc':           { house_code:'R', house_ext:'R', secondary:'',  dual_occ:'R', multi_code:'',  mixed_code:'',  mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'R', mixed_impact:'',  commercial:''  },
+    'materials':     { house_code:'R', house_ext:'',  secondary:'',  dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'streetscape':   { house_code:'R', house_ext:'',  secondary:'',  dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'stormwater':    { house_code:'R', house_ext:'R', secondary:'R', dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'R', operational:'R', multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'flood':         { house_code:'R', house_ext:'R', secondary:'R', dual_occ:'R', multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'R', operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'traffic':       { house_code:'',  house_ext:'',  secondary:'',  dual_occ:'',  multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'acoustic':      { house_code:'',  house_ext:'',  secondary:'',  dual_occ:'',  multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'geotech':       { house_code:'R', house_ext:'',  secondary:'R', dual_occ:'R', multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'R' },
+    'landscape':     { house_code:'',  house_ext:'',  secondary:'',  dual_occ:'R', multi_code:'M', mixed_code:'M', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'R' },
+    'arborist':      { house_code:'R', house_ext:'R', secondary:'R', dual_occ:'R', multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'R', operational:'',  multi_impact:'R', mixed_impact:'R', commercial:'R' },
+    'sustainability':{ house_code:'',  house_ext:'',  secondary:'',  dual_occ:'',  multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'R' },
+    'tpreport':      { house_code:'',  house_ext:'',  secondary:'',  dual_occ:'',  multi_code:'R', mixed_code:'R', mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'notification':  { house_code:'',  house_ext:'',  secondary:'',  dual_occ:'',  multi_code:'',  mixed_code:'',  mcu_home:'',  reconfigure:'',  operational:'',  multi_impact:'M', mixed_impact:'M', commercial:'M' },
+    'qleave':        { house_code:'R', house_ext:'R', secondary:'R', dual_occ:'R', multi_code:'R', mixed_code:'R', mcu_home:'R', reconfigure:'R', operational:'R', multi_impact:'R', mixed_impact:'R', commercial:'R' }
+  };
+  adminConfig.docMatrix = defaults;
+}
+
+function getDocState(docId, typeId) {
+  return (adminConfig.docMatrix[docId] && adminConfig.docMatrix[docId][typeId]) || '';
+}
+
+function cycleDocState(docId, typeId) {
+  const cur = getDocState(docId, typeId);
+  const next = cur === '' ? 'R' : cur === 'R' ? 'M' : '';
+  if (!adminConfig.docMatrix[docId]) adminConfig.docMatrix[docId] = {};
+  adminConfig.docMatrix[docId][typeId] = next;
+  renderDocMatrix();
+  updateAdminCardStats();
+}
+
+function renderDocMatrix() {
+  initDocMatrix();
+  const types = adminConfig.daTypes;
+  const totalPages = Math.ceil(types.length / DOC_COLS_PER_PAGE);
+  const start = docCarouselPage * DOC_COLS_PER_PAGE;
+  const visibleTypes = types.slice(start, start + DOC_COLS_PER_PAGE);
+  const end = Math.min(start + DOC_COLS_PER_PAGE, types.length);
+
+  // Update info
+  document.getElementById('docCarouselInfo').textContent = 'Showing ' + (start+1) + '–' + end + ' of ' + types.length;
+  document.getElementById('docMatrixTypeCount').textContent = types.length;
+
+  // Dots
+  const dotsEl = document.getElementById('docCarouselDots');
+  dotsEl.innerHTML = '';
+  for (let p = 0; p < totalPages; p++) {
+    const dot = document.createElement('div');
+    dot.className = 'doc-carousel-dot' + (p === docCarouselPage ? ' active' : '');
+    dot.onclick = () => { docCarouselPage = p; renderDocMatrix(); };
+    dotsEl.appendChild(dot);
+  }
+
+  // Group by pathway for header row
+  const pathwayGroups = [];
+  let lastPw = '';
+  visibleTypes.forEach(t => {
+    if (t.pathway !== lastPw) { pathwayGroups.push({ pathway: t.pathway, span: 1 }); lastPw = t.pathway; }
+    else { pathwayGroups[pathwayGroups.length-1].span++; }
+  });
+
+  // Head
+  const head = document.getElementById('docMatrixHead');
+  const labelColW = '260px';
+  let headHTML = '<tr><th class="dm-doc-label-head" style="width:'+labelColW+';border-right:2px solid var(--border)">SUPPORTING DOCUMENT</th>';
+  pathwayGroups.forEach(g => { headHTML += '<th class="dm-header-pathway" colspan="'+g.span+'">'+g.pathway+'</th>'; });
+  headHTML += '</tr><tr><th class="dm-doc-label-head" style="width:'+labelColW+';border-right:2px solid var(--border)">SUPPORTING DOCUMENT</th>';
+  visibleTypes.forEach(t => {
+    headHTML += '<th class="dm-header-type"><div>'+t.name+'</div><span class="dm-code">'+t.code+'</span><span class="dm-pathway">'+t.pathway.split(' ')[0]+'</span></th>';
+  });
+  headHTML += '</tr>';
+  head.innerHTML = headHTML;
+
+  // Body
+  const body = document.getElementById('docMatrixBody');
+  let bodyHTML = '';
+  adminConfig.docCategories.forEach(cat => {
+    bodyHTML += '<tr><td class="dm-category" colspan="'+(visibleTypes.length+1)+'">'+cat.name+'</td></tr>';
+    cat.docs.forEach(doc => {
+      bodyHTML += '<tr><td class="dm-doc-label" style="border-right:2px solid var(--border)">'+doc.title+'</td>';
+      visibleTypes.forEach(t => {
+        const st = getDocState(doc.id, t.id);
+        let icon = '<span class="dm-cell-icon empty"></span>';
+        if (st === 'R') icon = '<span class="dm-cell-icon required">✓</span>';
+        if (st === 'M') icon = '<span class="dm-cell-icon mandatory">M</span>';
+        bodyHTML += '<td class="dm-cell" onclick="cycleDocState(\''+doc.id+'\',\''+t.id+'\')" title="Click to cycle: empty → required → mandatory">'+icon+'</td>';
+      });
+      bodyHTML += '</tr>';
+    });
+  });
+  body.innerHTML = bodyHTML;
+}
+
+function docCarouselPrev() {
+  if (docCarouselPage > 0) { docCarouselPage--; renderDocMatrix(); }
+}
+
+function docCarouselNext() {
+  const totalPages = Math.ceil(adminConfig.daTypes.length / DOC_COLS_PER_PAGE);
+  if (docCarouselPage < totalPages - 1) { docCarouselPage++; renderDocMatrix(); }
+}
+
+function addDocRow() {
+  const title = prompt('Document name:');
+  if (!title) return;
+  const catName = prompt('Category (e.g. Site & Context, Plans & Elevations):') || 'Reporting';
+  const docId = 'custom_' + Date.now();
+  const cat = adminConfig.docCategories.find(c => c.name === catName);
+  if (cat) { cat.docs.push({ id: docId, title }); }
+  else { adminConfig.docCategories.push({ name: catName, docs: [{ id: docId, title }] }); }
+  adminConfig.docMatrix[docId] = {};
+  addChangeLogEntry('Required Documents', 'Added "' + title + '" to document list');
+  renderDocMatrix();
+  updateAdminCardStats();
+}
+
+function renderAdminChangeLog() {
+  const tbody = document.getElementById('adminChangeLog');
+  if (!tbody) return;
+  tbody.innerHTML = adminConfig.changeLog.map(c => `<tr>
+    <td style="white-space:nowrap">${c.date}</td>
+    <td style="font-weight:500">${c.user}</td>
+    <td><span class="admin-badge" style="background:var(--neutral-bg);color:var(--ink-med)">${c.section}</span></td>
+    <td>${c.change}</td>
+    <td style="white-space:nowrap">${c.effective}</td>
+  </tr>`).join('');
+}
+
+function addChangeLogEntry(section, change, effective) {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' });
+  adminConfig.changeLog.unshift({
+    date: dateStr, user: 'Sean Richards', section,
+    change, effective: effective || dateStr
+  });
+  renderAdminChangeLog();
+}
+
+function showFeeEditModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'admin-edit-overlay';
+  overlay.id = 'feeEditOverlay';
+  overlay.onclick = function(e) { if(e.target===this) this.remove(); };
+  overlay.innerHTML = `
+    <div class="admin-edit-panel">
+      <div class="admin-edit-header">
+        <h3>Edit Fee Schedule</h3>
+        <button class="admin-close" onclick="document.getElementById('feeEditOverlay').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-light);">✕</button>
+      </div>
+      <div class="admin-edit-body">
+        <div class="admin-edit-field">
+          <label>Point value ($)</label>
+          <input type="number" id="editPointValue" value="${adminConfig.pointValue}" step="0.01">
+        </div>
+        <div class="admin-edit-field">
+          <label>Financial year</label>
+          <input type="text" id="editFinYear" value="${adminConfig.financialYear}">
+        </div>
+        <div class="admin-edit-field">
+          <label>Effective from</label>
+          <input type="date" id="editFeeEffective" value="2025-07-01">
+        </div>
+        <div class="admin-edit-field">
+          <label>Reason for change</label>
+          <input type="text" id="editFeeReason" placeholder="e.g. Annual fee schedule update">
+        </div>
+      </div>
+      <div class="admin-edit-actions">
+        <button class="cancel-btn" onclick="document.getElementById('feeEditOverlay').remove()">Cancel</button>
+        <button class="save-btn" onclick="saveFeeEdit()">Save changes</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function saveFeeEdit() {
+  const oldVal = adminConfig.pointValue;
+  const newVal = parseFloat(document.getElementById('editPointValue').value);
+  const finYear = document.getElementById('editFinYear').value;
+  const effDate = document.getElementById('editFeeEffective').value;
+  const reason = document.getElementById('editFeeReason').value;
+
+  const effDateStr = new Date(effDate).toLocaleDateString('en-AU', { day:'numeric', month:'long', year:'numeric' });
+
+  adminConfig.pointValue = newVal;
+  adminConfig.financialYear = finYear;
+  adminConfig.feeEffective = effDateStr;
+  adminConfig.feeModifiedBy = 'Sean Richards';
+  adminConfig.feeModifiedDate = new Date().toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' });
+
+  document.getElementById('adminPointValue').textContent = '$' + newVal.toFixed(2);
+  document.getElementById('adminFeeEffective').textContent = effDateStr;
+  document.getElementById('adminFeeModified').innerHTML = adminConfig.feeModifiedDate + ' by <strong>' + adminConfig.feeModifiedBy + '</strong>';
+
+  addChangeLogEntry('Fee Schedule', (reason || 'Updated point value from $' + oldVal + ' to $' + newVal) + ' for FY ' + finYear, effDateStr);
+  renderAdminFeeTable();
+  updateAdminCardStats();
+  document.getElementById('feeEditOverlay').remove();
+  showToast('Fee schedule updated — effective ' + effDateStr);
+}
+
+function showQLeaveEditModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'admin-edit-overlay';
+  overlay.id = 'qleaveEditOverlay';
+  overlay.onclick = function(e) { if(e.target===this) this.remove(); };
+  overlay.innerHTML = `
+    <div class="admin-edit-panel">
+      <div class="admin-edit-header">
+        <h3>Edit QLeave Levy Rates</h3>
+        <button class="admin-close" onclick="document.getElementById('qleaveEditOverlay').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-light);">✕</button>
+      </div>
+      <div class="admin-edit-body">
+        <div class="admin-edit-field">
+          <label>Levy rate (%)</label>
+          <input type="number" id="editQLeaveRate" value="${(adminConfig.qleaveRate * 100).toFixed(3)}" step="0.001">
+        </div>
+        <div class="admin-edit-field">
+          <label>Threshold ($)</label>
+          <input type="number" id="editQLeaveThreshold" value="${adminConfig.qleaveThreshold}" step="1000">
+        </div>
+        <div class="admin-edit-field">
+          <label>Effective from</label>
+          <input type="date" id="editQLeaveEffective" value="2025-07-01">
+        </div>
+        <div class="admin-edit-field">
+          <label>Reason for change</label>
+          <input type="text" id="editQLeaveReason" placeholder="e.g. QLeave annual rate update">
+        </div>
+      </div>
+      <div class="admin-edit-actions">
+        <button class="cancel-btn" onclick="document.getElementById('qleaveEditOverlay').remove()">Cancel</button>
+        <button class="save-btn" onclick="saveQLeaveEdit()">Save changes</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function saveQLeaveEdit() {
+  const oldRate = adminConfig.qleaveRate;
+  const newRate = parseFloat(document.getElementById('editQLeaveRate').value) / 100;
+  const newThreshold = parseFloat(document.getElementById('editQLeaveThreshold').value);
+  const effDate = document.getElementById('editQLeaveEffective').value;
+  const reason = document.getElementById('editQLeaveReason').value;
+
+  const effDateStr = new Date(effDate).toLocaleDateString('en-AU', { day:'numeric', month:'long', year:'numeric' });
+
+  adminConfig.qleaveRate = newRate;
+  adminConfig.qleaveThreshold = newThreshold;
+  adminConfig.qleaveEffective = effDateStr;
+  adminConfig.qleaveModifiedBy = 'Sean Richards';
+  adminConfig.qleaveModifiedDate = new Date().toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' });
+
+  document.getElementById('adminQLeaveRate').textContent = (newRate * 100).toFixed(3) + '%';
+  document.getElementById('adminQLeaveThreshold').textContent = '$' + newThreshold.toLocaleString() + ' (construction value excl. GST)';
+  document.getElementById('adminQLeaveEffective').textContent = effDateStr;
+  document.getElementById('adminQLeaveModified').innerHTML = adminConfig.qleaveModifiedDate + ' by <strong>' + adminConfig.qleaveModifiedBy + '</strong>';
+
+  addChangeLogEntry('QLeave Levy', reason || 'Updated levy rate to ' + (newRate*100).toFixed(3) + '%, threshold $' + newThreshold.toLocaleString(), effDateStr);
+  updateAdminCardStats();
+  document.getElementById('qleaveEditOverlay').remove();
+  showToast('QLeave rates updated — effective ' + effDateStr);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.shiftKey && e.key === 'A' && document.getElementById('app').style.display !== 'none') {
+    openAdmin();
+  }
+});
+</script>
+<script src="https://build-au-feedback-widget.vercel.app/feedback-widget.js"></script>
+</body>
+</html>

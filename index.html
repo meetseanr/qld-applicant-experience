@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Build AU — QLD DA Lodgement Experience v1.6</title>
+<title>Build AU — QLD DA Lodgement Experience v1.8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 <!-- Google Maps via iframe embed (no API key required) -->
@@ -90,7 +90,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .topbar-admin svg{width:16px;height:16px;fill:var(--ink-light);}
 
 /* ==================== PROGRESS BAR ==================== */
-.progress-bar-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;}
+.progress-bar-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px 38px;}
 .progress-stages{display:flex;align-items:center;gap:0;max-width:760px;margin:0 auto;}
 .progress-stage{display:flex;align-items:center;flex:1;}
 .progress-stage:last-child{flex:0;}
@@ -143,10 +143,10 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 
 /* ==================== PROPERTY INTELLIGENCE ==================== */
 .intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.intel-card{background:var(--neutral-bg);border-radius:var(--radius-sm);padding:12px 14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.intel-card{background:var(--neutral-bg);border-radius:var(--radius-sm);padding:12px 14px;border:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:8px;min-width:0;}
 .intel-card-left{flex:1;min-width:0;}
 .intel-label{font-size:10px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
-.intel-value{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.intel-value{font-size:13px;font-weight:600;color:var(--ink);word-break:break-word;line-height:1.4;}
 .intel-desc{font-size:12px;color:var(--ink-light);line-height:1.5;}
 .flood-banner{background:var(--warning-bg);border:1px solid #fbbf24;border-radius:var(--radius-sm);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;}
 .flood-banner svg{width:18px;height:18px;fill:var(--warning);flex-shrink:0;margin-top:1px;}
@@ -365,7 +365,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 /* ==================== INFO TOOLTIP ==================== */
 .info-tip { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: var(--neutral-bg); color: var(--ink-faint); font-size: 10px; font-weight: 700; cursor: pointer; margin-left: 6px; border: 1px solid var(--border); position: relative; }
 .info-tip:hover .info-tip-content { display: block; }
-.info-tip-content { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 260px; background: var(--ink); color: white; font-size: 11px; font-weight: 400; line-height: 1.5; padding: 10px 12px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); z-index: 200; text-transform: none; letter-spacing: 0; }
+.info-tip-content { display: none; position: absolute; bottom: calc(100% + 8px); right: -4px; left: auto; transform: none; width: 260px; background: var(--ink); color: white; font-size: 11px; font-weight: 400; line-height: 1.5; padding: 10px 12px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); z-index: 200; text-transform: none; letter-spacing: 0; }
 
 /* ==================== SIGN-IN SECTION ==================== */
 .signin-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
@@ -566,7 +566,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
       <div class="gate-meta">
         <div class="gate-meta-item">
           <div class="gate-meta-label">Version</div>
-          <div class="gate-meta-value">v1.6 — March 2026</div>
+          <div class="gate-meta-value">v1.8 — March 2026</div>
         </div>
         <div class="gate-meta-item">
           <div class="gate-meta-label">Jurisdiction</div>
@@ -684,7 +684,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
       <div class="admin-section">
         <div class="admin-section-header">
           <div>
-            <h3>DA Application Fee Schedule</h3>
+            <h3>Development Application Fee Schedule</h3>
             <p class="admin-section-desc">Configure the point value and fee categories applied to development applications. Prescribed under the Planning and Environment (Fees) Regulations.</p>
           </div>
           <button class="admin-action-btn" onclick="showFeeEditModal()">Edit fee schedule</button>
@@ -1080,8 +1080,8 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
           <div class="form-section">
             <div class="form-section-title">Applicant</div>
             <div class="field-row">
-              <div class="field"><label>Applicant name (individual or company)</label><input type="text" placeholder="e.g. Thomas Robertson" id="applicantName"></div>
-              <div class="field"><label>Contact name (if company)</label><input type="text" placeholder="Only if applicant is a company" id="applicantContact"></div>
+              <div class="field"><label>Applicant name</label><input type="text" placeholder="e.g. Thomas Robertson" id="applicantName"></div>
+              <div class="field"><label>Company name (if applicable)</label><input type="text" placeholder="e.g. Robertson Developments Pty Ltd" id="applicantContact"></div>
             </div>
             <div class="field-row">
               <div class="field"><label>Postal address</label><input type="text" placeholder="e.g. 4723 Newberry Court" id="applicantPostal"></div>
@@ -1093,12 +1093,21 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
               <div class="field"><label>Country</label><input type="text" placeholder="Australia" id="applicantCountry" value="Australia"></div>
             </div>
             <div class="field-row">
-              <div class="field"><label>Contact number</label><input type="tel" placeholder="e.g. 0412 345 678" id="applicantPhone"></div>
-              <div class="field"><label>Email (non-mandatory)</label><input type="email" placeholder="e.g. t.robertson@email.com" id="applicantEmail"></div>
+              <div class="field"><label>Contact number</label><input type="tel" placeholder="e.g. 07 3000 0000" id="applicantPhone"></div>
+              <div class="field"><label>Email</label><input type="email" placeholder="e.g. t.robertson@email.com" id="applicantEmail"></div>
             </div>
             <div class="field-row">
-              <div class="field"><label>Mobile (non-mandatory)</label><input type="tel" placeholder="e.g. 0412 345 678" id="applicantMobile"></div>
-              <div class="field"><label>Applicant reference (if applicable)</label><input type="text" placeholder="e.g. DA-2026-001" id="applicantRef"></div>
+              <div class="field" style="flex:1"><label>Applicant reference (if applicable)</label><input type="text" placeholder="e.g. DA-2026-001" id="applicantRef"></div>
+              <div class="field" style="flex:1"></div>
+            </div>
+            <div style="margin-top:16px;padding:14px 16px;background:var(--neutral-bg);border:1px solid var(--border);border-radius:var(--radius-sm);">
+              <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+                <input type="checkbox" id="homeBasedBusiness" style="margin-top:2px;width:16px;height:16px;flex-shrink:0;accent-color:var(--ink);">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px;">Home-based business</div>
+                  <div style="font-size:12px;color:var(--ink-light);line-height:1.5;">Tick if this development application relates to a home-based business use. This is required to be declared on Form 1, Part 1 under the <em>Planning Act 2016</em>.</div>
+                </div>
+              </label>
             </div>
           </div>
 
@@ -1123,7 +1132,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
             </div>
           </div>
 
-          <div id="agentSection" style="display:none">
+          <div id="agentSection" style="display:none;margin-bottom:28px;">
             <div class="consent-card" id="consentDownloadCard">
               <div class="consent-card-title">Owner's consent</div>
               <div class="consent-card-desc">Download a blank consent template, have the registered owner sign it, then upload the signed version. The consent must be current, specific to this application, and include the owner's signature.</div>
@@ -1230,7 +1239,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 
 <!-- Prototype tag -->
 <div class="proto-tag" onclick="openAdmin()" title="Click to open admin panel · Shift+A">
-  <strong>Build AU — QLD DA Experience v1.6</strong>
+  <strong>Build AU — QLD DA Experience v1.8</strong>
   <span style="margin-left:6px;opacity:0.6;">⚙ Admin</span>
   <br>Concept demonstration only. Commercial in confidence.
 </div>
@@ -1309,6 +1318,20 @@ const PATHWAY_CONFIG = {
     timeline:'No DA process — works can proceed subject to building approval',
     isExit: true,
   },
+  accepted_flood: {
+    label:'Code Assessable (Flood overlay)',
+    color:'code',
+    icon:'🌊',
+    title:'Code Assessable — flood overlay applies',
+    sub:'This type of development would normally be Accepted Development (no DA required), but your property is in a mapped flood overlay area (Overland Flow Path). Under the Planning Regulation 2017, the flood overlay upgrades the assessment category. A DA with a hydraulic engineer\'s flood impact assessment is required.',
+    timeline:'35 business days (standard code assessment)',
+    steps:[
+      { title:'Lodge your DA here', desc:'Complete your application using this tool. A hydraulic engineer\'s flood impact assessment report will be required — upload it along with your other supporting documents.' },
+      { title:'Code assessment', desc:'Assessed against the flood overlay code and relevant zone/overlay codes. No public submission period.' },
+      { title:'Decision notice', desc:'Approval may include flood-resilience conditions (floor levels, materials, drainage).' },
+    ],
+    isExit: false,
+  },
   risksmart: {
     label:'RiskSmart — Code Assessable',
     color:'risksmart',
@@ -1317,7 +1340,7 @@ const PATHWAY_CONFIG = {
     sub:'Your development is Code Assessable and eligible for Council\'s RiskSmart program — Brisbane\'s fast-track DA pathway for eligible code-assessable applications. Target decision: 5–10 business days.',
     timeline:'5–10 business days (RiskSmart) · 35 business days (standard code)',
     steps:[
-      { title:'Lodge your DA', desc:'Submit Form 1, site plan, building plans, and character assessment for Demolition Control / TBC overlay.' },
+      { title:'Lodge your DA here', desc:'Complete your application using this tool. Provide your development details, upload your supporting documents, and submit — your Form 1 is generated automatically.' },
       { title:'Code assessment', desc:'Council assesses against the Neighbourhood Plan, dwelling house code, and overlay codes.' },
       { title:'Decision notice', desc:'Approval, approval with conditions, or refusal. Conditions may include materials, setbacks, character requirements.' },
     ],
@@ -1328,10 +1351,10 @@ const PATHWAY_CONFIG = {
     color:'code',
     icon:'🌊',
     title:'Code Assessable — flood overlay applies',
-    sub:'Your property is in a flood overlay area (Overland Flow Path), which means a flood impact assessment is required and RiskSmart is not available. Your application follows the standard code assessment pathway.',
+    sub:'Your property is in a mapped flood overlay area (Overland Flow Path). A hydraulic engineer\'s flood impact assessment is required. Your application follows the standard code assessment pathway.',
     timeline:'35 business days (standard code assessment)',
     steps:[
-      { title:'Lodge your DA', desc:'Submit Form 1 with a hydraulic engineer\'s flood impact assessment report, site plan, and character assessment.' },
+      { title:'Lodge your DA here', desc:'Complete your application using this tool. A hydraulic engineer\'s flood impact assessment report will be required — upload it along with your other supporting documents.' },
       { title:'Code assessment', desc:'Assessed against dwelling house code, neighbourhood plan, flood overlay code, and Traditional Building Character overlay codes.' },
       { title:'Decision notice', desc:'Approval may include flood-resilience conditions (floor levels, materials, drainage).' },
     ],
@@ -1342,10 +1365,10 @@ const PATHWAY_CONFIG = {
     color:'code',
     icon:'📋',
     title:'Code Assessable development',
-    sub:'Your development is Code Assessable under the Brisbane City Plan 2014. There is no public notification — Council assesses the application against the relevant codes. No RiskSmart fast-track available for this development type.',
+    sub:'Your development is Code Assessable under the Brisbane City Plan 2014. There is no public notification — Council assesses the application against the relevant codes.',
     timeline:'35 business days (standard code assessment)',
     steps:[
-      { title:'Lodge your DA', desc:'Submit Form 1, site plan, architectural plans, character assessment (Demolition Control overlay), and any other required documents.' },
+      { title:'Lodge your DA here', desc:'Complete your application using this tool. Provide your development details, upload your supporting documents, and submit — your Form 1 is generated automatically.' },
       { title:'Code assessment', desc:'Assessed against the zone code, overlay codes, and neighbourhood plan provisions. No public submission period.' },
       { title:'Decision notice', desc:'Approval, approval with conditions, or refusal. Right of appeal to the Planning and Environment Court.' },
     ],
@@ -1359,7 +1382,7 @@ const PATHWAY_CONFIG = {
     sub:'Your development is Impact Assessable. This triggers a formal public notification period during which neighbours and the community can make submissions. Applications take longer and involve more documentation.',
     timeline:'~55+ business days (including 15-day public notification period)',
     steps:[
-      { title:'Lodge your DA', desc:'Submit Form 1, comprehensive development plans, traffic report, character assessment, and impact assessment documentation.' },
+      { title:'Lodge your DA here', desc:'Complete your application using this tool. Comprehensive development plans, a traffic report, and impact assessment documentation will be required — we\'ll guide you through the full document checklist.' },
       { title:'Public notification', desc:'Mandatory 15-business-day public notification period. Adjoining owners notified, site notice posted, public advertisement placed.' },
       { title:'Assessment & decision', desc:'Council considers all submissions and assesses against the Strategic Framework, zone code, and overlay codes. Decision notice issued.' },
     ],
@@ -1377,6 +1400,8 @@ let state = {
   constructionValue: 0,
   numUnits: 2,
   devDescription: '',
+  devDescFile: null,
+  docChecksAnimated: false,
   irPref: 'yes',
   floorArea: 0,
   searchMode: 'address',
@@ -1473,7 +1498,7 @@ function nextStage() {
     state.applicantCountry = document.getElementById('applicantCountry')?.value || 'Australia';
     state.applicantPhone = document.getElementById('applicantPhone')?.value || '';
     state.applicantEmail = document.getElementById('applicantEmail')?.value || '';
-    state.applicantMobile = document.getElementById('applicantMobile')?.value || '';
+    state.homeBasedBusiness = document.getElementById('homeBasedBusiness')?.checked || false;
     state.applicantRef = document.getElementById('applicantRef')?.value || '';
     state.isAgent = document.querySelector('input[name="applicantType"]:checked')?.value === 'agent';
   }
@@ -1644,12 +1669,13 @@ function renderStage2() {
   const a = state.selectedAddresses[0];
   if (!a) return;
   document.getElementById('propBanner').innerHTML = `
+    <div style="font-size:10px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Primary address</div>
     <div class="prop-addr">${a.addr}</div>
     <div class="prop-lot">${a.lot} · ${a.area}m² lot · Lat ${a.lat.toFixed(4)}, Lng ${a.lng.toFixed(4)}</div>
     <div class="prop-chips" style="margin-top:10px">
       <span class="chip chip-zone">${a.zone}</span>
       ${a.dhc ? '<span class="chip chip-overlay">Demolition Control</span>' : ''}
-      ${a.tbc ? '<span class="chip chip-overlay">TBC Overlay</span>' : ''}
+      ${(a.tbc && !a.dhc) ? '<span class="chip chip-overlay">TBC Overlay</span>' : ''}
       ${a.flood ? '<span class="chip chip-flood">⚠ Flood Overlay</span>' : ''}
     </div>`;
   const floodBanner = document.getElementById('floodBanner');
@@ -1659,7 +1685,7 @@ function renderStage2() {
       <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
       <div class="flood-banner-text">
         <strong>Flood Overlay — Overland Flow</strong>
-        This property is in a mapped flood area. A hydraulic engineer's flood impact assessment report will be required with your DA. RiskSmart fast-track is not available — this application must follow the standard code assessment pathway.
+        This property is in a mapped flood overlay area. Under the Planning Regulation 2017, the flood overlay upgrades your assessment category — all development types require a DA with a hydraulic engineer's flood impact assessment report. RiskSmart fast-track is not available.
       </div>
     </div>`;
   } else {
@@ -1690,9 +1716,9 @@ function renderStage2() {
         <div class="intel-label">Demolition control overlay</div>
         <div class="intel-value">Traditional Building Character (Demolition) — applies to this site</div>
       </div>
-      <span class="info-tip">i<span class="info-tip-content">Demolition of pre-1947 dwellings requires assessment under the Traditional Building Character (Demolition) overlay code. A character assessment is required with any new dwelling DA.</span></span>
+      <span class="info-tip">i<span class="info-tip-content">Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code. The Traditional Building Character (TBC) overlay also applies — new works must respect the materials, form and proportions of traditional Queenslander housing. Both overlays require a character assessment with any new dwelling DA.</span></span>
     </div>` : ''}
-    ${a.tbc ? `<div class="intel-card">
+    ${(a.tbc && !a.dhc) ? `<div class="intel-card">
       <div class="intel-card-left">
         <div class="intel-label">TBC overlay</div>
         <div class="intel-value">Applies to this site</div>
@@ -1706,13 +1732,7 @@ function renderStage2() {
       </div>
       <span class="info-tip">i<span class="info-tip-content">${a.area >= 400 ? 'Meets minimum lot size for most development types in this zone.' : 'Smaller lot — minimum lot size provisions may affect options.'}</span></span>
     </div>
-    <div class="intel-card">
-      <div class="intel-card-left">
-        <div class="intel-label">Assessment manager</div>
-        <div class="intel-value">Council</div>
-      </div>
-      <span class="info-tip">i<span class="info-tip-content">Council is the assessment manager for this property. DA fees (2025–26) apply.</span></span>
-    </div>`;
+    `;
   document.getElementById('saraBanner').innerHTML = `
     <div class="sara-check">
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
@@ -1723,15 +1743,22 @@ function renderStage2() {
 function renderStage3() {
   const a = state.selectedAddresses[0];
   const types = DEV_TYPES[a.zone] || DEV_TYPES.CR2;
-  document.getElementById('devTypeGrid').innerHTML = types.map(t => `
+  document.getElementById('devTypeGrid').innerHTML = types.map(t => {
+    let badge = t.badge;
+    // Flood overlay upgrades accepted development to code assessable (Planning Reg 2017, Sch 6)
+    if (a.flood && t.pathway === 'accepted') badge = 'Code assessable (flood overlay)';
+    // Flood overlay downgrades RiskSmart to standard code
+    if (a.flood && t.pathway === 'risksmart') badge = 'Code assessable (flood overlay)';
+    return `
     <div class="devtype-card ${state.selectedDevType?.id === t.id ? 'selected' : ''}" onclick="selectDevType('${t.id}')">
       <div class="devtype-icon">${t.icon}</div>
       <div class="devtype-content">
         <div class="devtype-title">${t.label}</div>
         <div class="devtype-desc">${t.desc}</div>
-        <span class="devtype-badge">${t.badge}</span>
+        <span class="devtype-badge">${badge}</span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   const prohibited = PROHIBITED_USES[a.zone] || [];
   const prohibSec = document.getElementById('prohibitedSection');
   if (prohibited.length) {
@@ -1747,7 +1774,10 @@ function selectDevType(id) {
   const types = DEV_TYPES[a.zone] || DEV_TYPES.CR2;
   state.selectedDevType = types.find(t => t.id === id);
   let pathway = state.selectedDevType.pathway;
-  if (pathway === 'risksmart' && a.flood) pathway = 'risksmart_flood';
+  // Flood overlay upgrades accepted → code assessable (Planning Reg 2017, Sch 6)
+  if (a.flood && pathway === 'accepted') pathway = 'accepted_flood';
+  // Flood overlay downgrades RiskSmart → standard code
+  if (a.flood && pathway === 'risksmart') pathway = 'risksmart_flood';
   state.pathway = pathway;
   renderStage3();
   document.getElementById('s3Next').disabled = false;
@@ -1807,24 +1837,34 @@ function renderStage5() {
   const needsFloorArea = ['newdwelling','secondary','multiple','mixeduse','alts'].includes(dt?.id);
 
   document.getElementById('s5FormContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;padding:12px 16px;background:var(--neutral-bg);border-radius:var(--radius-sm);">
+      <span style="font-size:12px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.5px;">Type of development</span>
+      <span style="font-size:13px;color:var(--ink);">Material change of use (MCU) / Building work</span>
+      <span class="chip" style="background:${getPathwayChipBg()};color:${getPathwayChipColor()};font-size:11px;padding:3px 10px;">${getPathwayLabel()}</span>
+    </div>
     <div class="form-section">
       <div class="form-section-title">Development description (Form 1, Part 3)</div>
-      <div class="field-row full">
-        <div class="field">
-          <label>Description of proposed works</label>
-          <textarea id="devDesc" placeholder="e.g. Demolition of existing dwelling and construction of a new 2-bedroom dwelling house with carport and deck, designed in accordance with the Traditional Building Character overlay code." rows="4">${state.devDescription}</textarea>
-          <span class="field-hint">This description will appear verbatim on your Form 1 lodgement. Be specific — include materials, height, and key design features.</span>
+      <div id="descUploadView">
+        <div class="upload-zone" style="padding:24px;margin-bottom:8px;" onclick="document.getElementById('descFileInput').click()">
+          <div class="upload-zone-icon" style="font-size:24px;margin-bottom:6px;">📄</div>
+          <div class="upload-zone-text"><strong>Upload</strong> your Statement of Proposed Works</div>
+          <div class="upload-zone-text" style="font-size:11px;margin-top:4px;color:var(--ink-faint);">PDF, Word, or text file</div>
         </div>
+        <div style="text-align:center;"><button onclick="showDescWrite()" style="background:none;border:none;font-size:12px;color:var(--ink-light);cursor:pointer;text-decoration:underline;padding:4px;">or write the description yourself</button></div>
       </div>
-      <div class="field-row full">
-        <div class="field">
-          <label>Type of development (Form 1 Part 3)</label>
-          <div class="field-value" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            Material change of use (MCU) / Building work
-            <span class="chip" style="background:${getPathwayChipBg()};color:${getPathwayChipColor()};font-size:11px;padding:3px 10px;">${getPathwayLabel()}</span>
-          </div>
+      <div id="descWriteView" style="display:none;">
+        <div class="field" style="margin-bottom:8px;">
+          <textarea id="devDesc" placeholder="e.g. Demolition of existing dwelling and construction of a new 2-bedroom dwelling house with carport and deck, designed in accordance with the Traditional Building Character overlay code." rows="4" oninput="state.devDescription=this.value">${state.devDescription}</textarea>
+          <span class="field-hint">Be specific — include materials, height, and key design features. This will appear on your Form 1.</span>
         </div>
+        <div style="text-align:center;"><button onclick="showDescUpload()" style="background:none;border:none;font-size:12px;color:var(--ink-light);cursor:pointer;text-decoration:underline;padding:4px;">or upload a document instead</button></div>
       </div>
+      <div id="descFileConfirm" style="display:none;background:var(--positive-bg);border:1px solid #bbf7d0;border-radius:var(--radius-sm);padding:10px 14px;align-items:center;gap:10px;margin-bottom:16px;">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:var(--positive);flex-shrink:0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <span id="descFileName" style="font-size:13px;font-weight:500;color:var(--positive-text);flex:1;"></span>
+        <button onclick="clearDescFile()" style="background:none;border:none;font-size:11px;color:var(--ink-faint);cursor:pointer;padding:0;">Remove</button>
+      </div>
+      <input type="file" id="descFileInput" accept=".pdf,.doc,.docx,.txt" style="display:none;" onchange="handleDescFile(this)">
     </div>
     ${needsFloorArea ? `
     <div class="form-section">
@@ -1875,18 +1915,54 @@ function renderStage5() {
   updateQLeave();
 }
 
+function showDescWrite() {
+  document.getElementById('descUploadView').style.display = 'none';
+  document.getElementById('descWriteView').style.display = 'block';
+  document.getElementById('devDesc')?.focus();
+}
+
+function showDescUpload() {
+  document.getElementById('descWriteView').style.display = 'none';
+  document.getElementById('descUploadView').style.display = 'block';
+  state.devDescription = '';
+  const ta = document.getElementById('devDesc');
+  if (ta) ta.value = '';
+}
+
+function handleDescFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  state.devDescFile = file.name;
+  state.devDescription = '';
+  document.getElementById('descUploadView').style.display = 'none';
+  document.getElementById('descWriteView').style.display = 'none';
+  const confirm = document.getElementById('descFileConfirm');
+  if (confirm) confirm.style.display = 'flex';
+  const nameEl = document.getElementById('descFileName');
+  if (nameEl) nameEl.textContent = file.name;
+}
+
+function clearDescFile() {
+  state.devDescFile = null;
+  const input = document.getElementById('descFileInput');
+  if (input) input.value = '';
+  document.getElementById('descFileConfirm').style.display = 'none';
+  document.getElementById('descUploadView').style.display = 'block';
+  document.getElementById('descWriteView').style.display = 'none';
+}
+
 function getPathwayLabel() {
-  const labels = { accepted:'Accepted Development', risksmart:'Code Assessable (RiskSmart)', risksmart_flood:'Code Assessable (Standard)', code:'Code Assessable', impact:'Impact Assessable' };
+  const labels = { accepted:'Accepted Development', accepted_flood:'Code Assessable (Flood overlay)', risksmart:'Code Assessable (RiskSmart)', risksmart_flood:'Code Assessable (Standard)', code:'Code Assessable', impact:'Impact Assessable' };
   return labels[state.pathway] || '';
 }
 
 function getPathwayChipBg() {
-  const bgs = { accepted:'var(--positive-bg)', risksmart:'#eff6ff', risksmart_flood:'#fef3c7', code:'#fef3c7', impact:'var(--negative-bg)' };
+  const bgs = { accepted:'var(--positive-bg)', accepted_flood:'#fef3c7', risksmart:'#eff6ff', risksmart_flood:'#fef3c7', code:'#fef3c7', impact:'var(--negative-bg)' };
   return bgs[state.pathway] || 'var(--neutral-bg)';
 }
 
 function getPathwayChipColor() {
-  const colors = { accepted:'var(--positive-text)', risksmart:'#1d4ed8', risksmart_flood:'#92400e', code:'#92400e', impact:'var(--negative-text)' };
+  const colors = { accepted:'var(--positive-text)', accepted_flood:'#92400e', risksmart:'#1d4ed8', risksmart_flood:'#92400e', code:'#92400e', impact:'var(--negative-text)' };
   return colors[state.pathway] || 'var(--ink-med)';
 }
 
@@ -1907,7 +1983,7 @@ function renderStage6() {
   const dt = state.selectedDevType;
   const p = state.pathway;
   const isImpact = p === 'impact';
-  const isCode = p === 'code' || p === 'risksmart' || p === 'risksmart_flood';
+  const isCode = p === 'code' || p === 'risksmart' || p === 'risksmart_flood' || p === 'accepted_flood';
   const isFlood = a?.flood;
   const isDHC = a?.dhc;
   const isTBC = a?.tbc;
@@ -1915,16 +1991,14 @@ function renderStage6() {
   const needsQLeave = state.constructionValue >= 150000;
 
   const docs = [];
-  docs.push({ id:'form1', title:'Form 1 — Development Application form', desc:'The standard QLD Form 1. Parts 1–4 and Part 8 declaration are mandatory.', type:'req' });
-  docs.push({ id:'form2', title:'Form 2 — Building work details', desc:'Required where the DA includes a building work component.', type:'req' });
-  docs.push({ id:'consent', title:'Owner\'s consent', desc:'Written consent from all registered owners if you are not the owner.', type:'opt' });
   docs.push({ id:'siteplan', title:'Site plan (1:200 or 1:500)', desc:'Lot boundaries, north point, existing and proposed structures, setbacks.', type:'req' });
   docs.push({ id:'floorplan', title:'Floor plans (all levels)', desc:'Dimensioned floor plans for all levels.', type: isCode || isImpact ? 'req' : 'opt' });
   docs.push({ id:'elevations', title:'Elevations (all sides)', desc:'Height, roof form, materials, boundary relationship.', type: isCode || isImpact ? 'req' : 'opt' });
   if (isMultiple) docs.push({ id:'landscape', title:'Landscape plan', desc:'Prepared by a qualified landscape architect.', type:'req' });
-  if (isDHC) docs.push({ id:'dhc', title:'Demolition control assessment', desc:'Assessment under the Traditional Building Character (Demolition) overlay code — how the design responds to streetscape character.', type:'req' });
-  if (isTBC) docs.push({ id:'tbc', title:'TBC character assessment', desc:'How development respects Traditional Building Character.', type:'req' });
-  if (isDHC || isTBC) docs.push({ id:'materials', title:'Materials and finishes schedule', desc:'External materials, colours and finishes.', type:'req' });
+  if (isDHC || isTBC) {
+    docs.push({ id:'tbc', title:'Traditional Building Character assessment', desc:'Assessment against the TBC overlay code — demolition justification (if applicable) and how the proposed design responds to streetscape character.', type:'req' });
+    docs.push({ id:'materials', title:'Materials and finishes schedule', desc:'External materials, colours and finishes.', type:'req' });
+  }
   if (isFlood) {
     docs.push({ id:'flood', title:'Flood impact assessment', desc:'Hydraulic engineer report for Flood overlay (Overland Flow).', type:'cond' });
     docs.push({ id:'stormwater', title:'Stormwater management plan', desc:'No increase in peak flow rates to adjoining properties.', type:'cond' });
@@ -1934,7 +2008,6 @@ function renderStage6() {
     docs.push({ id:'traffic', title:'Traffic impact assessment', desc:'Required for 10+ vehicle movements per peak hour.', type:'cond' });
     docs.push({ id:'notification', title:'Notification material', desc:'Letters to adjoining owners and public notice sign.', type:'req' });
   }
-  if (needsQLeave) docs.push({ id:'qleave', title:'QLeave levy receipt', desc:'0.575% of construction cost for works ≥ $150,000.', type:'opt' });
 
   // Store docs in state for animation
   state.stageDocs = docs;
@@ -1950,15 +2023,13 @@ function renderStage6() {
     </div>`).join('');
 
   document.getElementById('s6DocList').innerHTML = html;
-
-  // Animate auto-checking of documents after a brief delay
-  setTimeout(() => animateDocChecks(), 600);
+  state.docChecksAnimated = false;
 }
 
 function animateDocChecks() {
   // Simulate AI checking uploaded documents against requirements
-  // Auto-confirm: form1, form2, siteplan, floorplan (as if detected from upload)
-  const autoConfirm = ['form1', 'form2', 'siteplan', 'floorplan'];
+  // Auto-confirm: siteplan, floorplan (as if detected from upload)
+  const autoConfirm = ['siteplan', 'floorplan'];
   let delay = 0;
 
   state.stageDocs.forEach((d, i) => {
@@ -2272,6 +2343,7 @@ function submitApp() {
   const pathwayStepTexts = {
     risksmart: 'Your application enters the RiskSmart fast-track assessment (5–10 business days).',
     risksmart_flood: 'Your application enters standard code assessment (35 business days). Flood overlay assessment included.',
+    accepted_flood: 'Your application enters code assessment (35 business days). Flood overlay upgraded this from accepted development.',
     code: 'Your application enters code assessment (35 business days).',
     impact: 'Your application enters the Impact Assessment process with a 15-business-day public notification period.',
   };
@@ -2334,6 +2406,10 @@ function handleFileUpload(event) {
     state.uploadedFiles.push({ name: f.name, size: (f.size / 1024).toFixed(0) + ' KB' });
   });
   renderUploadedFiles();
+  if (!state.docChecksAnimated) {
+    state.docChecksAnimated = true;
+    setTimeout(() => animateDocChecks(), 400);
+  }
   simulateAIReview();
 }
 
@@ -2355,7 +2431,7 @@ function simulateAIReview() {
       '✓ Site plan detected — dimensions and north point present',
       '✓ Floor plans detected — levels identified',
     ];
-    if (a?.dhc) items.push('⚠ Character assessment not detected — required for Demolition Control overlay');
+    if (a?.dhc || a?.tbc) items.push('⚠ Traditional Building Character assessment not detected — required for TBC overlay');
     if (a?.flood) items.push('⚠ Flood impact assessment not detected — required for flood overlay');
     el.innerHTML = `<div class="ai-review">
       <div class="ai-review-header"><div class="ai-review-title">AI document review</div></div>
@@ -2400,14 +2476,14 @@ function generateForm1PDF() {
 
   sectionHeader('Part 1 — Applicant Details');
   addRow('Applicant name', state.applicantName || '');
-  addRow('Contact name', state.applicantContact || '');
+  addRow('Company name', state.applicantContact || '');
   addRow('Postal address', state.applicantPostal || '');
   addRow('Suburb', state.applicantSuburb || '');
   addRow('State', state.applicantState || 'QLD');
   addRow('Postcode', state.applicantPostcode || '');
   addRow('Contact number', state.applicantPhone || '');
   addRow('Email', state.applicantEmail || '');
-  addRow('Mobile', state.applicantMobile || '');
+  addRow('Home-based business', state.homeBasedBusiness ? 'Yes' : 'No');
   y += 3;
   addRow("Owner's consent required", state.isAgent ? 'Yes — written consent attached' : 'No');
   y += 5;
@@ -2444,7 +2520,7 @@ function generateForm1PDF() {
 
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Generated by Build AU Applicants v1.6 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.text('Generated by Build AU Applicants v1.8 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
   doc.setTextColor(0);
 
   doc.save('Form-1-Development-Application.pdf');
@@ -2479,7 +2555,7 @@ function generateForm2PDF() {
   y += 20;
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Generated by Build AU Applicants v1.6 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.text('Generated by Build AU Applicants v1.8 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
   doc.save('Form-2-Building-Work-Details.pdf');
 }
 
@@ -2507,7 +2583,7 @@ function generateOwnersConsentPDF() {
   doc.text('Witness name: ____________________________', 18, y);
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Generated by Build AU Applicants v1.6 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.text('Generated by Build AU Applicants v1.8 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
   doc.save('Owners-Consent-Form.pdf');
 }
 
@@ -2603,8 +2679,7 @@ const adminConfig = {
       { id:'shadow', title:'Shadow diagrams' }
     ]},
     { name: 'Character & Amenity', docs: [
-      { id:'dhc', title:'Demolition control assessment' },
-      { id:'tbc', title:'TBC character assessment' },
+      { id:'tbc', title:'Traditional Building Character assessment' },
       { id:'materials', title:'Materials & finishes schedule' },
       { id:'streetscape', title:'Streetscape perspective' }
     ]},
@@ -2622,8 +2697,7 @@ const adminConfig = {
     ]},
     { name: 'Reporting', docs: [
       { id:'tpreport', title:'Town planning report' },
-      { id:'notification', title:'Notification material' },
-      { id:'qleave', title:'QLeave levy receipt' }
+      { id:'notification', title:'Notification material' }
     ]}
   ],
   docMatrix: {},
@@ -2772,14 +2846,12 @@ function renderDocMatrix() {
     else { pathwayGroups[pathwayGroups.length-1].span++; }
   });
 
-  // Head
+  // Head — single row with type name and pathway badge
   const head = document.getElementById('docMatrixHead');
   const labelColW = '260px';
   let headHTML = '<tr><th class="dm-doc-label-head" style="width:'+labelColW+';border-right:2px solid var(--border)">SUPPORTING DOCUMENT</th>';
-  pathwayGroups.forEach(g => { headHTML += '<th class="dm-header-pathway" colspan="'+g.span+'">'+g.pathway+'</th>'; });
-  headHTML += '</tr><tr><th class="dm-doc-label-head" style="width:'+labelColW+';border-right:2px solid var(--border)">SUPPORTING DOCUMENT</th>';
   visibleTypes.forEach(t => {
-    headHTML += '<th class="dm-header-type"><div>'+t.name+'</div><span class="dm-code">'+t.code+'</span><span class="dm-pathway">'+t.pathway.split(' ')[0]+'</span></th>';
+    headHTML += '<th class="dm-header-type"><div>'+t.name+'</div><span class="dm-pathway">'+t.pathway+'</span></th>';
   });
   headHTML += '</tr>';
   head.innerHTML = headHTML;
@@ -2854,29 +2926,46 @@ function showFeeEditModal() {
   overlay.className = 'admin-edit-overlay';
   overlay.id = 'feeEditOverlay';
   overlay.onclick = function(e) { if(e.target===this) this.remove(); };
+  const feeRows = adminConfig.fees.map((f, i) => `
+    <tr>
+      <td style="font-size:12px;font-weight:500;color:var(--ink);">${f.category}</td>
+      <td><input type="number" id="editFeePoints_${i}" value="${f.points}" min="0" oninput="updateFeePreview()" style="width:70px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:right;"></td>
+      <td style="font-size:12px;color:var(--ink-light);" id="editFeeCost_${i}">$${(f.points * adminConfig.pointValue).toLocaleString()}</td>
+    </tr>`).join('');
   overlay.innerHTML = `
-    <div class="admin-edit-panel">
+    <div class="admin-edit-panel" style="max-width:600px;">
       <div class="admin-edit-header">
         <h3>Edit Fee Schedule</h3>
         <button class="admin-close" onclick="document.getElementById('feeEditOverlay').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-light);">✕</button>
       </div>
       <div class="admin-edit-body">
-        <div class="admin-edit-field">
-          <label>Point value ($)</label>
-          <input type="number" id="editPointValue" value="${adminConfig.pointValue}" step="0.01">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div class="admin-edit-field">
+            <label>Point value ($)</label>
+            <input type="number" id="editPointValue" value="${adminConfig.pointValue}" step="0.01" oninput="updateFeePreview()">
+          </div>
+          <div class="admin-edit-field">
+            <label>Financial year</label>
+            <input type="text" id="editFinYear" value="${adminConfig.financialYear}">
+          </div>
+          <div class="admin-edit-field">
+            <label>Effective from</label>
+            <input type="date" id="editFeeEffective" value="2025-07-01">
+          </div>
+          <div class="admin-edit-field">
+            <label>Reason for change</label>
+            <input type="text" id="editFeeReason" placeholder="e.g. Annual fee schedule update">
+          </div>
         </div>
-        <div class="admin-edit-field">
-          <label>Financial year</label>
-          <input type="text" id="editFinYear" value="${adminConfig.financialYear}">
-        </div>
-        <div class="admin-edit-field">
-          <label>Effective from</label>
-          <input type="date" id="editFeeEffective" value="2025-07-01">
-        </div>
-        <div class="admin-edit-field">
-          <label>Reason for change</label>
-          <input type="text" id="editFeeReason" placeholder="e.g. Annual fee schedule update">
-        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.3px;">Points per category</div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <thead><tr style="border-bottom:1px solid var(--border);">
+            <th style="text-align:left;padding:6px 8px;font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;">Category</th>
+            <th style="text-align:right;padding:6px 8px;font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;">Points</th>
+            <th style="text-align:left;padding:6px 8px;font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;">Fee</th>
+          </tr></thead>
+          <tbody>${feeRows}</tbody>
+        </table>
       </div>
       <div class="admin-edit-actions">
         <button class="cancel-btn" onclick="document.getElementById('feeEditOverlay').remove()">Cancel</button>
@@ -2884,6 +2973,15 @@ function showFeeEditModal() {
       </div>
     </div>`;
   document.body.appendChild(overlay);
+}
+
+function updateFeePreview() {
+  const pv = parseFloat(document.getElementById('editPointValue').value) || 0;
+  adminConfig.fees.forEach((f, i) => {
+    const pts = parseInt(document.getElementById('editFeePoints_' + i)?.value) || 0;
+    const costEl = document.getElementById('editFeeCost_' + i);
+    if (costEl) costEl.textContent = '$' + (pts * pv).toLocaleString();
+  });
 }
 
 function saveFeeEdit() {
@@ -2901,11 +2999,25 @@ function saveFeeEdit() {
   adminConfig.feeModifiedBy = 'Sean Richards';
   adminConfig.feeModifiedDate = new Date().toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' });
 
+  // Save per-category point changes
+  const pointChanges = [];
+  adminConfig.fees.forEach((f, i) => {
+    const newPts = parseInt(document.getElementById('editFeePoints_' + i)?.value) || f.points;
+    if (newPts !== f.points) {
+      pointChanges.push(f.category + ': ' + f.points + ' → ' + newPts + ' pts');
+      f.points = newPts;
+    }
+  });
+
   document.getElementById('adminPointValue').textContent = '$' + newVal.toFixed(2);
   document.getElementById('adminFeeEffective').textContent = effDateStr;
   document.getElementById('adminFeeModified').innerHTML = adminConfig.feeModifiedDate + ' by <strong>' + adminConfig.feeModifiedBy + '</strong>';
 
-  addChangeLogEntry('Fee Schedule', (reason || 'Updated point value from $' + oldVal + ' to $' + newVal) + ' for FY ' + finYear, effDateStr);
+  let changeDesc = reason || '';
+  if (oldVal !== newVal) changeDesc += (changeDesc ? '. ' : '') + 'Point value: $' + oldVal + ' → $' + newVal;
+  if (pointChanges.length) changeDesc += (changeDesc ? '. ' : '') + 'Points updated: ' + pointChanges.join(', ');
+  if (!changeDesc) changeDesc = 'No changes';
+  addChangeLogEntry('Fee Schedule', changeDesc + ' for FY ' + finYear, effDateStr);
   renderAdminFeeTable();
   updateAdminCardStats();
   document.getElementById('feeEditOverlay').remove();

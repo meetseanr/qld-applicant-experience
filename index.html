@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Build AU — QLD DA Lodgement Experience v1.8</title>
+<title>Build AU Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 <!-- Google Maps via iframe embed (no API key required) -->
@@ -71,37 +71,34 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 @keyframes gate-shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
 
 /* ==================== APP TOPBAR ==================== */
-.topbar{background:var(--card);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 24px;position:sticky;top:0;z-index:50;gap:16px;}
-.topbar-logo{display:flex;align-items:center;gap:8px;}
-.topbar-logo-box{width:28px;height:28px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center;}
-.topbar-logo-box svg{width:14px;height:14px;fill:white;}
-.topbar-brand{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-0.2px;}
-.topbar-sub{font-size:11px;color:var(--ink-light);font-weight:300;}
-.topbar-divider{width:1px;height:20px;background:var(--border);}
-.topbar-title{font-size:13px;font-weight:500;color:var(--ink-med);}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);height:64px;display:flex;align-items:center;padding:0 32px;position:sticky;top:0;z-index:50;gap:16px;}
+.topbar-logo{display:flex;align-items:center;gap:12px;}
+.topbar-logo-box{width:36px;height:36px;border-radius:8px;background:var(--ink);display:flex;align-items:center;justify-content:center;}
+.topbar-logo-box svg{width:18px;height:18px;fill:white;}
+.topbar-brand{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;line-height:1.2;}
+.topbar-sub{font-size:13px;color:var(--ink-light);font-weight:400;line-height:1.2;}
 .topbar-spacer{flex:1;}
-.topbar-save{font-size:12px;color:var(--ink-light);display:flex;align-items:center;gap:6px;}
-.topbar-save-dot{width:6px;height:6px;border-radius:50%;background:var(--positive);}
-.topbar-prelodge{padding:7px 14px;border-radius:var(--radius-sm);background:var(--accent);color:white;border:none;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-.topbar-prelodge:hover{opacity:0.85;}
-.topbar-prelodge svg{width:14px;height:14px;fill:white;}
-.topbar-admin{width:32px;height:32px;border-radius:var(--radius-sm);background:none;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;flex-shrink:0;}
-.topbar-admin:hover{background:var(--neutral-bg);border-color:var(--ink-light);}
-.topbar-admin svg{width:16px;height:16px;fill:var(--ink-light);}
+.topbar-prelodge{padding:9px 18px;border-radius:8px;background:var(--card);color:var(--accent);border:1px solid var(--accent);font-size:13px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+.topbar-prelodge:hover{background:#eff6ff;}
+.topbar-prelodge svg{width:16px;height:16px;fill:var(--accent);}
+.topbar-admin{background:none;border:none;padding:8px 12px;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink-light);font-family:'Inter',sans-serif;transition:color 0.15s;}
+.topbar-admin:hover{color:var(--ink);}
+.topbar-admin svg{width:14px;height:14px;fill:currentColor;}
 
 /* ==================== PROGRESS BAR ==================== */
-.progress-bar-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px 38px;}
-.progress-stages{display:flex;align-items:center;gap:0;max-width:760px;margin:0 auto;}
-.progress-stage{display:flex;align-items:center;flex:1;}
-.progress-stage:last-child{flex:0;}
-.stage-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--ink-faint);flex-shrink:0;transition:all 0.2s;position:relative;cursor:default;}
+.progress-bar-wrap{background:var(--card);border-bottom:1px solid var(--border);padding:18px 32px;}
+.progress-stages{display:flex;align-items:center;gap:10px;max-width:1400px;margin:0 auto;}
+.progress-stage{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.progress-stage.has-line{flex:1;}
+.stage-dot{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--ink-faint);flex-shrink:0;transition:all 0.2s;cursor:default;}
 .stage-dot.active{border-color:var(--ink);background:var(--ink);color:white;}
 .stage-dot.done{border-color:var(--positive);background:var(--positive);color:white;}
-.stage-dot.done::after{content:'✓';font-size:11px;}
+.stage-dot.done::after{content:'✓';font-size:13px;}
 .stage-dot.done .dot-num{display:none;}
-.stage-label{font-size:9px;font-weight:500;color:var(--ink-faint);position:absolute;top:28px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+.stage-label{font-size:13px;font-weight:500;color:var(--ink-faint);white-space:nowrap;}
 .stage-label.active{color:var(--ink);font-weight:600;}
-.stage-line{flex:1;height:2px;background:var(--border);transition:background 0.2s;}
+.stage-label.done{color:var(--ink-med);}
+.stage-line{flex:1;height:1px;background:var(--border);transition:background 0.2s;min-width:8px;}
 .stage-line.done{background:var(--positive);}
 .progress-wrap{padding-bottom:20px;}
 
@@ -158,15 +155,47 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .sara-check-text strong{font-weight:600;}
 
 /* ==================== DEV TYPE SELECTOR ==================== */
-.devtype-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;}
-.devtype-card{border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;cursor:pointer;transition:all 0.15s;background:var(--card);display:flex;align-items:center;gap:10px;}
-.devtype-card:hover{border-color:var(--ink-light);background:var(--neutral-bg);}
-.devtype-card.selected{border-color:var(--ink);background:#f8f9ff;}
-.devtype-icon{font-size:20px;flex-shrink:0;}
+/* ==================== STAGE 3 DEV TYPE — VIC-STYLE STACK ==================== */
+.devtype-section{margin-top:8px;}
+.devtype-section + .devtype-section{margin-top:28px;}
+.devtype-section-heading{font-size:11px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.8px;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;}
+.devtype-section-heading .section-icon{font-size:14px;line-height:1;}
+.devtype-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:0;}
+.devtype-card{border:1px solid var(--border);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all 0.15s;background:var(--card);display:flex;align-items:center;gap:16px;box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.devtype-card:hover{border-color:var(--accent);background:#f8fbff;}
+.devtype-card.selected{border-color:var(--accent);background:#eff6ff;box-shadow:0 0 0 3px rgba(37,99,235,0.12);}
+.devtype-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;background:var(--card);position:relative;transition:all 0.15s;}
+.devtype-card:hover .devtype-radio{border-color:var(--accent);}
+.devtype-card.selected .devtype-radio{border-color:var(--accent);border-width:6px;background:var(--card);}
 .devtype-content{flex:1;min-width:0;}
-.devtype-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:1px;}
-.devtype-desc{font-size:11px;color:var(--ink-light);line-height:1.4;}
-.devtype-badge{display:inline-block;margin-top:3px;font-size:9px;font-weight:600;padding:1px 7px;border-radius:8px;background:var(--neutral-bg);color:var(--ink-light);}
+.devtype-title{font-size:15px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:4px;letter-spacing:-0.2px;}
+.devtype-desc{font-size:13px;color:var(--ink-light);line-height:1.45;}
+.devtype-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;background:var(--neutral-bg);color:var(--ink-light);white-space:nowrap;flex-shrink:0;border:1px solid var(--border);}
+.devtype-badge .badge-icon{font-size:13px;line-height:1;}
+.devtype-badge.v-accepted{background:#dcfce7;color:#166534;border-color:#bbf7d0;}
+.devtype-badge.v-risksmart{background:#fef3c7;color:#92400e;border-color:#fde68a;}
+.devtype-badge.v-code{background:#e0e7ff;color:#3730a3;border-color:#c7d2fe;}
+.devtype-badge.v-impact{background:#ffedd5;color:#9a3412;border-color:#fed7aa;}
+.devtype-badge.v-ooa{background:#f1f5f9;color:#475569;border-color:#e2e8f0;}
+
+/* Not-available (prohibited) card — greyed out with Talk-to-planner CTA */
+.devtype-card.unavailable{background:#f8fafc;border-color:#e2e8f0;border-style:dashed;cursor:default;flex-wrap:wrap;padding-bottom:14px;box-shadow:none;}
+.devtype-card.unavailable:hover{background:#f1f5f9;border-color:#cbd5e1;}
+.devtype-card.unavailable .devtype-radio{display:none;}
+.devtype-card.unavailable .devtype-unavail-icon{width:20px;height:20px;border-radius:50%;background:var(--card);border:1.5px solid #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:12px;color:#94a3b8;flex-shrink:0;}
+.devtype-card.unavailable .devtype-title{color:#64748b;font-weight:600;}
+.devtype-card.unavailable .devtype-desc{color:#94a3b8;}
+.devtype-card.unavailable .devtype-badge{opacity:0.75;}
+.devtype-talk-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;font-size:13px;font-weight:600;color:var(--accent);background:var(--card);border:1px solid #bfdbfe;border-radius:20px;cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;margin-left:36px;margin-top:4px;}
+.devtype-talk-btn:hover{background:#eff6ff;border-color:var(--accent);}
+.devtype-talk-btn .talk-icon{font-size:14px;line-height:1;}
+.devtype-talk-btn .talk-arrow{transition:transform 0.15s;}
+.devtype-talk-btn:hover .talk-arrow{transform:translateX(2px);}
+
+/* Tooltip for unavailable reason — hover over the card or the ⊘ icon */
+.devtype-card.unavailable[data-reason]{position:relative;}
+.devtype-card.unavailable[data-reason]:hover::after{content:attr(data-reason);position:absolute;bottom:calc(100% + 6px);left:20px;background:#1d1d1f;color:white;font-size:12px;font-weight:500;padding:8px 12px;border-radius:8px;max-width:320px;line-height:1.4;z-index:20;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+.devtype-card.unavailable[data-reason]:hover::before{content:'';position:absolute;bottom:calc(100% + 2px);left:36px;border:4px solid transparent;border-top-color:#1d1d1f;z-index:20;pointer-events:none;}
 
 /* ==================== PATHWAY REVEAL ==================== */
 .pathway-hero{text-align:center;padding:32px 24px;border-radius:var(--radius);margin-bottom:24px;}
@@ -193,6 +222,41 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .exit-icon{font-size:36px;margin-bottom:12px;}
 .exit-title{font-size:18px;font-weight:700;color:var(--positive-text);margin-bottom:8px;}
 .exit-body{font-size:13px;color:var(--ink-med);line-height:1.6;margin-bottom:16px;}
+
+/* ==================== STAGE 7 REFERRALS ==================== */
+.referral-card{border:1px solid var(--border);border-radius:12px;background:var(--card);margin-bottom:16px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.03);}
+.referral-card-header{display:flex;align-items:center;gap:14px;padding:16px 20px;}
+.referral-card-icon{width:40px;height:40px;border-radius:10px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.referral-card-title{flex:1;min-width:0;}
+.referral-card-name{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-0.2px;}
+.referral-card-blurb{font-size:12px;color:var(--ink-light);line-height:1.5;margin-top:3px;}
+.referral-status-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;flex-shrink:0;border:1px solid transparent;}
+.referral-status-chip.required{background:#fee2e2;color:#991b1b;border-color:#fca5a5;}
+.referral-status-chip.maybe{background:#fef3c7;color:#92400e;border-color:#fde68a;}
+.referral-status-chip.no{background:#dcfce7;color:#166534;border-color:#bbf7d0;}
+.referral-status-chip.pending{background:#f1f5f9;color:#475569;border-color:#e2e8f0;}
+.referral-card-body{border-top:1px solid var(--border);padding:0;background:#fafbfc;}
+.referral-topic{padding:14px 20px;border-bottom:1px solid var(--border);}
+.referral-topic:last-child{border-bottom:none;}
+.referral-topic-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:6px;}
+.referral-topic-name{font-size:13px;font-weight:600;color:var(--ink);}
+.referral-topic-status{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0;}
+.referral-topic-status.required{background:#fee2e2;color:#991b1b;}
+.referral-topic-status.no{background:#dcfce7;color:#166534;}
+.referral-topic-status.screen{background:#fef3c7;color:#92400e;}
+.referral-topic-status.note{background:#dbeafe;color:#1e40af;}
+.referral-topic-reason{font-size:12px;color:var(--ink-light);line-height:1.5;}
+.referral-screening{margin-top:10px;padding:12px 14px;background:var(--card);border:1px solid #fde68a;border-radius:10px;}
+.referral-screening-q{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.45;}
+.referral-screening-help{font-size:11px;color:var(--ink-light);margin-bottom:10px;line-height:1.5;font-style:italic;}
+.referral-screening-buttons{display:flex;gap:8px;}
+.referral-screening-btn{flex:1;padding:8px 14px;border:1px solid var(--border);background:var(--card);border-radius:8px;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;}
+.referral-screening-btn:hover{border-color:var(--accent);background:#eff6ff;}
+.referral-screening-btn.selected-yes{background:#fee2e2;border-color:#fca5a5;color:#991b1b;}
+.referral-screening-btn.selected-no{background:#dcfce7;border-color:#86efac;color:#166534;}
+.referral-disclaimer{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#f0f4ff;border:1px solid #c7d2fe;border-radius:10px;margin:20px 0;font-size:12px;color:#4338ca;line-height:1.55;}
+.referral-disclaimer svg{width:18px;height:18px;fill:#6366f1;flex-shrink:0;margin-top:1px;}
+.referral-disclaimer strong{font-weight:700;}
 
 /* ==================== FORM FIELDS ==================== */
 .form-section{margin-bottom:28px;}
@@ -277,9 +341,12 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .btn-next{padding:11px 28px;border-radius:var(--radius-sm);background:var(--ink);color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;}
 .btn-next:hover{opacity:0.85;}
 .btn-next:disabled{opacity:0.4;cursor:default;}
-.btn-submit{padding:12px 32px;border-radius:var(--radius-sm);background:#2563eb;color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;}
+.btn-submit{padding:12px 32px;border-radius:var(--radius-sm);background:var(--ink);color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s,background 0.15s;}
 .btn-submit:hover{opacity:0.9;}
-.btn-start{padding:12px 32px;border-radius:var(--radius-sm);background:#2563eb;color:white;border:none;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;display:inline-block;}
+.btn-submit:disabled{opacity:0.4;cursor:default;}
+.btn-submit.warning{background:var(--warning);color:white;}
+.btn-submit.warning:hover{opacity:0.9;}
+.btn-start{padding:12px 32px;border-radius:var(--radius-sm);background:var(--ink);color:white;border:none;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s;display:inline-block;}
 .btn-start:hover{opacity:0.9;}
 
 /* ==================== SUCCESS STATE ==================== */
@@ -309,28 +376,46 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .bg-txt{font-size:12px;color:var(--ink-med);line-height:1.6;flex:1;}
 
 /* ==================== MAP ==================== */
-.map-container { height: 360px; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; z-index: 1; background: var(--neutral-bg); }
+.map-container { position: relative; height: 360px; border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; z-index: 1; background: var(--neutral-bg); margin-top: 16px; }
 .map-container iframe { width: 100%; height: 100%; border: 0; }
+.map-open-btn { position: absolute; top: 12px; left: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; background: var(--card); color: var(--accent); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.08); text-decoration: none; transition: all 0.15s; }
+.map-open-btn:hover { background: #f8fafc; }
+.map-open-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
 /* ==================== SEARCH TABS ==================== */
-.search-tabs { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
-.search-tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; background: var(--neutral-bg); color: var(--ink-light); border: none; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-.search-tab.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+.search-tabs { display: flex; gap: 8px; margin-bottom: 16px; background: var(--neutral-bg); padding: 4px; border-radius: 10px; }
+.search-tab { flex: 1; padding: 12px 16px; text-align: center; font-size: 14px; font-weight: 600; cursor: pointer; background: transparent; color: var(--ink-light); border: none; border-radius: 8px; font-family: 'Inter', sans-serif; transition: all 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.search-tab.active { background: var(--card); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.search-tab-icon { font-size: 15px; line-height: 1; }
+
+/* ==================== PROPERTY CARD (primary) ==================== */
+.property-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+.property-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.property-card-badges { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+.property-primary-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: white; background: var(--ink); padding: 4px 10px; border-radius: 6px; text-transform: none; letter-spacing: 0; width: fit-content; }
+.property-addr-heading { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; line-height: 1.3; }
+.property-meta-line { font-size: 13px; color: var(--ink-light); line-height: 1.5; }
+.property-change-btn { background: var(--neutral-bg); color: var(--ink-med); border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; }
+.property-change-btn:hover { background: var(--border); }
+.property-zone-chip { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; color: #166534; background: #dcfce7; padding: 4px 14px; border-radius: 8px; width: fit-content; margin-bottom: 16px; }
+.property-divider { height: 1px; background: var(--border); margin: 16px 0; }
+.property-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.property-stat-label { font-size: 11px; font-weight: 600; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.property-stat-value { font-size: 16px; font-weight: 600; color: var(--ink); }
 
 /* ==================== MULTI-ADDRESS ==================== */
 .address-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .address-item { display: flex; align-items: center; gap: 12px; background: var(--neutral-bg); border-radius: var(--radius-sm); padding: 14px 16px; border: 1px solid var(--border); transition: all 0.15s; }
-.address-item.primary { background: #f8f9ff; border-color: var(--accent); border-width: 2px; }
 .address-item-content { flex: 1; }
 .address-item-addr { font-size: 14px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .address-item-meta { font-size: 11px; color: var(--ink-light); margin-top: 3px; }
-.primary-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent-text); background: var(--accent-bg); padding: 2px 8px; border-radius: 10px; border: 1px solid #bfdbfe; white-space: nowrap; }
 .make-primary-btn { background: none; border: 1px solid var(--border); color: var(--ink-light); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; white-space: nowrap; }
 .make-primary-btn:hover { border-color: var(--accent); color: var(--accent-text); background: var(--accent-bg); }
 .address-remove { background: none; border: none; color: var(--ink-faint); cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 4px; transition: all 0.15s; }
 .address-remove:hover { background: var(--negative-bg); color: var(--negative-text); }
-.add-address-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; font-size: 13px; font-weight: 600; color: var(--ink-light); background: var(--card); border: 1px dashed var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; margin-top: 12px; }
-.add-address-btn:hover { border-color: var(--ink-light); color: var(--ink-med); background: var(--neutral-bg); }
+.add-address-btn { display: inline-flex; align-items: center; gap: 8px; width: 100%; justify-content: center; padding: 14px 16px; font-size: 14px; font-weight: 600; color: var(--accent); background: var(--card); border: 1.5px dashed var(--accent); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; margin-top: 12px; }
+.add-address-btn:hover { background: #eff6ff; }
+.add-address-btn svg { width: 16px; height: 16px; fill: currentColor; }
 
 /* ==================== OUT OF AREA ==================== */
 .ooa-card { background: var(--warning-bg); border: 1px solid var(--warning); border-radius: var(--radius-sm); padding: 20px; text-align: center; }
@@ -340,9 +425,39 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 
 /* ==================== PROHIBITED USES ==================== */
 .prohibited-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
-.prohibited-title { font-size: 12px; font-weight: 600; color: var(--negative-text); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
+.prohibited-title { font-size: 12px; font-weight: 600; color: var(--warning-text); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.3px; }
 .prohibited-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px; background: var(--negative-bg); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 12px; color: var(--negative-text); }
 .prohibited-x { font-weight: 700; flex-shrink: 0; }
+.devtype-card.prohibited { border-color:#fbbf24;background:var(--warning-bg); }
+.devtype-card.prohibited .devtype-badge { background:var(--negative-bg);color:var(--negative-text); }
+.prohibited-warning-box{background:var(--negative-bg);border:1px solid #fca5a5;border-radius:var(--radius-sm);padding:14px 16px;margin-top:16px;display:none;}
+.prohibited-warning-box.visible{display:block;}
+.prohibited-warning-text{font-size:13px;color:var(--negative-text);line-height:1.5;}
+.prohibited-warning-text strong{display:block;margin-bottom:4px;}
+.prohibited-proceed-btn{margin-top:10px;background:var(--negative);color:#fff;border:none;padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;}
+.prohibited-proceed-btn:hover{opacity:0.9;}
+.overlay-list{display:grid;gap:6px;margin-top:8px;}
+.overlay-item{background:var(--neutral-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;}
+.overlay-item-code{font-size:10px;font-weight:700;color:var(--ink-light);background:var(--card);border:1px solid var(--border);border-radius:4px;padding:2px 6px;flex-shrink:0;margin-top:1px;}
+.overlay-item-body{flex:1;min-width:0;}
+.overlay-item-name{font-size:13px;font-weight:500;color:var(--ink);}
+.overlay-item-desc{font-size:11px;color:var(--ink-light);margin-top:2px;line-height:1.4;}
+.overlay-count{font-size:11px;color:var(--ink-faint);margin-top:4px;}
+.sara-advisory{background:#f0f4ff;border:1px solid #c7d2fe;border-radius:var(--radius-sm);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-top:16px;}
+.sara-advisory svg{width:18px;height:18px;fill:#6366f1;flex-shrink:0;margin-top:1px;}
+.sara-advisory-text{font-size:13px;color:#4338ca;line-height:1.5;}
+.sara-advisory-text strong{font-weight:600;display:block;margin-bottom:4px;}
+.sara-advisory-disclaimer{font-size:11px;color:#6366f1;margin-top:6px;font-style:italic;}
+.sara-warning{background:var(--warning-bg);border:1px solid #fbbf24;border-radius:var(--radius-sm);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-top:16px;}
+.sara-warning svg{width:18px;height:18px;fill:var(--warning);flex-shrink:0;margin-top:1px;}
+.sara-warning-text{font-size:13px;color:var(--warning-text);line-height:1.5;}
+.sara-warning-text strong{font-weight:600;display:block;margin-bottom:4px;}
+.form1-mapping{background:var(--neutral-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;}
+.form1-mapping-title{font-size:11px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.form1-mapping-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.form1-mapping-label{font-size:12px;font-weight:500;color:var(--ink-light);min-width:140px;}
+.form1-mapping-value{font-size:13px;color:var(--ink);font-weight:500;}
+.form1-mapping .chip{font-size:10px;padding:2px 8px;}
 
 /* ==================== UPLOAD ZONE ==================== */
 .upload-zone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 20px; }
@@ -532,6 +647,39 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .admin-edit-panel{background:var(--card);border-radius:var(--radius);max-width:480px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden;}
 .admin-edit-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
 .admin-edit-header h3{font-size:14px;font-weight:700;color:var(--ink);}
+
+/* ==================== COUNCIL CONTACT MODAL ==================== */
+.council-modal{background:var(--card);border-radius:16px;max-width:560px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden;max-height:90vh;overflow-y:auto;}
+.council-modal-header{padding:24px 28px 16px 28px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;}
+.council-modal-title{font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-0.4px;line-height:1.25;}
+.council-modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--ink-light);padding:4px;line-height:1;transition:color 0.15s;flex-shrink:0;}
+.council-modal-close:hover{color:var(--ink);}
+.council-modal-body{padding:0 28px 24px 28px;}
+.council-chip{display:inline-flex;align-items:center;padding:8px 16px;border:1px solid var(--accent);border-radius:20px;font-size:13px;font-weight:600;color:var(--accent);background:var(--card);margin-bottom:20px;}
+.council-contact-box{background:#f1f5f9;border-radius:12px;padding:18px 20px;margin-bottom:24px;}
+.council-contact-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.council-contact-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.council-contact-row:last-child{margin-bottom:0;}
+.council-contact-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;opacity:0.8;}
+.council-contact-details{flex:1;min-width:0;}
+.council-contact-link{font-size:15px;font-weight:600;color:var(--accent);text-decoration:none;display:block;line-height:1.3;}
+.council-contact-link:hover{text-decoration:underline;}
+.council-contact-sub{font-size:13px;color:var(--ink-light);margin-top:2px;line-height:1.4;}
+.council-divider{display:flex;align-items:center;gap:12px;margin:0 0 20px 0;}
+.council-divider-line{flex:1;height:1px;background:var(--border);}
+.council-divider-text{font-size:11px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.8px;}
+.council-meeting-body{font-size:14px;color:var(--ink-light);line-height:1.5;margin-bottom:18px;}
+.council-include-box{border:2px solid var(--accent);background:#eff6ff;border-radius:10px;padding:14px 16px;margin-bottom:18px;display:flex;gap:12px;align-items:flex-start;cursor:pointer;}
+.council-include-checkbox{width:20px;height:20px;border-radius:5px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:white;font-size:13px;font-weight:700;}
+.council-include-checkbox.unchecked{background:var(--card);border:2px solid var(--border);color:transparent;}
+.council-include-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:4px;}
+.council-include-desc{font-size:12px;color:var(--ink-light);line-height:1.5;}
+.council-calendar-placeholder{background:#f1f5f9;border-radius:10px;padding:28px 20px;text-align:center;margin-bottom:20px;}
+.council-calendar-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+.council-calendar-sub{font-size:12px;color:var(--ink-faint);font-style:italic;}
+.council-modal-footer{padding:0 28px 28px 28px;}
+.council-close-btn{width:100%;padding:14px;background:var(--ink);color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:background 0.15s;}
+.council-close-btn:hover{background:#000;}
 .admin-edit-body{padding:20px;}
 .admin-edit-field{margin-bottom:16px;}
 .admin-edit-field label{display:block;font-size:11px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px;}
@@ -541,6 +689,24 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .admin-edit-actions button{padding:8px 20px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.15s;}
 .admin-edit-actions .cancel-btn{background:none;border:1px solid var(--border);color:var(--ink-med);}
 .admin-edit-actions .save-btn{background:var(--ink);border:none;color:white;}
+
+/* Submit-incomplete confirmation modal */
+.incomplete-modal{background:var(--card);border-radius:14px;max-width:480px;width:100%;box-shadow:var(--shadow-lg);overflow:hidden;padding:28px 28px 24px;}
+.incomplete-modal-icon{width:44px;height:44px;border-radius:10px;background:var(--warning-bg);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.incomplete-modal-icon svg{width:24px;height:24px;fill:var(--warning);}
+.incomplete-modal-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;margin-bottom:12px;}
+.incomplete-modal-body{font-size:14px;line-height:1.55;color:var(--ink-med);margin-bottom:16px;}
+.incomplete-modal-body strong{color:var(--ink);font-weight:700;}
+.incomplete-modal-tip{background:var(--warning-bg);border:1px solid #f6d79a;border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:13px;line-height:1.5;color:var(--warning-text);}
+.incomplete-modal-tip strong{font-weight:700;}
+.incomplete-modal-actions{display:flex;gap:10px;}
+.incomplete-modal-actions button{flex:1;padding:12px 16px;border-radius:8px;font-size:13.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity 0.15s,background 0.15s;}
+.incomplete-modal-btn-submit{background:var(--warning-bg);color:var(--warning-text);border:1px solid #f6d79a;}
+.incomplete-modal-btn-submit:hover{background:#fde8c2;}
+.incomplete-modal-btn-back{background:var(--card);color:var(--ink);border:1px solid var(--border);}
+.incomplete-modal-btn-back:hover{background:var(--neutral-bg);}
+.incomplete-missing-list{font-size:13px;color:var(--ink-med);margin:0 0 16px 18px;padding:0;line-height:1.55;}
+.incomplete-missing-list li{margin-bottom:2px;}
 
 /* ==================== RESPONSIVE ==================== */
 @media(max-width:640px){
@@ -561,12 +727,11 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
       <div class="gate-logo">
         <svg viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg>
       </div>
-      <div class="gate-brand">Build AU</div>
-      <div class="gate-proto-name">QLD DA Lodgement Experience</div>
+      <div class="gate-proto-name">Build AU - Applicant Experience Prototype - Queensland</div>
       <div class="gate-meta">
         <div class="gate-meta-item">
           <div class="gate-meta-label">Version</div>
-          <div class="gate-meta-value">v1.8 — March 2026</div>
+          <div class="gate-meta-value">v2.0 — April 2026</div>
         </div>
         <div class="gate-meta-item">
           <div class="gate-meta-label">Jurisdiction</div>
@@ -874,19 +1039,17 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
       </div>
       <div>
         <div class="topbar-brand">Build AU</div>
-        <div class="topbar-sub">Prototype</div>
+        <div class="topbar-sub">Planning Permit Application</div>
       </div>
     </div>
-    <div class="topbar-divider"></div>
-    <div class="topbar-title">DA Lodgement — Queensland</div>
     <div class="topbar-spacer"></div>
-    <div class="topbar-save"><div class="topbar-save-dot"></div> Auto-saved</div>
     <button class="topbar-prelodge" onclick="showPreLodgementModal()">
-      <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-      Book pre-lodgement meeting
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      Want to talk to a planner? Set up a pre-application meeting
     </button>
     <button class="topbar-admin" onclick="openAdmin()" title="Admin panel">
       <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.61 3.61 0 0112 15.6z"/></svg>
+      Admin
     </button>
   </div>
 
@@ -902,14 +1065,14 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
     <div id="stage1" class="stage-view">
       <div id="bgp1"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 1 of 9</div>
-        <div class="stage-heading">Find your property</div>
-        <div class="stage-sub">Start by entering your property address or lot/plan reference. We'll look up your zone and planning overlays automatically.</div>
+        <div class="stage-eyebrow">Step 1 of 10</div>
+        <div class="stage-heading" style="font-size:26px;">Find Your Property</div>
+        <div class="stage-sub">Search by street address or lot/plan reference to begin your development application.</div>
 
         <!-- Search tabs -->
         <div class="search-tabs">
-          <button class="search-tab active" onclick="setSearchMode('address')">Address</button>
-          <button class="search-tab" onclick="setSearchMode('lotplan')">Lot / Plan</button>
+          <button class="search-tab active" onclick="setSearchMode('address')"><span class="search-tab-icon">📍</span> Street Address</button>
+          <button class="search-tab" onclick="setSearchMode('lotplan')"><span class="search-tab-icon">📋</span> Lot / Plan</button>
         </div>
 
         <!-- Address search -->
@@ -928,7 +1091,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
           <div class="autocomplete-list" id="lotplanAutocompleteList"></div>
         </div>
 
-        <!-- Primary address (shown after selection) -->
+        <!-- Primary address card (shown after selection, contains map) -->
         <div id="primaryAddressWrap" style="display:none">
           <div id="primaryAddressCard"></div>
         </div>
@@ -947,15 +1110,13 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
           Enter your address above to get started. This prototype uses 15 sample properties in Milton QLD 4064.
         </div>
 
-        <!-- Google Maps embed (shown after address selection, above add-more) -->
-        <div class="map-container" id="mapContainer" style="display:none">
-          <iframe id="googleMap" src="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-        </div>
-
-        <!-- Additional addresses + add more (below map) -->
+        <!-- Additional addresses + add more -->
         <div id="addMoreWrap" style="display:none">
-          <div id="additionalAddressList" class="address-list" style="margin-bottom:8px;"></div>
-          <button class="add-address-btn" id="addMoreBtn" onclick="addAnotherAddress()">+ Add another property</button>
+          <div id="additionalAddressList" class="address-list" style="margin-bottom:0;"></div>
+          <button class="add-address-btn" id="addMoreBtn" onclick="addAnotherAddress()">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add another property address (multi-lot application)
+          </button>
           <div id="multiNote" style="display:none;font-size:11px;color:var(--ink-faint);margin-top:8px;">The assessment pathway is determined by your primary property (marked above).</div>
         </div>
 
@@ -970,14 +1131,13 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
     <div id="stage2" class="stage-view" style="display:none">
       <div id="bgp2"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 2 of 9</div>
+        <div class="stage-eyebrow">Step 2 of 10</div>
         <div class="stage-heading">Your property snapshot</div>
         <div class="stage-sub">Here's what we found for your property based on the Brisbane City Plan 2014.</div>
 
         <div id="propBanner" class="prop-card" style="margin-bottom:20px;"></div>
         <div id="floodBanner" style="display:none"></div>
         <div class="intel-grid" id="intelGrid"></div>
-        <div id="saraBanner"></div>
 
         <div class="nav-bar">
           <button class="btn-back" onclick="prevStage()">← Back</button>
@@ -990,13 +1150,18 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
     <div id="stage3" class="stage-view" style="display:none">
       <div id="bgp3"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 3 of 9</div>
+        <div class="stage-eyebrow">Step 3 of 10</div>
         <div class="stage-heading">What are you planning?</div>
         <div class="stage-sub">Select the type of development you're proposing. This determines your assessment pathway.</div>
 
-        <div class="devtype-grid" id="devTypeGrid"></div>
+        <!-- Available section (rendered by renderStage3) -->
+        <div id="devTypeAvailableSection" class="devtype-section"></div>
 
-        <div class="prohibited-section" id="prohibitedSection"></div>
+        <!-- Not available section (rendered by renderStage3) -->
+        <div id="devTypeUnavailableSection" class="devtype-section"></div>
+
+        <!-- Prohibited selection warning (appears only if user clicks an unavailable card body) -->
+        <div class="prohibited-warning-box" id="prohibitedWarning"></div>
 
         <div class="nav-bar">
           <button class="btn-back" onclick="prevStage()">← Back</button>
@@ -1009,7 +1174,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
     <div id="stage4" class="stage-view" style="display:none">
       <div id="bgp4"></div>
       <div class="stage-card" id="s4Card">
-        <div class="stage-eyebrow">Step 4 of 9</div>
+        <div class="stage-eyebrow">Step 4 of 10</div>
         <div class="stage-heading" id="s4Heading">Your assessment pathway</div>
         <div id="s4Content"></div>
         <div class="nav-bar" id="s4Nav">
@@ -1023,7 +1188,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
     <div id="stage5" class="stage-view" style="display:none">
       <div id="bgp5"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 5 of 9</div>
+        <div class="stage-eyebrow">Step 5 of 10</div>
         <div class="stage-heading">Development details</div>
         <div class="stage-sub">Tell us more about your proposed works. This information will appear on your Form 1.</div>
         <div id="s5FormContent"></div>
@@ -1038,8 +1203,8 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
     <div id="stage6" class="stage-view" style="display:none">
       <div id="bgp6"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 6 of 9</div>
-        <div class="stage-heading">Documents required</div>
+        <div class="stage-eyebrow">Step 6 of 10</div>
+        <div class="stage-heading">Document requirements</div>
         <div class="stage-sub">Upload your documents and we'll check them against the requirements for your application.</div>
 
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
@@ -1050,7 +1215,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
         <div class="uploaded-files" id="uploadedFiles"></div>
         <div id="aiReviewSection" style="display:none"></div>
 
-        <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.3px;">Required documents</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.3px;">Document checklist</div>
         <div id="s6DocList"></div>
         <div class="nav-bar">
           <button class="btn-back" onclick="prevStage()">← Back</button>
@@ -1059,11 +1224,35 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
       </div>
     </div>
 
-    <!-- Stage 7: Applicant Details (Form 1, Part 1) -->
+    <!-- Stage 7: Referral Authorities -->
     <div id="stage7" class="stage-view" style="display:none">
       <div id="bgp7"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 7 of 9</div>
+        <div class="stage-eyebrow">Step 7 of 10</div>
+        <div class="stage-heading">Referral authorities</div>
+        <div class="stage-sub">Some development applications must be referred to other agencies before they can be decided. Based on your property and proposed development, here is what we can determine — please confirm a few details where we can't be definitive.</div>
+
+        <div id="s7AuthorityList"></div>
+
+        <div class="referral-disclaimer">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+          <div>
+            <strong>This is a guide only.</strong> Referral requirements are determined under the Planning Regulation 2017 (Schedule 10) and the State Development Assessment Provisions. Where in doubt, applicants should confirm with the relevant authority or seek advice from a planning consultant. Council will independently verify referral triggers when assessing your application.
+          </div>
+        </div>
+
+        <div class="nav-bar">
+          <button class="btn-back" onclick="prevStage()">← Back</button>
+          <button class="btn-next" id="s7Next" onclick="nextStage()" disabled>Continue →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 8: Applicant Details (Form 1, Part 1) -->
+    <div id="stage8" class="stage-view" style="display:none">
+      <div id="bgp8"></div>
+      <div class="stage-card">
+        <div class="stage-eyebrow">Step 8 of 10</div>
         <div class="stage-heading">Applicant details</div>
         <div class="stage-sub">Provide details of the person or company making this development application (Form 1, Part 1).</div>
 
@@ -1172,15 +1361,15 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
       </div>
     </div>
 
-    <!-- Stage 8: Fee & Review -->
-    <div id="stage8" class="stage-view" style="display:none">
-      <div id="bgp8"></div>
-      <div class="stage-card" id="s8Card">
-        <div class="stage-eyebrow">Step 8 of 9</div>
+    <!-- Stage 9: Fee & Review -->
+    <div id="stage9" class="stage-view" style="display:none">
+      <div id="bgp9"></div>
+      <div class="stage-card" id="s9Card">
+        <div class="stage-eyebrow">Step 9 of 10</div>
         <div class="stage-heading">Review &amp; submit</div>
         <div class="stage-sub">Review your application summary and estimated fees before lodging.</div>
 
-        <div id="s8ReviewContent"></div>
+        <div id="s9ReviewContent"></div>
 
         <div class="declaration-box">
           <div class="declaration-text">
@@ -1194,16 +1383,16 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 
         <div class="nav-bar">
           <button class="btn-back" onclick="prevStage()">← Back</button>
-          <button class="btn-submit" id="submitBtn" disabled onclick="submitApp()">Lodge Application</button>
+          <button class="btn-submit" id="submitBtn" disabled onclick="submitApp()">Lodge application</button>
         </div>
       </div>
     </div>
 
-    <!-- Stage 9: Success -->
-    <div id="stage9" class="stage-view" style="display:none">
-      <div id="bgp9"></div>
+    <!-- Stage 10: Success -->
+    <div id="stage10" class="stage-view" style="display:none">
+      <div id="bgp10"></div>
       <div class="stage-card">
-        <div class="stage-eyebrow">Step 9 of 9</div>
+        <div class="stage-eyebrow">Step 10 of 10</div>
         <div class="stage-heading">Application confirmed</div>
         <div class="success-state" style="padding:24px 0;">
           <div class="success-icon">🎉</div>
@@ -1250,61 +1439,71 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 // ==================== DATA ====================
 const ADDRESSES = [
   // Accepted Development — CR2, DHC+TBC, no flood
-  { id:'a1', addr:'11 Baroona Road, Milton QLD 4064', street:'11 BAROONA ROAD', lot:'Lot 2 RP212550', area:571, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.4686, lng:153.0034 },
-  { id:'a2', addr:'2 Blaxland Street, Milton QLD 4064', street:'2 BLAXLAND STREET', lot:'Lot 86 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.4692, lng:153.0041 },
-  { id:'a3', addr:'11 Castlemaine Street, Milton QLD 4064', street:'11 CASTLEMAINE STREET', lot:'Lot 74 RP19536', area:589, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'accepted', lat:-27.4698, lng:153.0028 },
-  { id:'a4', addr:'2 Copeland Street, Milton QLD 4064', street:'2 COPELAND STREET', lot:'Lot 1 RP47527', area:400, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.4701, lng:153.0037 },
+  { id:'a1', addr:'11 Baroona Road, Milton QLD 4064', street:'11 BAROONA ROAD', lot:'Lot 2 RP212550', area:571, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'BPA',name:'Bushfire Prone Area',desc:'Moderate bushfire hazard. BAL assessment may be required for new dwellings.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'}], flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.468586, lng:153.003395 },
+  { id:'a2', addr:'2 Blaxland Street, Milton QLD 4064', street:'2 BLAXLAND STREET', lot:'Lot 86 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'}], flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.463775, lng:153.007931 },
+  { id:'a3', addr:'11 Castlemaine Street, Milton QLD 4064', street:'11 CASTLEMAINE STREET', lot:'Lot 74 RP19536', area:589, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'SL',name:'Steep Land',desc:'Gradient exceeds 15%. Geotechnical assessment required for earthworks and retaining walls.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'BPA',name:'Bushfire Prone Area',desc:'Moderate bushfire hazard. BAL assessment may be required for new dwellings.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'}], flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'accepted', lat:-27.462972, lng:153.008377 },
+  { id:'a4', addr:'2 Copeland Street, Milton QLD 4064', street:'2 COPELAND STREET', lot:'Lot 1 RP47527', area:400, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'}], flood:false, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'accepted', lat:-27.463671, lng:153.002875 },
   // RiskSmart / New Dwelling — CR2, DHC+TBC
-  { id:'r1', addr:'15 Baroona Road, Milton QLD 4064', street:'15 BAROONA ROAD', lot:'Lot 3 RP212549', area:595, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.4688, lng:153.0033 },
-  { id:'r2', addr:'3 Blaxland Street, Milton QLD 4064', street:'3 BLAXLAND STREET', lot:'Lot 71 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.4693, lng:153.0042 },
-  { id:'r3', addr:'17 Castlemaine Street, Milton QLD 4064', street:'17 CASTLEMAINE STREET', lot:'Lot 73 RP19536', area:683, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.4700, lng:153.0027 },
-  { id:'r4', addr:'12 Blaxland Street, Milton QLD 4064', street:'12 BLAXLAND STREET', lot:'Lot 81 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', dhc:true, tbc:true, flood:true, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'risksmart', lat:-27.4693, lng:153.0040 },
+  { id:'r1', addr:'15 Baroona Road, Milton QLD 4064', street:'15 BAROONA ROAD', lot:'Lot 3 RP212549', area:595, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'SL',name:'Steep Land',desc:'Gradient exceeds 15%. Geotechnical assessment required for earthworks and retaining walls.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'}], flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.468487, lng:153.003291 },
+  { id:'r2', addr:'3 Blaxland Street, Milton QLD 4064', street:'3 BLAXLAND STREET', lot:'Lot 71 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'BPA',name:'Bushfire Prone Area',desc:'Moderate bushfire hazard. BAL assessment may be required for new dwellings.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'}], flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.463301, lng:153.008064 },
+  { id:'r3', addr:'17 Castlemaine Street, Milton QLD 4064', street:'17 CASTLEMAINE STREET', lot:'Lot 73 RP19536', area:683, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'SL',name:'Steep Land',desc:'Gradient exceeds 15%. Geotechnical assessment required for earthworks and retaining walls.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'BPA',name:'Bushfire Prone Area',desc:'Moderate bushfire hazard. BAL assessment may be required for new dwellings.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'HER',name:'Heritage Overlay',desc:'Adjacent to a local heritage place. Development must consider visual amenity and heritage character.'}], flood:false, np:'Latrobe and Given Terraces Neighbourhood Plan', npPrec:'Residential precinct', scenario:'risksmart', lat:-27.463137, lng:153.008318 },
+  { id:'r4', addr:'12 Blaxland Street, Milton QLD 4064', street:'12 BLAXLAND STREET', lot:'Lot 81 RP19536', area:455, zone:'CR2', zoneDesc:'Character Residential – Infill Housing', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TBC',name:'Traditional Building Character',desc:'New works must respect the materials, form and proportions of traditional Queenslander housing.'},{code:'FL',name:'Flood Overlay — Overland Flow',desc:'Property is in a mapped flood overlay area. Hydraulic engineer flood impact assessment required.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Ithaca Creek. Stormwater management and riparian setback requirements apply.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'}], flood:true, np:'Ithaca District Neighbourhood Plan', npPrec:'Hillside character precinct', scenario:'risksmart', lat:-27.464011, lng:153.007220 },
   // Code Assessable / Secondary Dwelling — MDR, Milton NP
-  { id:'c1', addr:'12 Bergin Street, Milton QLD 4064', street:'12 BERGIN STREET', lot:'Lot 37 RP18476', area:435, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4710, lng:153.0050 },
-  { id:'c2', addr:'14 Gordon Street, Milton QLD 4064', street:'14 GORDON STREET', lot:'Lot 68 RP18476', area:405, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4715, lng:153.0055 },
-  { id:'c3', addr:'11 Sheehan Street, Milton QLD 4064', street:'11 SHEEHAN STREET', lot:'Lot 16 RP18476', area:405, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4718, lng:153.0048 },
-  { id:'c4', addr:'9 Dorsey Street, Milton QLD 4064', street:'9 DORSEY STREET', lot:'Lot 25 SP116098', area:174, zone:'MDR', zoneDesc:'Medium Density Residential', dhc:true, tbc:false, flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.4720, lng:153.0052 },
+  { id:'c1', addr:'12 Bergin Street, Milton QLD 4064', street:'12 BERGIN STREET', lot:'Lot 37 RP18476', area:435, zone:'MDR', zoneDesc:'Medium Density Residential', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Milton Drain. Stormwater management requirements apply.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to major transport corridor. Noise and vibration attenuation may be required.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'}], flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.470696, lng:153.002110 },
+  { id:'c2', addr:'14 Gordon Street, Milton QLD 4064', street:'14 GORDON STREET', lot:'Lot 68 RP18476', area:405, zone:'MDR', zoneDesc:'Medium Density Residential', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to major transport corridor. Noise and vibration attenuation may be required.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Milton Drain. Stormwater management requirements apply.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'}], flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.470951, lng:153.003832 },
+  { id:'c3', addr:'11 Sheehan Street, Milton QLD 4064', street:'11 SHEEHAN STREET', lot:'Lot 16 RP18476', area:405, zone:'MDR', zoneDesc:'Medium Density Residential', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to major transport corridor. Noise and vibration attenuation may be required.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'SL',name:'Steep Land',desc:'Gradient exceeds 15%. Geotechnical assessment required for earthworks and retaining walls.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Milton Drain. Stormwater management requirements apply.'}], flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.470131, lng:153.003532 },
+  { id:'c4', addr:'9 Dorsey Street, Milton QLD 4064', street:'9 DORSEY STREET', lot:'Lot 25 SP116098', area:174, zone:'MDR', zoneDesc:'Medium Density Residential', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to major transport corridor. Noise and vibration attenuation may be required.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'}], flood:false, np:'Milton Neighbourhood Plan', npPrec:'Medium Density Residential precinct', scenario:'code', lat:-27.471784, lng:153.001837 },
   // Impact Assessable / Multi-Unit — HDR2, Milton Station NP
-  { id:'i1', addr:'10 Crombie Street, Milton QLD 4064', street:'10 CROMBIE STREET', lot:'Lot 171 RP18374', area:410, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', dhc:true, tbc:false, flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.4725, lng:153.0045 },
-  { id:'i2', addr:'9 Manning Street, Milton QLD 4064', street:'9 MANNING STREET', lot:'Lot 100 RP18374', area:405, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', dhc:true, tbc:false, flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.4728, lng:153.0043 },
-  { id:'i3', addr:'20 Walsh Street, Milton QLD 4064', street:'20 WALSH STREET', lot:'Lot 1 RP153912', area:2833, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', dhc:true, tbc:false, flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.4730, lng:153.0040 },
-  { id:'oo1', addr:'177 Pacific Highway, North Sydney NSW 2060', street:'177 PACIFIC HIGHWAY', lot:'Lot 1 DP891235', area:4200, zone:'OOA', zoneDesc:'Outside City Council area', dhc:false, tbc:false, flood:false, np:'N/A', npPrec:'N/A', scenario:'outofarea', outOfArea:true, lat:-33.8399, lng:151.2093 },
+  { id:'i1', addr:'10 Crombie Street, Milton QLD 4064', street:'10 CROMBIE STREET', lot:'Lot 171 RP18374', area:410, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to Milton Road state-controlled road. TMR referral may be triggered for access changes.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Milton Drain. Stormwater management requirements apply.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'},{code:'AO',name:'Acid Sulfate Soils',desc:'Site is in an acid sulfate soils investigation area. Testing required for excavation below 5m AHD.'}], flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.469453, lng:153.006960 },
+  { id:'i2', addr:'9 Manning Street, Milton QLD 4064', street:'9 MANNING STREET', lot:'Lot 100 RP18374', area:405, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to Milton Road state-controlled road. TMR referral may be triggered for access changes.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'},{code:'AO',name:'Acid Sulfate Soils',desc:'Site is in an acid sulfate soils investigation area. Testing required for excavation below 5m AHD.'}], flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.470096, lng:153.005053 },
+  { id:'i3', addr:'20 Walsh Street, Milton QLD 4064', street:'20 WALSH STREET', lot:'Lot 1 RP153912', area:2833, zone:'HDR2', zoneDesc:'High Density Residential (up to 15 storeys)', overlays:[{code:'DHC',name:'Demolition Control',desc:'Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code.'},{code:'TC',name:'Transport Corridor',desc:'Adjacent to Milton Road state-controlled road. TMR referral may be triggered for access changes.'},{code:'AE',name:'Airport Environs',desc:'Within the Brisbane Airport OLS. Building height restrictions and noise attenuation may apply.'},{code:'WC',name:'Waterway Corridor',desc:'Property is within 100m of Milton Drain. Stormwater management requirements apply.'},{code:'IC',name:'Infrastructure Charging',desc:'Subject to infrastructure charges under the adopted charges resolution.'},{code:'AO',name:'Acid Sulfate Soils',desc:'Site is in an acid sulfate soils investigation area. Testing required for excavation below 5m AHD.'},{code:'HER',name:'Heritage Overlay',desc:'Adjacent to a local heritage place. Development must consider visual amenity and heritage character.'}], flood:false, np:'Milton Station Neighbourhood Plan', npPrec:'Core residential precinct', scenario:'impact', lat:-27.469830, lng:153.006683 },
+  { id:'oo1', addr:'177 Pacific Highway, North Sydney NSW 2060', street:'177 PACIFIC HIGHWAY', lot:'Lot 1 DP891235', area:4200, zone:'OOA', zoneDesc:'Outside City Council area', overlays:[], flood:false, np:'N/A', npPrec:'N/A', scenario:'outofarea', outOfArea:true, lat:-33.8399, lng:151.2093 },
 ];
 
 const DEV_TYPES = {
   CR2: [
-    { id:'minor', label:'Minor works', desc:'Deck, carport, shed, pool, fence', icon:'🔨', pathway:'accepted', badge:'No DA required' },
-    { id:'alts', label:'Alterations & additions', desc:'Extension to existing dwelling', icon:'🏠', pathway:'accepted', badge:'No DA required' },
-    { id:'newdwelling', label:'New dwelling house', desc:'Replace existing house with new build', icon:'🏗️', pathway:'risksmart', badge:'RiskSmart eligible' },
-    { id:'secondary', label:'Secondary dwelling', desc:'Granny flat (≤80m² GFA, meets acceptable outcomes)', icon:'🏡', pathway:'accepted', badge:'No DA required' },
+    { id:'minor', label:'Minor works', desc:'Deck, carport, shed, pool, fence', icon:'🔨', pathway:'accepted' },
+    { id:'alts', label:'Alterations & additions', desc:'Extension to existing dwelling', icon:'🏠', pathway:'accepted' },
+    { id:'newdwelling', label:'New dwelling house', desc:'Replace existing house with new build', icon:'🏗️', pathway:'risksmart' },
+    { id:'secondary', label:'Secondary dwelling', desc:'Granny flat (≤80m² GFA, meets acceptable outcomes)', icon:'🏡', pathway:'accepted' },
   ],
   MDR: [
-    { id:'minor', label:'Minor works', desc:'Deck, carport, landscaping', icon:'🔨', pathway:'code', badge:'Code assessable' },
-    { id:'secondary', label:'Secondary dwelling', desc:'Dual occupancy or secondary unit', icon:'🏡', pathway:'code', badge:'Code assessable' },
-    { id:'newdwelling', label:'New dwelling / dual occ', desc:'New residential development', icon:'🏗️', pathway:'code', badge:'Code assessable' },
-    { id:'multiple', label:'Multiple dwellings', desc:'Units, townhouses, apartments (4+)', icon:'🏢', pathway:'impact', badge:'Impact assessable' },
+    { id:'minor', label:'Minor works', desc:'Deck, carport, landscaping', icon:'🔨', pathway:'code' },
+    { id:'secondary', label:'Secondary dwelling', desc:'Dual occupancy or secondary unit', icon:'🏡', pathway:'code' },
+    { id:'newdwelling', label:'New dwelling / dual occ', desc:'New residential development', icon:'🏗️', pathway:'code' },
+    { id:'multiple', label:'Multiple dwellings', desc:'Units, townhouses, apartments (4+)', icon:'🏢', pathway:'impact' },
   ],
   HDR2: [
-    { id:'multiple', label:'Multiple dwellings / apartments', desc:'Multi-storey residential (up to 15 storeys)', icon:'🏢', pathway:'impact', badge:'Impact assessable' },
-    { id:'mixeduse', label:'Mixed use (residential + commercial)', desc:'Ground-floor commercial with residential above', icon:'🏙️', pathway:'impact', badge:'Impact assessable' },
+    { id:'multiple', label:'Multiple dwellings / apartments', desc:'Multi-storey residential (up to 15 storeys)', icon:'🏢', pathway:'impact' },
+    { id:'mixeduse', label:'Mixed use (residential + commercial)', desc:'Ground-floor commercial with residential above', icon:'🏙️', pathway:'impact' },
   ],
 };
 
+// Pathway badge configuration — pill text + icon + color variant (QLD DA Rules v3 statutory timeframes)
+const PATHWAY_BADGE = {
+  accepted:       { icon:'✓', label:'Accepted',          days:'No DA required',                         variant:'accepted' },
+  accepted_flood: { icon:'📋', label:'Code assessable',   days:'35 business days (flood overlay)',        variant:'code' },
+  risksmart:      { icon:'⚡', label:'RiskSmart',          days:'10 business days',                        variant:'risksmart' },
+  risksmart_flood:{ icon:'📋', label:'Code assessable',   days:'35 business days (flood overlay)',        variant:'code' },
+  code:           { icon:'📋', label:'Code assessable',   days:'35 business days',                        variant:'code' },
+  impact:         { icon:'⚠',  label:'Impact assessable', days:'45 business days + public notification', variant:'impact' },
+  outofarea:      { icon:'⊘',  label:'Outside council',   days:'Contact relevant council',               variant:'ooa' },
+};
+
+// Prohibited uses are now selectable (with strong warning) rather than hard-blocked
+// Council cannot refuse to accept an application — applicants have the right to lodge
 const PROHIBITED_USES = {
   CR2: [
-    { label: 'Multiple dwellings (3+ units)', reason: 'Prohibited in the Character Residential zone under BCC City Plan 2014' },
-    { label: 'Commercial development', reason: 'Not permitted in Character Residential zone' },
-    { label: 'Industrial uses', reason: 'Not permitted in residential zones' },
-    { label: 'High-rise apartments (above 2 storeys)', reason: 'Exceeds zone height limit' },
+    { id:'proh_multi_cr2', label: 'Multiple dwellings (3+ units)', desc:'Multi-unit residential (apartments, townhouses)', reason: 'Prohibited in the Character Residential zone under the City Plan', icon:'🏢', pathway:'impact', badge:'Impact assessable', prohibited:true },
+    { id:'proh_comm_cr2', label: 'Commercial development', desc:'Shop, office, food premises', reason: 'Not permitted in the Character Residential zone', icon:'🏪', pathway:'impact', badge:'Impact assessable', prohibited:true },
+    { id:'proh_ind_cr2', label: 'Industrial uses', desc:'Factory, warehouse, storage', reason: 'Not permitted in residential zones', icon:'🏭', pathway:'impact', badge:'Impact assessable', prohibited:true },
   ],
   MDR: [
-    { label: 'Industrial uses', reason: 'Not permitted in residential zones' },
-    { label: 'Large-scale commercial', reason: 'Not permitted in Medium Density Residential' },
-    { label: 'High-rise above neighbourhood plan limit', reason: 'Exceeds 3-4 storey height limit' },
+    { id:'proh_ind_mdr', label: 'Industrial uses', desc:'Factory, warehouse, storage', reason: 'Not permitted in residential zones', icon:'🏭', pathway:'impact', badge:'Impact assessable', prohibited:true },
+    { id:'proh_comm_mdr', label: 'Large-scale commercial', desc:'Major retail, large office', reason: 'Not permitted in Medium Density Residential', icon:'🏪', pathway:'impact', badge:'Impact assessable', prohibited:true },
   ],
   HDR2: [
-    { label: 'Industrial uses', reason: 'Not permitted in residential zones' },
-    { label: 'Low-density detached housing', reason: 'Single dwelling house not consistent with HDR2 zone intent' },
+    { id:'proh_ind_hdr', label: 'Industrial uses', desc:'Factory, warehouse, storage', reason: 'Not permitted in residential zones', icon:'🏭', pathway:'impact', badge:'Impact assessable', prohibited:true },
   ],
 };
 
@@ -1322,7 +1521,7 @@ const PATHWAY_CONFIG = {
     label:'Code Assessable (Flood overlay)',
     color:'code',
     icon:'🌊',
-    title:'Code Assessable — flood overlay applies',
+    title:'',
     sub:'This type of development would normally be Accepted Development (no DA required), but your property is in a mapped flood overlay area (Overland Flow Path). Under the Planning Regulation 2017, the flood overlay upgrades the assessment category. A DA with a hydraulic engineer\'s flood impact assessment is required.',
     timeline:'35 business days (standard code assessment)',
     steps:[
@@ -1350,7 +1549,7 @@ const PATHWAY_CONFIG = {
     label:'Code Assessable (Flood overlay)',
     color:'code',
     icon:'🌊',
-    title:'Code Assessable — flood overlay applies',
+    title:'',
     sub:'Your property is in a mapped flood overlay area (Overland Flow Path). A hydraulic engineer\'s flood impact assessment is required. Your application follows the standard code assessment pathway.',
     timeline:'35 business days (standard code assessment)',
     steps:[
@@ -1390,7 +1589,243 @@ const PATHWAY_CONFIG = {
   },
 };
 
-const STAGE_LABELS = ['Find Property','Prop. Review','Dev. Type','Pathway','Details','Documents','Applicant','Fee & Review','Confirmation'];
+// Form 1 Q6.1 mapping: dev type → formal development type(s) + approval type
+const FORM1_MAPPING = {
+  minor:       { devTypes:['Building work'], approvalType:'Development permit', assessNote:'Minor building works' },
+  alts:        { devTypes:['Building work'], approvalType:'Development permit', assessNote:'Alterations and additions to existing dwelling' },
+  newdwelling: { devTypes:['Material change of use','Building work'], approvalType:'Development permit', assessNote:'New dwelling house' },
+  secondary:   { devTypes:['Material change of use','Building work'], approvalType:'Development permit', assessNote:'Secondary dwelling / dual occupancy' },
+  multiple:    { devTypes:['Material change of use','Building work'], approvalType:'Development permit', assessNote:'Multiple dwelling development' },
+  mixeduse:    { devTypes:['Material change of use','Building work'], approvalType:'Development permit', assessNote:'Mixed use development' },
+  // Prohibited types (if applicant proceeds anyway)
+  proh_multi_cr2: { devTypes:['Material change of use','Building work'], approvalType:'Development permit', assessNote:'Multiple dwellings (prohibited in zone — applicant elected to proceed)' },
+  proh_comm_cr2:  { devTypes:['Material change of use'], approvalType:'Development permit', assessNote:'Commercial development (prohibited in zone — applicant elected to proceed)' },
+  proh_ind_cr2:   { devTypes:['Material change of use'], approvalType:'Development permit', assessNote:'Industrial use (prohibited in zone — applicant elected to proceed)' },
+  proh_ind_mdr:   { devTypes:['Material change of use'], approvalType:'Development permit', assessNote:'Industrial use (prohibited in zone — applicant elected to proceed)' },
+  proh_comm_mdr:  { devTypes:['Material change of use'], approvalType:'Development permit', assessNote:'Large-scale commercial (prohibited in zone — applicant elected to proceed)' },
+  proh_ind_hdr:   { devTypes:['Material change of use'], approvalType:'Development permit', assessNote:'Industrial use (prohibited in zone — applicant elected to proceed)' },
+};
+
+// Helper: check if address has a specific overlay code
+function hasOverlay(a, code) { return (a.overlays || []).some(o => o.code === code); }
+
+// ==================== REFERRAL AUTHORITIES ====================
+// Each authority has one or more 'topics'. Each topic returns a status:
+//   'required' — definitively required, no screening needed
+//   'no'       — definitively not required, no screening needed
+//   'screen'   — depends on a screening question; status finalised by applicant's answer
+//   'note'     — informational note (e.g. local heritage overlay code) — not a referral but worth flagging
+const REFERRAL_AUTHORITIES = [
+  {
+    id: 'sara',
+    name: 'State Assessment and Referral Agency (SARA)',
+    shortName: 'SARA',
+    icon: '🏛️',
+    blurb: 'SARA assesses state interests — transport, environment, aviation, contaminated land — under the State Development Assessment Provisions (SDAP) and Schedule 10 of the Planning Regulation 2017.',
+    topics: [
+      {
+        id: 'sara_transport',
+        name: 'State-controlled road proximity (DTMR)',
+        autoStatus: function(a, dt, s) { return hasOverlay(a, 'TC') ? 'screen' : 'no'; },
+        autoReason: function(a, dt, s) { return hasOverlay(a, 'TC')
+          ? 'The Transport Corridor overlay applies — this property is near a state-controlled road. Distance to the road centreline determines whether a referral is triggered.'
+          : 'No Transport Corridor overlay applies. State-controlled road referral is not triggered by this property.'; },
+        screening: {
+          question: 'Is your development within 25 metres of the centreline of a state-controlled road (e.g. Milton Road, Coronation Drive, Western Freeway)?',
+          help: 'You can verify proximity using the DTMR State-Controlled Roads map at qldtraffic.qld.gov.au.'
+        }
+      },
+      {
+        id: 'sara_aviation',
+        name: 'Brisbane Airport airspace (OLS)',
+        autoStatus: function(a, dt, s) { return hasOverlay(a, 'AE') ? 'screen' : 'no'; },
+        autoReason: function(a, dt, s) { return hasOverlay(a, 'AE')
+          ? 'The Airport Environs overlay applies — this property is within Brisbane Airport\'s Obstacle Limitation Surface (OLS). Tall structures may require referral.'
+          : 'Property is outside the Brisbane Airport OLS.'; },
+        screening: {
+          question: 'Will any part of your development (including cranes during construction) exceed 24 metres above ground level?',
+          help: 'Most single dwellings and low-rise developments are well below this threshold.'
+        }
+      },
+      {
+        id: 'sara_era',
+        name: 'Environmentally Relevant Activity (ERA)',
+        autoStatus: function(a, dt, s) {
+          const noEra = ['minor','alts','newdwelling','secondary'];
+          return noEra.includes(dt && dt.id) ? 'no' : 'screen';
+        },
+        autoReason: function(a, dt, s) {
+          const noEra = ['minor','alts','newdwelling','secondary'];
+          if (noEra.includes(dt && dt.id)) return 'Standard residential development types do not trigger ERA thresholds.';
+          return 'Larger or non-residential developments can sometimes trigger ERA thresholds — please confirm below.';
+        },
+        screening: {
+          question: 'Does your development involve any Environmentally Relevant Activity (ERA) listed under the Environmental Protection Regulation 2019?',
+          help: 'ERAs include things like waste transfer, chemical storage, mineral processing. Most residential developments do not involve ERAs.'
+        }
+      },
+      {
+        id: 'sara_contam',
+        name: 'Contaminated land (EMR / CLR)',
+        autoStatus: function(a, dt, s) { return 'screen'; },
+        autoReason: function() { return 'Environmental Management Register and Contaminated Land Register listings are not captured in the City Plan overlays — please confirm.'; },
+        screening: {
+          question: 'Is your property listed on the Environmental Management Register (EMR) or Contaminated Land Register (CLR)?',
+          help: 'Search the register via the Department of Environment website. Most Milton residential properties are not listed.'
+        }
+      }
+    ]
+  },
+  {
+    id: 'uu',
+    name: 'Queensland Urban Utilities',
+    shortName: 'Urban Utilities',
+    icon: '💧',
+    blurb: 'The water and sewer distributor-retailer for the Brisbane City Council area. Referral is required for developments that exceed standard residential connection thresholds, or that need non-standard infrastructure.',
+    topics: [
+      {
+        id: 'uu_threshold',
+        name: 'Connection threshold',
+        autoStatus: function(a, dt, s) {
+          const units = Math.max(1, s.numUnits || 1);
+          if ((dt && (dt.id === 'multiple' || dt.id === 'mixeduse')) && units >= 60) return 'required';
+          return 'no';
+        },
+        autoReason: function(a, dt, s) {
+          const units = Math.max(1, s.numUnits || 1);
+          if ((dt && (dt.id === 'multiple' || dt.id === 'mixeduse')) && units >= 60) {
+            return 'Your ' + units + '-unit development exceeds the 60-lot referral threshold for water and sewer.';
+          }
+          if (dt && (dt.id === 'multiple' || dt.id === 'mixeduse')) {
+            return 'Your ' + units + '-unit development is below the 60-lot referral threshold — standard connection applies.';
+          }
+          return 'Single-dwelling developments use standard residential connections that do not trigger referral.';
+        },
+        screening: null
+      },
+      {
+        id: 'uu_nonstandard',
+        name: 'Non-standard infrastructure',
+        autoStatus: function(a, dt, s) {
+          if (dt && (dt.id === 'multiple' || dt.id === 'mixeduse')) return 'screen';
+          return 'no';
+        },
+        autoReason: function(a, dt, s) {
+          if (dt && (dt.id === 'multiple' || dt.id === 'mixeduse')) {
+            return 'Multi-unit developments occasionally require non-standard infrastructure (e.g. main extensions, new pump stations).';
+          }
+          return 'Single-dwelling developments use standard infrastructure only.';
+        },
+        screening: {
+          question: 'Will your development require non-standard water or sewer infrastructure (e.g. water main extension, new sewer pump station, on-site sewage treatment)?',
+          help: 'If unsure, confirm via Urban Utilities pre-application advice (urbanutilities.com.au).'
+        }
+      }
+    ]
+  },
+  {
+    id: 'heritage',
+    name: 'Queensland Heritage Register',
+    shortName: 'Heritage',
+    icon: '🏺',
+    blurb: 'Development on or affecting a place on the Queensland Heritage Register is referred to the Department of Environment via SARA. This is separate from the local Heritage overlay in the City Plan, which Council assesses directly.',
+    topics: [
+      {
+        id: 'heritage_qhr',
+        name: 'State Heritage Register listing',
+        autoStatus: function() { return 'screen'; },
+        autoReason: function() { return 'Queensland Heritage Register listings are maintained by the Department of Environment — not the City Plan — so applicants must confirm.'; },
+        screening: {
+          question: 'Is your property (or an immediately adjoining property) listed on the Queensland Heritage Register?',
+          help: 'Search the register at apps.des.qld.gov.au/heritage-register. This is a separate register from the local Heritage overlay in the City Plan.'
+        }
+      },
+      {
+        id: 'heritage_local',
+        name: 'Local Heritage overlay (City Plan)',
+        autoStatus: function(a, dt, s) { return hasOverlay(a, 'HER') ? 'note' : 'no'; },
+        autoReason: function(a, dt, s) { return hasOverlay(a, 'HER')
+          ? 'The Heritage overlay in the Brisbane City Plan applies to (or adjoins) this property. This is NOT a referral to another authority — Council assesses it under the Heritage overlay code as part of your application. Your documents should address visual amenity and heritage character.'
+          : 'No Heritage overlay in the City Plan applies to this property.'; },
+        screening: null
+      }
+    ]
+  },
+  {
+    id: 'infra',
+    name: 'Infrastructure providers',
+    shortName: 'Powerlink / Energex',
+    icon: '⚡',
+    blurb: 'Powerlink (high-voltage transmission network) and Energex (distribution network) may need to be referred where your development is in proximity to their infrastructure or requires non-standard works.',
+    topics: [
+      {
+        id: 'infra_powerlink',
+        name: 'Powerlink transmission lines',
+        autoStatus: function() { return 'screen'; },
+        autoReason: function() { return 'Powerlink transmission corridors are not captured in the City Plan overlays — please confirm.'; },
+        screening: {
+          question: 'Is your property within 40 metres of a Powerlink high-voltage transmission line, easement or substation?',
+          help: 'Check powerlink.com.au/transmission-corridor-maps. Most inner-Brisbane residential properties are not near transmission corridors.'
+        }
+      },
+      {
+        id: 'infra_energex',
+        name: 'Energex network connection',
+        autoStatus: function(a, dt, s) {
+          const small = ['minor','alts','secondary','newdwelling'].includes(dt && dt.id);
+          return small ? 'no' : 'screen';
+        },
+        autoReason: function(a, dt, s) {
+          const small = ['minor','alts','secondary','newdwelling'].includes(dt && dt.id);
+          return small
+            ? 'Single-dwelling developments use standard Energex residential connections — no referral required.'
+            : 'Larger developments may require non-standard network connections.';
+        },
+        screening: {
+          question: 'Will your development require non-standard Energex infrastructure (e.g. dedicated substation, major network extension, or works to existing distribution lines beyond standard connection)?',
+          help: 'Most multi-unit developments under ~20 dwellings connect via standard residential connections.'
+        }
+      }
+    ]
+  }
+];
+
+// Helper: derive overall status of an authority (rolling up its topics)
+function authorityOverallStatus(auth) {
+  const a = state.selectedAddresses[0];
+  const dt = state.selectedDevType;
+  const answers = (state.referrals && state.referrals[auth.id]) || {};
+  let anyRequired = false, anyMaybe = false;
+  for (const t of auth.topics) {
+    let s = t.autoStatus(a, dt, state);
+    if (s === 'screen' && answers[t.id] != null) {
+      s = answers[t.id] === true ? 'required' : 'no';
+    }
+    if (s === 'required') anyRequired = true;
+    else if (s === 'screen' || s === 'note') anyMaybe = true;
+  }
+  if (anyRequired) return 'required';
+  if (anyMaybe) return 'maybe';
+  return 'no';
+}
+
+// Helper: are all required screening questions for this authority answered?
+function authorityScreeningComplete(auth) {
+  const a = state.selectedAddresses[0];
+  const dt = state.selectedDevType;
+  const answers = (state.referrals && state.referrals[auth.id]) || {};
+  for (const t of auth.topics) {
+    if (t.autoStatus(a, dt, state) === 'screen' && answers[t.id] == null) return false;
+  }
+  return true;
+}
+
+// Helper: are ALL screening questions across all authorities answered?
+function allReferralsAnswered() {
+  return REFERRAL_AUTHORITIES.every(authorityScreeningComplete);
+}
+
+const STAGE_LABELS = ['Find Property','Prop. Review','Dev. Type','Pathway','Details','Documents','Referrals','Applicant','Fee & Review','Confirmation'];
 
 let state = {
   currentStage: 1,
@@ -1407,6 +1842,8 @@ let state = {
   searchMode: 'address',
   qleavePayNow: true,
   uploadedFiles: [],
+  uploadedDocIds: [], // ids from state.stageDocs that have been uploaded
+  referrals: {}, // { [authorityId]: { [topicId]: true|false } }
 };
 
 function checkPassword() {
@@ -1458,16 +1895,18 @@ function renderProgress() {
   wrap.innerHTML = '';
   STAGE_LABELS.forEach((label, i) => {
     const n = i + 1;
+    const isLast = i === STAGE_LABELS.length - 1;
     const isDone = n < state.currentStage;
     const isActive = n === state.currentStage;
     const dotClass = isDone ? 'done' : (isActive ? 'active' : '');
+    const labelClass = isDone ? 'done' : (isActive ? 'active' : '');
     const lineClass = isDone ? 'done' : '';
-    wrap.innerHTML += `<div class="progress-stage">
+    wrap.innerHTML += `<div class="progress-stage${isLast ? '' : ' has-line'}">
       <div class="stage-dot ${dotClass}" title="${label}">
         <span class="dot-num">${n}</span>
-        <span class="stage-label ${isActive?'active':''}">${label}</span>
       </div>
-      ${i < STAGE_LABELS.length - 1 ? `<div class="stage-line ${lineClass}"></div>` : ''}
+      <span class="stage-label ${labelClass}">${label}</span>
+      ${isLast ? '' : `<div class="stage-line ${lineClass}"></div>`}
     </div>`;
   });
 }
@@ -1484,11 +1923,12 @@ function showStage(n) {
   if (n === 4) renderStage4();
   if (n === 5) renderStage5();
   if (n === 6) renderStage6();
-  if (n === 8) renderStage8();
+  if (n === 7) renderStage7();
+  if (n === 9) renderStage9();
 }
 
 function nextStage() {
-  if (state.currentStage === 7) {
+  if (state.currentStage === 8) {
     state.applicantName = document.getElementById('applicantName')?.value || '';
     state.applicantContact = document.getElementById('applicantContact')?.value || '';
     state.applicantPostal = document.getElementById('applicantPostal')?.value || '';
@@ -1554,7 +1994,6 @@ function selectAddress(id) {
     document.getElementById('outOfAreaCard').style.display = 'block';
     document.getElementById('primaryAddressWrap').style.display = 'none';
     document.getElementById('noSelectionHint').style.display = 'none';
-    document.getElementById('mapContainer').style.display = 'none';
     document.getElementById('s1Next').disabled = true;
     document.getElementById('addressSearch').value = '';
     if (document.getElementById('lotplanSearch')) document.getElementById('lotplanSearch').value = '';
@@ -1570,10 +2009,8 @@ function selectAddress(id) {
   renderAddressList();
   document.getElementById('primaryAddressWrap').style.display = 'block';
   document.getElementById('noSelectionHint').style.display = 'none';
-  document.getElementById('mapContainer').style.display = 'block';
   document.getElementById('addMoreWrap').style.display = 'block';
   document.getElementById('s1Next').disabled = false;
-  updateMap(state.selectedAddresses);
   if (state.selectedAddresses.length > 1) {
     document.getElementById('multiNote').style.display = 'block';
   }
@@ -1583,27 +2020,53 @@ function renderAddressList() {
   const primary = state.selectedAddresses[0];
   const additional = state.selectedAddresses.slice(1);
 
-  // Primary address card (above map)
+  // Build map URL and external-open URL
+  const mapEmbed = `https://www.google.com/maps?q=${primary.lat},${primary.lng}&z=18&output=embed`;
+  const mapOpen = `https://www.google.com/maps/search/?api=1&query=${primary.lat},${primary.lng}`;
+
+  // Primary address card with embedded map
   document.getElementById('primaryAddressCard').innerHTML = `
-    <div class="address-item primary">
-      <div class="address-item-content">
-        <div class="address-item-addr">
-          ${primary.addr}
-          <span class="primary-badge">Primary</span>
+    <div class="property-card">
+      <div class="property-card-header">
+        <div class="property-card-badges">
+          <span class="property-primary-pill">Primary address</span>
+          <div class="property-addr-heading">${primary.addr}</div>
+          <div class="property-meta-line">Lot/Plan: ${primary.lot}</div>
         </div>
-        <div class="address-item-meta">${primary.lot} · ${primary.area}m² · ${primary.zone} — ${primary.zoneDesc}</div>
+        <button class="property-change-btn" onclick="clearSelection()">Change</button>
       </div>
-      <button class="address-remove" onclick="removeAddress('${primary.id}')" title="Remove">✕</button>
+      <div class="property-zone-chip">${primary.zone}</div>
+      <div class="property-divider"></div>
+      <div class="property-stats-grid">
+        <div>
+          <div class="property-stat-label">Lot area</div>
+          <div class="property-stat-value">${primary.area} m²</div>
+        </div>
+        <div>
+          <div class="property-stat-label">Lot/Plan</div>
+          <div class="property-stat-value">${primary.lot}</div>
+        </div>
+        <div>
+          <div class="property-stat-label">Council</div>
+          <div class="property-stat-value">City Council</div>
+        </div>
+      </div>
+      <div class="map-container" id="mapContainer">
+        <a href="${mapOpen}" target="_blank" rel="noopener" class="map-open-btn">
+          Open in Maps <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+        </a>
+        <iframe id="googleMap" src="${mapEmbed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
     </div>`;
 
-  // Additional addresses (below map)
+  // Additional addresses (below main card)
   const addList = document.getElementById('additionalAddressList');
   if (additional.length) {
     addList.innerHTML = additional.map(a => `
       <div class="address-item">
         <div class="address-item-content">
           <div class="address-item-addr">${a.addr}</div>
-          <div class="address-item-meta">${a.lot} · ${a.area}m² · ${a.zone} — ${a.zoneDesc}</div>
+          <div class="address-item-meta">Lot/Plan: ${a.lot} · ${a.area}m² · ${a.zone}</div>
         </div>
         <button class="make-primary-btn" onclick="makePrimary('${a.id}')">Make primary</button>
         <button class="address-remove" onclick="removeAddress('${a.id}')" title="Remove">✕</button>
@@ -1619,7 +2082,6 @@ function makePrimary(id) {
   const addr = state.selectedAddresses.splice(idx, 1)[0];
   state.selectedAddresses.unshift(addr);
   renderAddressList();
-  updateMap(state.selectedAddresses);
 }
 
 function removeAddress(id) {
@@ -1627,13 +2089,11 @@ function removeAddress(id) {
   if (state.selectedAddresses.length === 0) {
     document.getElementById('primaryAddressWrap').style.display = 'none';
     document.getElementById('noSelectionHint').style.display = 'block';
-    document.getElementById('mapContainer').style.display = 'none';
     document.getElementById('addMoreWrap').style.display = 'none';
     document.getElementById('s1Next').disabled = true;
     document.getElementById('multiNote').style.display = 'none';
   } else {
     renderAddressList();
-    updateMap(state.selectedAddresses);
     if (state.selectedAddresses.length <= 1) document.getElementById('multiNote').style.display = 'none';
   }
 }
@@ -1649,13 +2109,16 @@ function clearSelection() {
   if (document.getElementById('lotplanSearch')) document.getElementById('lotplanSearch').value = '';
   document.getElementById('primaryAddressWrap').style.display = 'none';
   document.getElementById('noSelectionHint').style.display = 'block';
-  document.getElementById('mapContainer').style.display = 'none';
   document.getElementById('addMoreWrap').style.display = 'none';
   document.getElementById('outOfAreaCard').style.display = 'none';
   document.getElementById('s1Next').disabled = true;
   document.getElementById('multiNote').style.display = 'none';
   document.getElementById('autocompleteList').classList.remove('open');
-  document.getElementById('googleMap').src = '';
+  // Map iframe is now rendered inside the primary card — clearing the card removes it
+  const card = document.getElementById('primaryAddressCard');
+  if (card) card.innerHTML = '';
+  const addList = document.getElementById('additionalAddressList');
+  if (addList) addList.innerHTML = '';
 }
 
 document.addEventListener('click', e => {
@@ -1674,9 +2137,7 @@ function renderStage2() {
     <div class="prop-lot">${a.lot} · ${a.area}m² lot · Lat ${a.lat.toFixed(4)}, Lng ${a.lng.toFixed(4)}</div>
     <div class="prop-chips" style="margin-top:10px">
       <span class="chip chip-zone">${a.zone}</span>
-      ${a.dhc ? '<span class="chip chip-overlay">Demolition Control</span>' : ''}
-      ${(a.tbc && !a.dhc) ? '<span class="chip chip-overlay">TBC Overlay</span>' : ''}
-      ${a.flood ? '<span class="chip chip-flood">⚠ Flood Overlay</span>' : ''}
+      ${(a.overlays||[]).map(o => o.code === 'FL' ? '<span class="chip chip-flood">\u26A0 '+o.name+'</span>' : '<span class="chip chip-overlay">'+o.name+'</span>').join('')}
     </div>`;
   const floodBanner = document.getElementById('floodBanner');
   if (a.flood) {
@@ -1696,6 +2157,14 @@ function renderStage2() {
     MDR: 'Allows multi-unit dwellings, dual occupancy, secondary dwellings. Height up to 3–4 storeys (8.5–13m) in Milton NP.',
     HDR2: 'Allows high-density residential development up to 15 storeys (45m). Milton Station NP sets maximum heights and setbacks.'
   };
+  const overlayCards = (a.overlays||[]).map(o => `
+    <div class="overlay-item">
+      <span class="overlay-item-code">${o.code}</span>
+      <div class="overlay-item-body">
+        <div class="overlay-item-name">${o.name}</div>
+        <div class="overlay-item-desc">${o.desc}</div>
+      </div>
+    </div>`).join('');
   document.getElementById('intelGrid').innerHTML = `
     <div class="intel-card">
       <div class="intel-card-left">
@@ -1711,68 +2180,140 @@ function renderStage2() {
       </div>
       <span class="info-tip">i<span class="info-tip-content">${a.npPrec}. Sets site-specific height, setback, and character requirements.</span></span>
     </div>
-    ${a.dhc ? `<div class="intel-card">
-      <div class="intel-card-left">
-        <div class="intel-label">Demolition control overlay</div>
-        <div class="intel-value">Traditional Building Character (Demolition) — applies to this site</div>
-      </div>
-      <span class="info-tip">i<span class="info-tip-content">Demolition of pre-1947 dwellings requires assessment under the Demolition Control overlay code. The Traditional Building Character (TBC) overlay also applies — new works must respect the materials, form and proportions of traditional Queenslander housing. Both overlays require a character assessment with any new dwelling DA.</span></span>
-    </div>` : ''}
-    ${(a.tbc && !a.dhc) ? `<div class="intel-card">
-      <div class="intel-card-left">
-        <div class="intel-label">TBC overlay</div>
-        <div class="intel-value">Applies to this site</div>
-      </div>
-      <span class="info-tip">i<span class="info-tip-content">Recognises traditional Queenslander and pre-1947 housing. New works should respect materials, form and proportions.</span></span>
-    </div>` : ''}
     <div class="intel-card">
       <div class="intel-card-left">
         <div class="intel-label">Lot area</div>
-        <div class="intel-value">${a.area}m²</div>
+        <div class="intel-value">${a.area}m\u00B2</div>
       </div>
-      <span class="info-tip">i<span class="info-tip-content">${a.area >= 400 ? 'Meets minimum lot size for most development types in this zone.' : 'Smaller lot — minimum lot size provisions may affect options.'}</span></span>
+      <span class="info-tip">i<span class="info-tip-content">${a.area >= 400 ? 'Meets minimum lot size for most development types in this zone.' : 'Smaller lot \u2014 minimum lot size provisions may affect options.'}</span></span>
+    </div>
+    <div style="grid-column:1/-1;">
+      <div class="intel-label" style="margin-bottom:6px;">Applicable overlays <span class="overlay-count">(${(a.overlays||[]).length} overlays affect this property)</span></div>
+      <div class="overlay-list">${overlayCards || '<div style="font-size:12px;color:var(--ink-faint);">No overlays apply to this property.</div>'}</div>
     </div>
     `;
-  document.getElementById('saraBanner').innerHTML = `
-    <div class="sara-check">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-      <div class="sara-check-text"><strong>No SARA referral required</strong> — This residential development in Milton QLD does not trigger a referral to the State Assessment and Referral Agency (SARA) under the SDAP.</div>
-    </div>`;
 }
 
 function renderStage3() {
   const a = state.selectedAddresses[0];
   const types = DEV_TYPES[a.zone] || DEV_TYPES.CR2;
-  document.getElementById('devTypeGrid').innerHTML = types.map(t => {
-    let badge = t.badge;
-    // Flood overlay upgrades accepted development to code assessable (Planning Reg 2017, Sch 6)
-    if (a.flood && t.pathway === 'accepted') badge = 'Code assessable (flood overlay)';
-    // Flood overlay downgrades RiskSmart to standard code
-    if (a.flood && t.pathway === 'risksmart') badge = 'Code assessable (flood overlay)';
-    return `
-    <div class="devtype-card ${state.selectedDevType?.id === t.id ? 'selected' : ''}" onclick="selectDevType('${t.id}')">
-      <div class="devtype-icon">${t.icon}</div>
-      <div class="devtype-content">
-        <div class="devtype-title">${t.label}</div>
-        <div class="devtype-desc">${t.desc}</div>
-        <span class="devtype-badge">${badge}</span>
-      </div>
-    </div>`;
-  }).join('');
   const prohibited = PROHIBITED_USES[a.zone] || [];
-  const prohibSec = document.getElementById('prohibitedSection');
+
+  // Render the "Available at this property" section
+  const availableCards = types.map(t => {
+    // Resolve effective pathway (flood overlay upgrades accepted/risksmart → code)
+    let effectivePathway = t.pathway;
+    if (a.flood && (t.pathway === 'accepted' || t.pathway === 'risksmart')) {
+      effectivePathway = t.pathway + '_flood';
+    }
+    const badge = PATHWAY_BADGE[effectivePathway] || PATHWAY_BADGE.code;
+    const selected = state.selectedDevType?.id === t.id ? ' selected' : '';
+    return `
+      <div class="devtype-card${selected}" onclick="selectDevType('${t.id}')">
+        <div class="devtype-radio"></div>
+        <div class="devtype-content">
+          <div class="devtype-title">${t.label}</div>
+          <div class="devtype-desc">${t.desc}</div>
+        </div>
+        <span class="devtype-badge v-${badge.variant}">
+          <span class="badge-icon">${badge.icon}</span> ${badge.label} \u00b7 ${badge.days}
+        </span>
+      </div>`;
+  }).join('');
+
+  document.getElementById('devTypeAvailableSection').innerHTML = `
+    <div class="devtype-section-heading"><span class="section-icon">\u2713</span> Available at this property</div>
+    <div class="devtype-grid">${availableCards}</div>`;
+
+  // Render the "Not available at this property" section
+  const unavailSection = document.getElementById('devTypeUnavailableSection');
   if (prohibited.length) {
-    prohibSec.innerHTML = `<div class="prohibited-title">Not permitted at this property</div>` +
-      prohibited.map(p => `<div class="prohibited-item"><span class="prohibited-x">✕</span><div><strong>${p.label}</strong> — ${p.reason}</div></div>`).join('');
+    const unavailableCards = prohibited.map(p => {
+      // Prohibited uses always route to impact assessable if pursued
+      const badge = PATHWAY_BADGE.impact;
+      // Escape the reason for data-reason attribute (quotes in attribute)
+      const reasonAttr = p.reason.replace(/"/g, '&quot;');
+      return `
+        <div class="devtype-card unavailable" data-reason="${reasonAttr}" onclick="selectProhibitedType('${p.id}')">
+          <div class="devtype-unavail-icon">\u2298</div>
+          <div class="devtype-content">
+            <div class="devtype-title">${p.label}</div>
+            <div class="devtype-desc">${p.desc}</div>
+          </div>
+          <span class="devtype-badge v-${badge.variant}">
+            <span class="badge-icon">${badge.icon}</span> ${badge.label} \u00b7 ${badge.days}
+          </span>
+          <button class="devtype-talk-btn" onclick="event.stopPropagation(); openTalkToPlanner('${p.id}')">
+            <span class="talk-icon">\ud83d\udcac</span> Not sure? Talk to a planner <span class="talk-arrow">\u2192</span>
+          </button>
+        </div>`;
+    }).join('');
+    unavailSection.innerHTML = `
+      <div class="devtype-section-heading"><span class="section-icon">\u2298</span> Not available at this property</div>
+      <div class="devtype-grid">${unavailableCards}</div>`;
+    unavailSection.style.display = '';
   } else {
-    prohibSec.innerHTML = '';
+    unavailSection.innerHTML = '';
+    unavailSection.style.display = 'none';
   }
+
+  // Clear any stale prohibited warning from a previous render
+  const warn = document.getElementById('prohibitedWarning');
+  if (warn) { warn.classList.remove('visible'); warn.innerHTML = ''; }
+}
+
+function selectProhibitedType(id) {
+  const a = state.selectedAddresses[0];
+  const prohibited = PROHIBITED_USES[a.zone] || [];
+  const p = prohibited.find(x => x.id === id);
+  if (!p) return;
+  state.pendingProhibited = p;
+  state.selectedDevType = null;
+  // Deselect any permitted card selection
+  document.querySelectorAll('.devtype-card').forEach(c => c.classList.remove('selected'));
+  // Render the warning + proceed box inline (preserves right to lodge under Planning Act 2016)
+  const w = document.getElementById('prohibitedWarning');
+  if (w) {
+    w.innerHTML = `
+      <div class="prohibited-warning-text">
+        <strong>\u26A0 This use is not anticipated in the ${a.zone} zone</strong>
+        ${p.reason}. Under the Planning Act 2016, Council cannot refuse to accept your application \u2014 but we strongly recommend speaking to a planner first, as your application is very likely to be refused and full fees will still apply (Impact Assessable pathway, including public notification).
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <button class="devtype-talk-btn" style="margin:0;" onclick="openTalkToPlanner('${p.id}')">
+          <span class="talk-icon">\ud83d\udcac</span> Talk to a planner <span class="talk-arrow">\u2192</span>
+        </button>
+        <button class="prohibited-proceed-btn" onclick="confirmProhibited()">I understand \u2014 proceed anyway</button>
+      </div>`;
+    w.classList.add('visible');
+    w.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+  document.getElementById('s3Next').disabled = true;
+}
+
+// Talk-to-a-planner CTA reuses the existing pre-lodgement modal
+function openTalkToPlanner(devTypeId) {
+  if (typeof showPreLodgementModal === 'function') {
+    showPreLodgementModal();
+  }
+}
+
+function confirmProhibited() {
+  if (!state.pendingProhibited) return;
+  state.selectedDevType = state.pendingProhibited;
+  state.pathway = 'impact'; // Prohibited uses always impact assessable
+  state.isProhibited = true;
+  document.getElementById('s3Next').disabled = false;
+  const w = document.getElementById('prohibitedWarning');
+  if (w) { w.innerHTML = '<div style="padding:10px;background:var(--warning-bg);border-radius:var(--radius-sm);font-size:12px;color:var(--warning-text);font-weight:500;">\u2714 Acknowledged \u2014 application will proceed as Impact Assessable. Pre-lodgement advice recommended.</div>'; }
 }
 
 function selectDevType(id) {
   const a = state.selectedAddresses[0];
   const types = DEV_TYPES[a.zone] || DEV_TYPES.CR2;
   state.selectedDevType = types.find(t => t.id === id);
+  state.isProhibited = false;
+  state.pendingProhibited = null;
   let pathway = state.selectedDevType.pathway;
   // Flood overlay upgrades accepted → code assessable (Planning Reg 2017, Sch 6)
   if (a.flood && pathway === 'accepted') pathway = 'accepted_flood';
@@ -1794,7 +2335,7 @@ function renderStage4() {
     card.innerHTML = `
       <div class="pathway-hero ${cfg.color}">
         <div class="pathway-badge ${cfg.color}">${cfg.icon} ${cfg.label}</div>
-        <div class="pathway-hero-title">${cfg.title}</div>
+        ${cfg.title ? `<div class="pathway-hero-title">${cfg.title}</div>` : ''}
         <div class="pathway-hero-sub">${cfg.sub}</div>
       </div>
       <div class="exit-box">
@@ -1805,16 +2346,30 @@ function renderStage4() {
       </div>`;
     nav.innerHTML = '<button class="btn-back" onclick="prevStage()">← Back</button><div></div>';
   } else {
+    const a = state.selectedAddresses[0];
+    const dt = state.selectedDevType;
+    // Prohibited warning banner if applicable
+    let prohibBanner = '';
+    if (state.isProhibited) {
+      prohibBanner = `<div style="background:var(--negative-bg);border:1px solid #fca5a5;border-radius:var(--radius-sm);padding:14px 16px;margin-top:16px;">
+        <div style="font-size:13px;color:var(--negative-text);line-height:1.5;">
+          <strong style="display:block;margin-bottom:4px;">\u26A0 Prohibited development type selected</strong>
+          Your selected development type (<strong>${dt?.label || ''}</strong>) is not supported in the ${a.zone} zone. This application will follow the Impact Assessable pathway and is very likely to be refused. Pre-lodgement advice is strongly recommended.
+        </div>
+      </div>`;
+    }
+
     card.innerHTML = `
       <div class="pathway-hero ${cfg.color}">
         <div class="pathway-badge ${cfg.color}">${cfg.icon} ${cfg.label}</div>
-        <div class="pathway-hero-title">${cfg.title}</div>
+        ${cfg.title ? `<div class="pathway-hero-title">${cfg.title}</div>` : ''}
         <div class="pathway-hero-sub">${cfg.sub}</div>
         <div class="pathway-timeline">
           <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
           ${cfg.timeline}
         </div>
       </div>
+      ${prohibBanner}
       <div class="pathway-steps">
         ${(cfg.steps||[]).map((s,i)=>`<div class="pathway-step">
           <div class="pathway-step-num">${i+1}</div>
@@ -1824,8 +2379,8 @@ function renderStage4() {
           </div>
         </div>`).join('')}
       </div>`;
-    nav.innerHTML = `<button class="btn-back" onclick="prevStage()">← Back</button>
-      <button class="btn-next" onclick="nextStage()">Continue to details →</button>`;
+    nav.innerHTML = `<button class="btn-back" onclick="prevStage()">\u2190 Back</button>
+      <button class="btn-next" onclick="nextStage()">Continue to details \u2192</button>`;
   }
 }
 
@@ -1836,11 +2391,29 @@ function renderStage5() {
   const needsUnits = dt?.id === 'multiple' || dt?.id === 'mixeduse';
   const needsFloorArea = ['newdwelling','secondary','multiple','mixeduse','alts'].includes(dt?.id);
 
+  // Form 1 Q6.1 mapping
+  const fm = FORM1_MAPPING[dt?.id] || { devTypes:['Material change of use'], approvalType:'Development permit', assessNote:dt?.label || '' };
+  state.form1DevTypes = fm.devTypes;
+  state.form1ApprovalType = fm.approvalType;
+  state.form1AssessLevel = getPathwayLabel();
+
   document.getElementById('s5FormContent').innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;padding:12px 16px;background:var(--neutral-bg);border-radius:var(--radius-sm);">
-      <span style="font-size:12px;font-weight:600;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.5px;">Type of development</span>
-      <span style="font-size:13px;color:var(--ink);">Material change of use (MCU) / Building work</span>
-      <span class="chip" style="background:${getPathwayChipBg()};color:${getPathwayChipColor()};font-size:11px;padding:3px 10px;">${getPathwayLabel()}</span>
+    <div class="form1-mapping">
+      <div class="form1-mapping-title">Form 1, Part 3 \u2014 Development aspect (auto-derived from your selections)</div>
+      <div class="form1-mapping-row">
+        <span class="form1-mapping-label">Q6.1(a) Type of development</span>
+        <span class="form1-mapping-value">${fm.devTypes.join(' + ')}</span>
+      </div>
+      <div class="form1-mapping-row">
+        <span class="form1-mapping-label">Q6.1(b) Approval type</span>
+        <span class="form1-mapping-value">${fm.approvalType}</span>
+      </div>
+      <div class="form1-mapping-row">
+        <span class="form1-mapping-label">Q6.1(c) Level of assessment</span>
+        <span class="form1-mapping-value">${getPathwayLabel()}</span>
+        <span class="chip" style="background:${getPathwayChipBg()};color:${getPathwayChipColor()};font-size:10px;padding:2px 8px;margin-left:6px;">${getPathwayLabel()}</span>
+      </div>
+      <div style="font-size:11px;color:var(--ink-faint);margin-top:8px;">These values are derived from your development type and property data. They will appear on your generated Form 1 PDF. Contact Council if you believe a different classification applies.</div>
     </div>
     <div class="form-section">
       <div class="form-section-title">Development description (Form 1, Part 3)</div>
@@ -1985,8 +2558,8 @@ function renderStage6() {
   const isImpact = p === 'impact';
   const isCode = p === 'code' || p === 'risksmart' || p === 'risksmart_flood' || p === 'accepted_flood';
   const isFlood = a?.flood;
-  const isDHC = a?.dhc;
-  const isTBC = a?.tbc;
+  const isDHC = hasOverlay(a, 'DHC');
+  const isTBC = hasOverlay(a, 'TBC');
   const isMultiple = dt?.id === 'multiple' || dt?.id === 'mixeduse';
   const needsQLeave = state.constructionValue >= 150000;
 
@@ -2017,7 +2590,7 @@ function renderStage6() {
       <div class="doc-check" id="doc-check-${d.id}"></div>
       <div class="doc-item-content">
         <div class="doc-item-title">${d.title}<span class="info-tip">ⓘ<span class="info-tip-content">${d.desc}</span></span></div>
-        <span class="doc-tag ${d.type}">${d.type === 'req' ? 'Required' : d.type === 'cond' ? 'Conditional' : 'Optional'}</span>
+        <span class="doc-tag ${d.type}">${d.type === 'req' ? 'Mandatory' : d.type === 'cond' ? 'Conditional' : 'Recommended'}</span>
       </div>
       <button class="doc-upload-btn" id="doc-btn-${d.id}" onclick="uploadSingleDoc('${d.id}')">Upload</button>
     </div>`).join('');
@@ -2049,6 +2622,7 @@ function animateDocChecks() {
         check.classList.add('checked');
         item.classList.add('doc-confirmed');
         if (btn) { btn.classList.add('uploaded'); btn.textContent = 'Uploaded'; }
+        if (!state.uploadedDocIds.includes(d.id)) state.uploadedDocIds.push(d.id);
       }, delay + 800);
       delay += 400;
     }
@@ -2073,12 +2647,13 @@ function uploadSingleDoc(docId) {
     btn.classList.add('uploaded');
     btn.textContent = 'Uploaded';
     btn.disabled = false;
+    if (!state.uploadedDocIds.includes(docId)) state.uploadedDocIds.push(docId);
   }, 1200);
 }
 
 function docItem(title, desc, type) {
   // Legacy fallback — not used in new renderStage6
-  const tagLabel = type === 'req' ? 'Required' : type === 'cond' ? 'Conditional' : 'Optional';
+  const tagLabel = type === 'req' ? 'Mandatory' : type === 'cond' ? 'Conditional' : 'Recommended';
   const itemClass = type === 'req' ? 'required' : type === 'cond' ? 'conditional' : 'optional';
   return `<div class="doc-item ${itemClass}">
     <div class="doc-check" onclick="this.classList.toggle('checked')"></div>
@@ -2221,7 +2796,91 @@ function runConsentAIVerification() {
   });
 }
 
-function renderStage8() {
+function renderStage7() {
+  const a = state.selectedAddresses[0];
+  const dt = state.selectedDevType;
+  if (!a || !dt) return;
+  const list = document.getElementById('s7AuthorityList');
+  const answers = state.referrals || {};
+
+  const html = REFERRAL_AUTHORITIES.map(auth => {
+    const authAnswers = answers[auth.id] || {};
+    // Compute overall status (after applying any saved answers)
+    const overall = authorityOverallStatus(auth);
+    const overallLabel = overall === 'required'
+      ? 'Referral required'
+      : overall === 'maybe'
+        ? (authorityScreeningComplete(auth) ? 'Not required' : 'Needs review')
+        : 'Not required';
+    const overallVariant = overall === 'required'
+      ? 'required'
+      : overall === 'maybe' && !authorityScreeningComplete(auth)
+        ? 'maybe'
+        : 'no';
+
+    // Render each topic
+    const topicsHtml = auth.topics.map(t => {
+      let s = t.autoStatus(a, dt, state);
+      let reason = t.autoReason(a, dt, state);
+      let savedAnswer = authAnswers[t.id];
+      let effectiveStatus = s;
+      if (s === 'screen' && savedAnswer != null) {
+        effectiveStatus = savedAnswer === true ? 'required' : 'no';
+      }
+      const statusText = {
+        required: 'Required',
+        no: 'Not required',
+        screen: 'Confirm below',
+        note: 'For info',
+      }[effectiveStatus] || effectiveStatus;
+
+      const screeningHtml = (s === 'screen' && t.screening) ? `
+        <div class="referral-screening">
+          <div class="referral-screening-q">${t.screening.question}</div>
+          ${t.screening.help ? `<div class="referral-screening-help">${t.screening.help}</div>` : ''}
+          <div class="referral-screening-buttons">
+            <button class="referral-screening-btn ${savedAnswer === true ? 'selected-yes' : ''}" onclick="answerReferral('${auth.id}','${t.id}',true)">Yes</button>
+            <button class="referral-screening-btn ${savedAnswer === false ? 'selected-no' : ''}" onclick="answerReferral('${auth.id}','${t.id}',false)">No</button>
+          </div>
+        </div>` : '';
+
+      return `
+        <div class="referral-topic">
+          <div class="referral-topic-row">
+            <div class="referral-topic-name">${t.name}</div>
+            <div class="referral-topic-status ${effectiveStatus}">${statusText}</div>
+          </div>
+          <div class="referral-topic-reason">${reason}</div>
+          ${screeningHtml}
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="referral-card">
+        <div class="referral-card-header">
+          <div class="referral-card-icon">${auth.icon}</div>
+          <div class="referral-card-title">
+            <div class="referral-card-name">${auth.name}</div>
+            <div class="referral-card-blurb">${auth.blurb}</div>
+          </div>
+          <div class="referral-status-chip ${overallVariant}">${overallLabel}</div>
+        </div>
+        <div class="referral-card-body">${topicsHtml}</div>
+      </div>`;
+  }).join('');
+
+  list.innerHTML = html;
+  document.getElementById('s7Next').disabled = !allReferralsAnswered();
+}
+
+function answerReferral(authId, topicId, answer) {
+  if (!state.referrals) state.referrals = {};
+  if (!state.referrals[authId]) state.referrals[authId] = {};
+  state.referrals[authId][topicId] = answer;
+  renderStage7();
+}
+
+function renderStage9() {
   const a = state.selectedAddresses[0];
   const dt = state.selectedDevType;
   const p = state.pathway;
@@ -2323,20 +2982,89 @@ function renderStage8() {
       <strong>Infrastructure charges:</strong> Separate infrastructure charges (water, sewerage, transport) may be payable at the time of approval under the Council Infrastructure Charges Resolution. These are not included in the DA fee estimate above and will be calculated by Council based on the approved development.
     </div>`;
 
-  document.getElementById('s8ReviewContent').innerHTML = html;
+  document.getElementById('s9ReviewContent').innerHTML = html;
+  updateSubmitButtonState();
 }
 
 function setQLeaveOption(payNow) {
   state.qleavePayNow = payNow;
-  renderStage8();
+  renderStage9();
+}
+
+// --- Doc completeness helpers ---
+function getMissingMandatoryDocs() {
+  return (state.stageDocs || []).filter(d => d.type === 'req' && !state.uploadedDocIds.includes(d.id));
+}
+function getMissingRecommendedDocs() {
+  // "Recommended" = optional in the data model. Conditional is excluded — it depends on case-by-case triggers.
+  return (state.stageDocs || []).filter(d => d.type === 'opt' && !state.uploadedDocIds.includes(d.id));
+}
+function isApplicationComplete() {
+  return getMissingMandatoryDocs().length === 0 && getMissingRecommendedDocs().length === 0;
+}
+
+function updateSubmitButtonState() {
+  const btn = document.getElementById('submitBtn');
+  if (!btn) return;
+  const check = document.getElementById('declarationCheck');
+  const complete = isApplicationComplete();
+  if (complete) {
+    btn.classList.remove('warning');
+    btn.textContent = 'Lodge application';
+  } else {
+    btn.classList.add('warning');
+    btn.textContent = 'Submit incomplete';
+  }
+  btn.disabled = !(check && check.checked);
 }
 
 function toggleSubmit() {
-  document.getElementById('submitBtn').disabled = !document.getElementById('declarationCheck').checked;
+  updateSubmitButtonState();
 }
 
 function submitApp() {
-  showStage(9);
+  // If anything recommended (or mandatory) is missing, confirm with the user first.
+  if (!isApplicationComplete()) {
+    showIncompleteSubmitModal();
+    return;
+  }
+  lodgeApplication();
+}
+
+function showIncompleteSubmitModal() {
+  const missingMandatory = getMissingMandatoryDocs();
+  const missingRecommended = getMissingRecommendedDocs();
+  const listItems = [...missingMandatory, ...missingRecommended]
+    .map(d => `<li>${d.title}${d.type === 'req' ? ' <span style="color:var(--negative-text);font-weight:600;">(mandatory)</span>' : ''}</li>`)
+    .join('');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'admin-edit-overlay';
+  overlay.id = 'incompleteOverlay';
+  overlay.onclick = function(e) { if (e.target === this) this.remove(); };
+  overlay.innerHTML = `
+    <div class="incomplete-modal">
+      <div class="incomplete-modal-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 6l7.53 13H4.47L12 8zm-1 4v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+      </div>
+      <div class="incomplete-modal-title">Submit incomplete application?</div>
+      <div class="incomplete-modal-body">
+        Your application does not contain all of the information recommended by City Council. Submitting without this information <strong>may cause a further information request</strong> to be issued, which will stop the assessment clock and delay the processing of your permit.
+      </div>
+      ${listItems ? `<ul class="incomplete-missing-list">${listItems}</ul>` : ''}
+      <div class="incomplete-modal-tip">
+        <strong>Tip:</strong> Use the Save Progress option to bookmark your application and return later with the missing documents.
+      </div>
+      <div class="incomplete-modal-actions">
+        <button class="incomplete-modal-btn-submit" onclick="document.getElementById('incompleteOverlay').remove(); lodgeApplication();">Submit anyway</button>
+        <button class="incomplete-modal-btn-back" onclick="document.getElementById('incompleteOverlay').remove(); showStage(6);">Go back and complete</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function lodgeApplication() {
+  showStage(10);
   document.getElementById('progressBarWrap').style.display = 'none';
   const refNum = Math.floor(Math.random() * 9000) + 1000;
   document.getElementById('successRef').textContent = 'DA-2026/' + refNum;
@@ -2366,38 +3094,72 @@ function showPreLodgementModal() {
   overlay.id = 'prelodgeOverlay';
   overlay.onclick = function(e) { if (e.target === this) this.remove(); };
   overlay.innerHTML = `
-    <div class="admin-edit-panel" style="max-width:480px;">
-      <div class="admin-edit-header">
-        <h3>Book a pre-lodgement meeting</h3>
-        <button onclick="document.getElementById('prelodgeOverlay').remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--ink-light);">✕</button>
+    <div class="council-modal">
+      <div class="council-modal-header">
+        <div class="council-modal-title">Want to discuss with council?</div>
+        <button class="council-modal-close" onclick="document.getElementById('prelodgeOverlay').remove()">\u2715</button>
       </div>
-      <div style="text-align:center;padding:32px 28px;">
-        <div style="font-size:36px;margin-bottom:16px;">📅</div>
-        <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;">Pre-lodgement meeting with Council</div>
-        <div style="font-size:13px;color:var(--ink-light);line-height:1.6;margin-bottom:24px;">
-          Discuss your proposal with a planning officer before lodging. This helps identify issues early and speeds up the assessment process.
-        </div>
-        <div style="background:var(--neutral-bg);border-radius:var(--radius-sm);padding:14px;margin-bottom:20px;text-align:left;">
-          <div style="font-size:11px;font-weight:600;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;">Available times</div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;" onclick="this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)';showToast('Pre-lodgement meeting booked — Tue 1 Apr, 10:00 AM');setTimeout(()=>document.getElementById('prelodgeOverlay')?.remove(),1500)">
-              <span style="font-size:13px;font-weight:500;color:var(--ink);">Tue 1 Apr — 10:00 AM</span>
-              <span style="font-size:11px;color:var(--ink-light);">30 min</span>
+      <div class="council-modal-body">
+        <div class="council-chip">Brisbane City Council</div>
+        <div class="council-contact-box">
+          <div class="council-contact-title">\ud83d\udcde Quick question? Contact the planning team directly</div>
+          <div class="council-contact-row">
+            <div class="council-contact-icon">\ud83d\udcf1</div>
+            <div class="council-contact-details">
+              <a href="tel:+61734038888" class="council-contact-link">(07) 3403 8888</a>
+              <div class="council-contact-sub">Mon \u2013 Fri, 8:00 am \u2013 5:00 pm (contact centre 24/7)</div>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;" onclick="this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)';showToast('Pre-lodgement meeting booked — Thu 3 Apr, 2:00 PM');setTimeout(()=>document.getElementById('prelodgeOverlay')?.remove(),1500)">
-              <span style="font-size:13px;font-weight:500;color:var(--ink);">Thu 3 Apr — 2:00 PM</span>
-              <span style="font-size:11px;color:var(--ink-light);">30 min</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;" onclick="this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)';showToast('Pre-lodgement meeting booked — Mon 7 Apr, 11:00 AM');setTimeout(()=>document.getElementById('prelodgeOverlay')?.remove(),1500)">
-              <span style="font-size:13px;font-weight:500;color:var(--ink);">Mon 7 Apr — 11:00 AM</span>
-              <span style="font-size:11px;color:var(--ink-light);">30 min</span>
+          </div>
+          <div class="council-contact-row">
+            <div class="council-contact-icon">\u2709\ufe0f</div>
+            <div class="council-contact-details">
+              <a href="mailto:planning.information@brisbane.qld.gov.au" class="council-contact-link">planning.information@brisbane.qld.gov.au</a>
+              <div class="council-contact-sub">Responses within 2 business days</div>
             </div>
           </div>
         </div>
-        <div style="font-size:11px;color:var(--ink-faint);">Select a time to book your meeting. A confirmation will be emailed to you.</div>
+        <div class="council-divider">
+          <div class="council-divider-line"></div>
+          <div class="council-divider-text">Or arrange a meeting</div>
+          <div class="council-divider-line"></div>
+        </div>
+        <div class="council-meeting-body">
+          A pre-lodgement meeting with a council planner can clarify requirements, identify issues early, and reduce the risk of a further information request. Select a time below to request one.
+        </div>
+        <div class="council-include-box" id="includeAppBox" onclick="togglePrelodgeInclude()">
+          <div class="council-include-checkbox" id="includeAppCheckbox">\u2713</div>
+          <div>
+            <div class="council-include-title">Include my application details with this request</div>
+            <div class="council-include-desc">Your property address, application type, and uploaded documents will be shared with the planner ahead of the meeting \u2014 helping them prepare and saving time on the day.</div>
+          </div>
+        </div>
+        <div class="council-calendar-placeholder">
+          <div class="council-calendar-title">\ud83d\uddd3\ufe0f Calendar booking widget</div>
+          <div class="council-calendar-sub">(simulated \u2014 not functional in prototype)</div>
+        </div>
+      </div>
+      <div class="council-modal-footer">
+        <button class="council-close-btn" onclick="document.getElementById('prelodgeOverlay').remove()">Close</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
+}
+
+function togglePrelodgeInclude() {
+  const box = document.getElementById('includeAppCheckbox');
+  const wrap = document.getElementById('includeAppBox');
+  if (!box || !wrap) return;
+  if (box.classList.contains('unchecked')) {
+    box.classList.remove('unchecked');
+    box.textContent = '\u2713';
+    wrap.style.borderColor = 'var(--accent)';
+    wrap.style.background = '#eff6ff';
+  } else {
+    box.classList.add('unchecked');
+    box.textContent = '';
+    wrap.style.borderColor = 'var(--border)';
+    wrap.style.background = 'var(--card)';
+  }
 }
 
 function handleFileUpload(event) {
@@ -2431,7 +3193,7 @@ function simulateAIReview() {
       '✓ Site plan detected — dimensions and north point present',
       '✓ Floor plans detected — levels identified',
     ];
-    if (a?.dhc || a?.tbc) items.push('⚠ Traditional Building Character assessment not detected — required for TBC overlay');
+    if (hasOverlay(a, 'DHC') || hasOverlay(a, 'TBC')) items.push('⚠ Traditional Building Character assessment not detected — required for TBC overlay');
     if (a?.flood) items.push('⚠ Flood impact assessment not detected — required for flood overlay');
     el.innerHTML = `<div class="ai-review">
       <div class="ai-review-header"><div class="ai-review-title">AI document review</div></div>
@@ -2495,14 +3257,38 @@ function generateForm1PDF() {
   addRow('Zone', a?.zone + ' — ' + (a?.zoneDesc || ''));
   y += 5;
 
-  sectionHeader('Part 3 — Development Details');
-  addRow('Development type', state.selectedDevType?.label || '');
-  addRow('Assessment level', getPathwayLabel());
+  sectionHeader('Part 3 — Development Details (Section 1 — Q6.1)');
+  const fm1 = FORM1_MAPPING[state.selectedDevType?.id] || {};
+  addRow('6.1(a) Type of development', (fm1.devTypes || ['Material change of use']).join(' + '));
+  addRow('6.1(b) Approval type', fm1.approvalType || 'Development permit');
+  addRow('6.1(c) Level of assessment', getPathwayLabel());
+  addRow('6.1(d) Description', state.devDescription || fm1.assessNote || state.selectedDevType?.label || '');
+  y += 3;
   addRow('Construction value', state.constructionValue ? '$' + state.constructionValue.toLocaleString() : '');
   y += 5;
 
   sectionHeader('Part 4 — Assessment Manager');
   addRow('Assessment manager', 'City Council');
+  y += 5;
+
+  sectionHeader('Part 5 — Referral Details');
+  // Pull from state.referrals (captured at Stage 7) — definitive where possible, screening-confirmed elsewhere
+  const dtForReferrals = state.selectedDevType;
+  REFERRAL_AUTHORITIES.forEach(auth => {
+    const overall = authorityOverallStatus(auth);
+    let label;
+    if (overall === 'required') label = 'Referral required';
+    else if (overall === 'maybe') label = authorityScreeningComplete(auth) ? 'Not required' : 'Pending applicant confirmation';
+    else label = 'Not required';
+    // Append a one-line summary of the topic-level findings (only triggered or required ones)
+    const triggers = auth.topics.filter(t => {
+      const sAuto = t.autoStatus(a, dtForReferrals, state);
+      const ans = (state.referrals && state.referrals[auth.id] && state.referrals[auth.id][t.id]);
+      return sAuto === 'required' || ans === true;
+    }).map(t => t.name);
+    if (triggers.length) label += ' — ' + triggers.join('; ');
+    addRow(auth.shortName, label);
+  });
   y += 5;
 
   sectionHeader('Part 6 — Information Request');
@@ -2520,7 +3306,7 @@ function generateForm1PDF() {
 
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Generated by Build AU Applicants v1.8 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.text('Generated by Build AU Applicants v1.9 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
   doc.setTextColor(0);
 
   doc.save('Form-1-Development-Application.pdf');
@@ -2555,7 +3341,7 @@ function generateForm2PDF() {
   y += 20;
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Generated by Build AU Applicants v1.8 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.text('Generated by Build AU Applicants v1.9 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
   doc.save('Form-2-Building-Work-Details.pdf');
 }
 
@@ -2583,21 +3369,22 @@ function generateOwnersConsentPDF() {
   doc.text('Witness name: ____________________________', 18, y);
   doc.setFontSize(8);
   doc.setTextColor(150);
-  doc.text('Generated by Build AU Applicants v1.8 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
+  doc.text('Generated by Build AU Applicants v1.9 — ' + new Date().toLocaleDateString(), 105, 285, { align: 'center' });
   doc.save('Owners-Consent-Form.pdf');
 }
 
 function renderBgPanels() {
   const panels = [
     { id:'bgp1', what:'Allows the applicant to find their property using a real address autocomplete from verified Milton QLD 4064 spatial data. Now includes map visualisation, multi-address support, and lot/plan search.', why:'Property confirmation is the logical start of any DA — everything that follows (zone, pathway, fees) depends on knowing the exact lot. The autocomplete uses verified Council spatial data to ensure correct zone and overlay attribution.', who:'Property owners, planning consultants, developers lodging a DA in Milton QLD', dn:'15 real addresses used — 4 per scenario group (Accepted, RiskSmart, Code, Impact) plus 3 Impact addresses. Spatial data sourced from Council CP14 zoning overlay and parcel data via GeoPandas spatial join.' },
-    { id:'bgp2', what:'Displays zone, overlays (Demolition Control, TBC, Flood), neighbourhood plan precinct, SARA check, and lot area for the selected property. All data is real from the Council spatial datasets.', why:'Giving applicants their planning context upfront reduces requests for further information and sets expectations before they choose a development type. The flood banner is critical — it changes the pathway from RiskSmart to standard code.', who:'Property owners and planning consultants who need to understand their planning constraints before choosing a development type', dn:'Flood overlay (Overland Flow) shown only on 12 Blaxland Street — the one address in the dataset with a confirmed flood overlay. Demolition Control applies to all Milton addresses; TBC applies to CR2 addresses only.' },
-    { id:'bgp3', what:'Lets the applicant select their development type from a filtered list relevant to their zone. The selection determines the assessment pathway.', why:'Plain-language development type descriptions reduce applicant confusion about planning jargon. Filtering by zone prevents applicants from selecting types not available in their zone (e.g. multi-storey in CR2).', who:'Property owners and applicants who may not be familiar with planning terminology', dn:'Dev types are zone-filtered: CR2 shows 5 options; MDR shows 4; HDR2 shows 2. RiskSmart badge is shown on the new dwelling option for CR2 (where eligible). Flood overlay overrides RiskSmart eligibility in the routing logic.' },
-    { id:'bgp4', what:'Reveals the assessment pathway (Accepted Development, RiskSmart, Code Assessable, or Impact Assessable) with a clear explanation of what it means, timeline, and next steps.', why:'The pathway reveal is the key moment in the DA process — applicants often don\'t know what pathway they\'re in until they\'ve already spent money on plans. Showing it early reduces wasted effort.', who:'All applicants — this is the pivotal screen that determines their experience', dn:'Accepted Development triggers an exit flow (no DA needed). RiskSmart with flood overlay routes to standard code (risksmart_flood pathway). Impact Assessable includes public notification steps.' },
-    { id:'bgp5', what:'Collects development-specific details for Form 1 and Form 2: description of works, floor area, number of units (for multi-dwelling), construction value, and building approval type.', why:'Collecting these details in a structured way ensures the Form 1 is complete at lodgement, reducing Information Requests. The QLeave auto-calculation educates applicants about a levy many don\'t know about.', who:'Applicants and their planning consultants completing the technical details of the application', dn:'Construction value drives QLeave calculation (0.575% for works ≥ $150K). Number of units drives fee calculation in Stage 8. Fields are conditionally shown based on development type.' },
-    { id:'bgp6', what:'Generates a smart document checklist based on the property\'s overlays and the selected development type and pathway. Required, conditional, and optional documents are distinguished.', why:'Incomplete document packages are the primary cause of Information Requests and Action Notices, adding weeks to DA timescales. A pre-populated, property-aware checklist directly addresses this pain point.', who:'Applicants preparing their lodgement package', dn:'Demolition Control / TBC overlay triggers character assessment and materials schedule as required. Flood overlay triggers hydraulic engineer report as mandatory conditional. Impact assessable triggers town planning report and notification material. QLeave receipt shown only when construction value ≥ $150K.' },
-    { id:'bgp7', what:'Collects owner and applicant contact details (Form 1, Parts 1–2) and the applicant\'s Information Request preference (Form 1, Part 6).', why:'The IR preference is often overlooked by applicants but is a meaningful legal choice under the Planning Act 2016. Explaining it in plain language (Yes vs No) empowers applicants to make an informed decision.', who:'Property owners and planning agents completing the statutory contact details', dn:'Agent section shown conditionally if "agent" radio selected. IR preference explanation references s54 of the Planning Act 2016 for accuracy.' },
-    { id:'bgp8', what:'Shows a full application summary and calculates the DA fee (Council 2025–26 fee schedule) and QLeave levy. Includes declaration and submit action.', why:'Fee transparency at point of lodgement reduces post-submission surprises. The infrastructure charges note sets expectations that additional charges may apply at approval — a common source of applicant frustration.', who:'Applicants reviewing their completed application before lodgement', dn:'Fees use verified Council 2025–26 schedule: point value $143. Multiple dwelling fee includes base (61 pts) + per-unit (5 pts) + impact surcharge (114 pts). QLeave = 0.575% of construction value. Infrastructure charges are separate and noted as TBA.' },
-    { id:'bgp9', what:'Confirmation screen showing the generated DA reference number and next steps in the assessment process.', why:'Provides certainty that the application has been lodged and sets clear expectations about what happens next.', who:'Applicants after submitting their DA', dn:'DA reference number is auto-generated. Pathway-specific text explains the timeline and process.' },
+    { id:'bgp2', what:'Displays zone, all applicable overlays (now as a scrollable list — properties can have 5-10+ overlays), neighbourhood plan precinct, and lot area for the selected property.', why:'Giving applicants their full planning context upfront reduces information requests and sets expectations. Showing all overlays (not just 1-2) reflects real-world complexity.', who:'Property owners and planning consultants who need to understand their planning constraints before choosing a development type', dn:'Overlays stored as an array per address (4-7 per property). Flood overlay shown only on 12 Blaxland Street. v1.9: overlay model changed from boolean flags (dhc/tbc) to array of objects with code, name, desc.' },
+    { id:'bgp3', what:'Lets the applicant select their development type from a filtered list relevant to their zone. Prohibited uses are now shown with warnings but remain selectable — council cannot refuse to accept an application.', why:'Plain-language development type descriptions reduce applicant confusion. v1.9 change: prohibited uses changed from hard block to strong discouragement with proceed option, reflecting that councils must accept all applications even for prohibited uses (Planning Act 2016).', who:'Property owners and applicants who may not be familiar with planning terminology', dn:'Dev types are zone-filtered. Prohibited uses shown with amber warning. Selecting a prohibited type shows a confirmation box explaining the application is very likely to be refused. If confirmed, routes to Impact Assessable pathway.' },
+    { id:'bgp4', what:'Reveals the assessment pathway (Accepted, RiskSmart, Code, Impact, or Code with flood overlay upgrade). Previously included a SARA referral advisory which was removed — referral triggers depend on development details not yet captured at this stage.', why:'The pathway reveal is the key moment — it sets applicant expectations for timeframes, fees, and public notification. v2.0 change: SARA inference removed here because it gave false confidence without knowing construction value, height, ERA involvement, or proximity to state-controlled roads. Referral screening now happens at Stage 7 where all inputs are available.', who:'All applicants — this is the pivotal screen that determines their experience', dn:'Pathways: Accepted (exit), RiskSmart (10 days), Code (35 days), Impact (45 days + public notification), plus flood-overlay-upgraded variants. Flood overlay upgrades Accepted → Code and downgrades RiskSmart → Code.' },
+    { id:'bgp5', what:'Collects development-specific details for Form 1 and Form 2. v1.9 adds Form 1 Q6.1 mapping: auto-derives development type (MCU/Building Work), approval type (Development Permit), and level of assessment from user selections.', why:'v1.9 change: Form 1 Q6.1(a) type of development, Q6.1(b) approval type, and Q6.1(c) level of assessment are now auto-populated based on the dev type selection. This addresses reviewer feedback that these critical Form 1 fields were not being captured. The mapping is deterministic for residential applications.', who:'Applicants and their planning consultants completing the technical details of the application', dn:'FORM1_MAPPING data structure maps each dev type ID to formal Form 1 categories. Values shown as read-only with an override note. Construction value drives QLeave calculation (0.575% for works >= $150K).' },
+    { id:'bgp6', what:'Generates a smart document checklist based on the property\'s overlays and the selected development type and pathway. Mandatory, conditional, and recommended documents are distinguished.', why:'Incomplete document packages are the primary cause of Information Requests and Action Notices, adding weeks to DA timescales. A pre-populated, property-aware checklist directly addresses this pain point.', who:'Applicants preparing their lodgement package', dn:'Demolition Control / TBC overlay triggers character assessment and materials schedule as mandatory. Flood overlay triggers hydraulic engineer report as mandatory conditional. Impact assessable triggers town planning report and notification material. QLeave receipt shown only when construction value ≥ $150K.' },
+    { id:'bgp7', what:'Screens the application against four potential referral authorities — SARA (state interests), Distributor-Retailer (Urban Utilities), Heritage, and Infrastructure providers (Powerlink, Energex, DTMR). Auto-determines status where possible from overlays + dev details, asks targeted screening questions where it cannot.', why:'Stage 4 (pathway) is too early to assess referrals because the full development scope isn\'t yet captured. Stage 7 — after Documents — is the first point at which all relevant inputs are known. Splitting determination into "definitive" vs "screening question" avoids both false confidence and unnecessary friction.', who:'All applicants, before submitting Form 1 — referral status flows directly into Form 1 Part 5.', dn:'4 authorities, each with auto-trigger logic (definitive where overlays + dev details suffice) and yes/no screening questions where applicant input is required. Continue button gated until all screening questions answered. Answers persist to state.referrals and feed Form 1 Part 5 generator.' },
+    { id:'bgp8', what:'Collects owner and applicant contact details (Form 1, Parts 1–2) and the applicant\'s Information Request preference (Form 1, Part 6).', why:'The IR preference is often overlooked by applicants but is a meaningful legal choice under the Planning Act 2016. Explaining it in plain language (Yes vs No) empowers applicants to make an informed decision.', who:'Property owners and planning agents completing the statutory contact details', dn:'Agent section shown conditionally if "agent" radio selected. IR preference explanation references s54 of the Planning Act 2016 for accuracy.' },
+    { id:'bgp9', what:'Shows a full application summary and calculates the DA fee (Council 2025–26 fee schedule) and QLeave levy. Includes declaration and submit action.', why:'Fee transparency at point of lodgement reduces post-submission surprises. The infrastructure charges note sets expectations that additional charges may apply at approval — a common source of applicant frustration.', who:'Applicants reviewing their completed application before lodgement', dn:'Fees use verified Council 2025–26 schedule: point value $143. Multiple dwelling fee includes base (61 pts) + per-unit (5 pts) + impact surcharge (114 pts). QLeave = 0.575% of construction value. Infrastructure charges are separate and noted as TBA.' },
+    { id:'bgp10', what:'Confirmation screen showing the generated DA reference number and next steps in the assessment process.', why:'Provides certainty that the application has been lodged and sets clear expectations about what happens next.', who:'Applicants after submitting their DA', dn:'DA reference number is auto-generated. Pathway-specific text explains the timeline and process.' },
   ];
   panels.forEach(p => {
     const el = document.getElementById(p.id);
